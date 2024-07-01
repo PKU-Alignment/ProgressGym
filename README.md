@@ -24,19 +24,19 @@ To quote the paper [*ProgressGym: Alignment with a Millennium of Moral Progress*
 
 For detailed information about progress alignment and the ProgressGym framework, please refer to the paper linked to above.
 
-## Components #1: Package & Codebase Usage
+## Usage Guide #1: Package & Codebase
 
 The codebase, along with full documentation, will be published as soon as cleanup is finished. [Stay tuned](https://forms.gle/1TWFLL4ZCLeYTD5N6)! 
 
-## Components #2: Leaderboard & Playground Usage
+## Usage Guide #2: Leaderboard & Playground
 
 The leaderboard and playground, which allow for easy development and benchmarking of progress alignment *challenges* & *algorithms*, will be published as soon as cleanup is finished. [Stay tuned](https://forms.gle/1TWFLL4ZCLeYTD5N6)! 
 
-## Components #3: Datasets & Models
+## Usage Guide #3: Datasets & Models
 
 All datasets and models are available on [Huggingface](https://huggingface.co/collections/PKU-Alignment/progressgym-666735fcf3e4efa276226eaa).
 
-#### The ProgressGym-HistLlama3 Historical LLMs
+### The ProgressGym-HistLlama3 Historical LLMs
 
 These are the **36 historical language models** in the ProgressGym framework, sized 8B/70B parameters. 
 
@@ -44,7 +44,7 @@ These are the **36 historical language models** in the ProgressGym framework, si
 
 Based on [Meta-Llama-3-8B](https://huggingface.co/meta-llama/Meta-Llama-3-8B) and [Meta-Llama-3-70B](https://huggingface.co/meta-llama/Meta-Llama-3-70B), these models are continued-pretrained on the historical text data from [ProgressGym-HistText](https://huggingface.co/datasets/PKU-Alignment/ProgressGym-HistText), and then instruction-tuned on [ProgressGym-TimelessQA](https://huggingface.co/datasets/PKU-Alignment/ProgressGym-TimelessQA).
 
-#### The ProgressGym-HisText Dataset
+### The ProgressGym-HisText Dataset
 
 ProgressGym-HistText is the central dataset in the ProgressGym framework. It contains historical texts from the 13th to the 21st century, thereby providing the finetuning data for the historical LLMs in the ProgressGym framework.
 
@@ -62,7 +62,7 @@ The ProgressGym-HistText dataset is 38GB in size. The statistics below displays 
 
 Please note that dimensions of the value embeddings are only chosen for demonstrative purposes (without cherry-picking); the ProgressGym framework is *not* strongly anchored on these dimensions, and instead examines a wider spectrum of 19 value dimensions. Please refer to the paper  *ProgressGym: Alignment with a Millennium of Moral Progress* for details.
 
-#### Supplementary Dataset: ProgressGym-MoralEvals
+### Supplementary Dataset: ProgressGym-MoralEvals
 
 ProgressGym-MoralEvals is one of the datasets in the ProgressGym framework. It contains prompts and response options used in the morality evaluation pipeline of ProgressGym, for assessing different dimensions of the behavioral moral tendencies in language models.
 
@@ -72,7 +72,7 @@ The uploaded ProgressGym-MoralEvals dataset is mostly meant for demonstrative pu
 
 ![image-20240630113342775](./readme-assets/moral-evals.png)
 
-#### Supplementary Dataset: ProgressGym-TimelessQA
+### Supplementary Dataset: ProgressGym-TimelessQA
 
 ProgressGym-TimelessQA is one of the datasets in the ProgressGym framework. It contains approximately 3,000 prompt-response pairs used in the supervised funetuning (SFT) process of historical language models, in order to endow these pretrained models with instruction-following abilities.
 
