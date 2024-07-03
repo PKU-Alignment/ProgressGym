@@ -5,10 +5,10 @@
 This Github repository is currently under construction. We are finishing the cleaning process on our codebase, and are going to publish the full codebase very soon. [Stay tuned](https://forms.gle/1TWFLL4ZCLeYTD5N6)!
 
 - **[Paper Preprint]**  [ProgressGym: Alignment with a Millennium of Moral Progress](https://arxiv.org/abs/2406.20087)
-- **[Leaderboard & Interactive Playground]** PKU-Alignment/ProgressGym-LeaderBoard *(coming soon)*
+- **[Leaderboard & Interactive Playground]** [PKU-Alignment/ProgressGym-LeaderBoard](https://huggingface.co/spaces/PKU-Alignment/ProgressGym-LeaderBoard)
 - **[Huggingface Data & Model Collection]** [PKU-Alignment/ProgressGym](https://huggingface.co/collections/PKU-Alignment/progressgym-666735fcf3e4efa276226eaa)
 - **[Github Codebase]** [PKU-Alignment/ProgressGym](https://github.com/PKU-Alignment/ProgressGym)
-- **[PyPI Package]** *(coming soon)*
+- **[PyPI Package]** *(coming soon - stay tuned!)*
 
 ## Overview
 
