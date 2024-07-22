@@ -1,0 +1,684 @@
+<!doctype html>
+<html class="no-js" lang="cn" data-content_root="">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Examinee" href="Examinee.html" /><link rel="prev" title="Data" href="Data.html" />
+
+    <!-- Generated with Sphinx 7.1.2 and Furo 2024.05.06 -->
+        <title>Judge - Progress-Gym 1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=362ab14a" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=387cc868" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=36a5483c" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" /
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="index.html"><div class="brand">Progress-Gym 1.0 documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
+  
+  
+  <span class="sidebar-brand-text">Progress-Gym 1.0 documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="running.html">Running the benchmark</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Implementing Your Own Experiment</a></li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="documentation.html">Documentation</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of Documentation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="Model.html">Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Data.html">Data</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Judge</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Examinee.html">Examinee</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="documentation.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="_sources/Judge.rst.txt" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div>
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="judge">
+<h1>Judge<a class="headerlink" href="#judge" title="Permalink to this heading">¶</a></h1>
+<p>In ProgressGym, we evaluate an <em>Examinee</em> (an algorithm) through <em>tasks</em>. In the code, those tasks are instantialized through classes called <em>Judges</em>, which handles queries from <em>Examinees</em> and updates the <em>human proxy models</em>.
+This page documents the base Judge class as well as the three Judges we've implemented.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="benchmark.framework.JudgeBase">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">benchmark.framework.</span></span><span class="sig-name descname"><span class="pre">JudgeBase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#benchmark.framework.JudgeBase" title="Permalink to this definition">¶</a></dt>
+<dd><p>JudgeBase is the base class for all judges.
+A judge is the benchmarking algorithm that evaluates the performance of an examinee.
+Each judge class corresponds to a challenge.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="benchmark.framework.JudgeBase.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#benchmark.framework.JudgeBase.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="benchmark.framework.JudgeBase.eval_snapshot">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">eval_snapshot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">examinee</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="Examinee.html#benchmark.framework.ExamineeBase" title="benchmark.framework.ExamineeBase"><span class="pre">ExamineeBase</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#benchmark.framework.JudgeBase.eval_snapshot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate the examinee's performance at the current snapshot. This method is called by the judge at every iteration.</p>
+<p>The base class implementation only does logging. It is recommended to does your own eval and then call the base class
+implementation to perform logging.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="benchmark.framework.JudgeBase.eval_times">
+<span class="sig-name descname"><span class="pre">eval_times</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#benchmark.framework.JudgeBase.eval_times" title="Permalink to this definition">¶</a></dt>
+<dd><p>Query statistics</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="benchmark.framework.JudgeBase.interpret_result">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">interpret_result</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">result</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#benchmark.framework.JudgeBase.interpret_result" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given an benchmark result dictionary, calculate a single score that represents the overall performance of the examinee. HIGHER scores must mean better performance. This method is called by the leaderboard to rank the examinees.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="benchmark.framework.JudgeBase.model_size">
+<span class="sig-name descname"><span class="pre">model_size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#benchmark.framework.JudgeBase.model_size" title="Permalink to this definition">¶</a></dt>
+<dd><p>Information determined at initialization</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="benchmark.framework.JudgeBase.produce_final_result">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">produce_final_result</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#benchmark.framework.JudgeBase.produce_final_result" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the final result of the evaluation. This method is called at the end of <cite>test()</cite> to get the final evaluation metrics.
+A reference score may be calculated here, but it will not be used by the leaderboard, in order to prevent manual score manipulation.</p>
+<p>The base class implementation only performs logging. You should override this method in your subclass to fill in the evaluation metrics, while preserving logging-purposed dict fields returned by the base class implementation.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="benchmark.framework.JudgeBase.query_from_examinee">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">query_from_examinee</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prompt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="Data.html#src.abstractions.data.Data" title="src.abstractions.data.Data"><span class="pre">Data</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="Model.html#src.abstractions.model.Model" title="src.abstractions.model.Model"><span class="pre">Model</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="Data.html#src.abstractions.data.Data" title="src.abstractions.data.Data"><span class="pre">Data</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#benchmark.framework.JudgeBase.query_from_examinee" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method is called by the examinee to query the judge, which the judge will answer according to human preferences at the current timestep.
+The examinee will use this information to learn about the latest human preference, and update its language model accordingly.</p>
+<p>The base class implementation answers the prompt by directly querying <cite>self.current_model`</cite>
+You could either call the base class implementation in your subclass's implementation (possibly supplying a different <cite>model</cite>),
+or override it if necessary.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="benchmark.framework.JudgeBase.query_total_length">
+<span class="sig-name descname"><span class="pre">query_total_length</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#benchmark.framework.JudgeBase.query_total_length" title="Permalink to this definition">¶</a></dt>
+<dd><p>Current model</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="benchmark.framework.JudgeBase.reset">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#benchmark.framework.JudgeBase.reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reset the internal state of the judge to start a new evaluation. This method is called before each test.</p>
+<p>The base class implementation resets the internal state of the judge to the initial state.
+Normally, you should optionally call the base class implementation in your subclass's implementation, and then add
+any additional reset logic that you need.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="benchmark.framework.JudgeBase.test">
+<span class="sig-name descname"><span class="pre">test</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">examinee</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="Examinee.html#benchmark.framework.ExamineeBase" title="benchmark.framework.ExamineeBase"><span class="pre">ExamineeBase</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#benchmark.framework.JudgeBase.test" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run the examinee and evaluate its performance. This method is called by the user to evaluate the examinee.
+The method returns a dictionary of evaluation metrics. The keys of the dictionary are the names of the metrics, and the values are the corresponding values of the metrics.
+The method operates by moving the examinee and the judge through a series of timesteps, where the judge evaluates the examinee at every timestep.
+Every iteration of examinee_iter corresponds to the passing of a timestep.</p>
+<p>Normally, you should not override this method in your subclass. Instead, you should implement the <cite>reset</cite>, <cite>eval_snapshot</cite>, <cite>tick</cite>, <cite>query_from_examinee</cite>, and <cite>produce_final_result</cite> methods in your subclass.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="benchmark.framework.JudgeBase.tick">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">tick</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#benchmark.framework.JudgeBase.tick" title="Permalink to this definition">¶</a></dt>
+<dd><p>Move the internal state of the judge to the next timestep. This method is called by the judge at every iteration.</p>
+<p>The base class implementation moves the judge to the next timestep by incrementing <cite>current_timestep</cite> by 1 (or more if necessary).
+You should optionally call the base class implementation in your subclass's implementation, and then add any additional
+logic that you need.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="challenges.coevolve.CoevolveJudge">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">challenges.coevolve.</span></span><span class="sig-name descname"><span class="pre">CoevolveJudge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#challenges.coevolve.CoevolveJudge" title="Permalink to this definition">¶</a></dt>
+<dd><p>CoevolveJudge is a judge that evaluates the performance of an examinee by comparing the actual and simulated history of human preferences.
+It takes into account the bidirectional influence between the AI system (i.e. the examinee) and the human preferences,
+and evaluates the size of influence of the AI system on the evolutionary trajectory of human preferences.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="challenges.coevolve.CoevolveJudge.eval_snapshot">
+<span class="sig-name descname"><span class="pre">eval_snapshot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">examinee</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="Examinee.html#benchmark.framework.ExamineeBase" title="benchmark.framework.ExamineeBase"><span class="pre">ExamineeBase</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#challenges.coevolve.CoevolveJudge.eval_snapshot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Move the simulated history one timestep forward, and evaluate the distance between the actual and simulated history.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="challenges.coevolve.CoevolveJudge.eval_times">
+<span class="sig-name descname"><span class="pre">eval_times</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#challenges.coevolve.CoevolveJudge.eval_times" title="Permalink to this definition">¶</a></dt>
+<dd><p>Query statistics</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="challenges.coevolve.CoevolveJudge.interpret_result">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">interpret_result</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">result</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#challenges.coevolve.CoevolveJudge.interpret_result" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given an benchmark result dictionary, calculate a single score that represents the overall performance of the examinee.
+HIGHER scores must mean better performance. This method is called by the leaderboard to rank the examinees.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="challenges.coevolve.CoevolveJudge.model_size">
+<span class="sig-name descname"><span class="pre">model_size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#challenges.coevolve.CoevolveJudge.model_size" title="Permalink to this definition">¶</a></dt>
+<dd><p>Information determined at initialization</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="challenges.coevolve.CoevolveJudge.produce_final_result">
+<span class="sig-name descname"><span class="pre">produce_final_result</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#challenges.coevolve.CoevolveJudge.produce_final_result" title="Permalink to this definition">¶</a></dt>
+<dd><p>Produce the final result of the evaluation from the supplementary_data dict.
+A reference score may be calculated here, but it will not be used by the leaderboard, in order to prevent manual score manipulation.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="challenges.coevolve.CoevolveJudge.query_from_examinee">
+<span class="sig-name descname"><span class="pre">query_from_examinee</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prompt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="Data.html#src.abstractions.data.Data" title="src.abstractions.data.Data"><span class="pre">Data</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="Data.html#src.abstractions.data.Data" title="src.abstractions.data.Data"><span class="pre">Data</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#challenges.coevolve.CoevolveJudge.query_from_examinee" title="Permalink to this definition">¶</a></dt>
+<dd><p>Query the Examinee for the response to a prompt, using the simulated model.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="challenges.coevolve.CoevolveJudge.query_total_length">
+<span class="sig-name descname"><span class="pre">query_total_length</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#challenges.coevolve.CoevolveJudge.query_total_length" title="Permalink to this definition">¶</a></dt>
+<dd><p>Current model</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="challenges.coevolve.CoevolveJudge.reset">
+<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#challenges.coevolve.CoevolveJudge.reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>In addition to the base class implementation, reset the simulated model and the queries (used for moving the simulated history forward).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="challenges.coevolve.CoevolveJudge.tick">
+<span class="sig-name descname"><span class="pre">tick</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#challenges.coevolve.CoevolveJudge.tick" title="Permalink to this definition">¶</a></dt>
+<dd><p>Let the actual history move one timestep forward, without changing the simulated history.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="challenges.coevolve.CoevolveJudge.update_human_proxy">
+<span class="sig-name descname"><span class="pre">update_human_proxy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">influencer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="Model.html#src.abstractions.model.Model" title="src.abstractions.model.Model"><span class="pre">Model</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">epochs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">comment</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#challenges.coevolve.CoevolveJudge.update_human_proxy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the human proxy model with the influence of the influencer model.
+The implementation here supports resuming from a previous checkpoint in case of failure,
+which leads to its relatively complex structure. CoevolveJudge requires special treatment
+to handle checkpoints since it contains more than one model, and the base class only implements
+checkpoint loading for the judge model.
+A plain implementation without checkpoint loading would be much simpler.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="challenges.follow.FollowJudge">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">challenges.follow.</span></span><span class="sig-name descname"><span class="pre">FollowJudge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#challenges.follow.FollowJudge" title="Permalink to this definition">¶</a></dt>
+<dd><p>FollowJudge is a judge that evaluates the updating performance of an examinee,
+It measures whether the examinee could update itself to match human preferences,
+when giving it new human preference data at a new timepoint.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="challenges.follow.FollowJudge.eval_snapshot">
+<span class="sig-name descname"><span class="pre">eval_snapshot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">examinee</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="Examinee.html#benchmark.framework.ExamineeBase" title="benchmark.framework.ExamineeBase"><span class="pre">ExamineeBase</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">ground_truth_model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="Model.html#src.abstractions.model.Model" title="src.abstractions.model.Model"><span class="pre">Model</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#challenges.follow.FollowJudge.eval_snapshot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluates examinee's performance</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="challenges.follow.FollowJudge.eval_times">
+<span class="sig-name descname"><span class="pre">eval_times</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#challenges.follow.FollowJudge.eval_times" title="Permalink to this definition">¶</a></dt>
+<dd><p>Query statistics</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="challenges.follow.FollowJudge.interpret_result">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">interpret_result</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">result</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#challenges.follow.FollowJudge.interpret_result" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given an benchmark result dictionary, calculate a single score that represents the overall performance of the examinee.
+HIGHER scores must mean better performance. This method is called by the leaderboard to rank the examinees.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="challenges.follow.FollowJudge.model_size">
+<span class="sig-name descname"><span class="pre">model_size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#challenges.follow.FollowJudge.model_size" title="Permalink to this definition">¶</a></dt>
+<dd><p>Information determined at initialization</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="challenges.follow.FollowJudge.produce_final_result">
+<span class="sig-name descname"><span class="pre">produce_final_result</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#challenges.follow.FollowJudge.produce_final_result" title="Permalink to this definition">¶</a></dt>
+<dd><p>Produce the final result of the evaluation from the supplementary_data dict.
+A reference score may be calculated here, but it will not be used by the leaderboard, in order to prevent manual score manipulation.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="challenges.follow.FollowJudge.query_from_examinee">
+<span class="sig-name descname"><span class="pre">query_from_examinee</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prompt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="Data.html#src.abstractions.data.Data" title="src.abstractions.data.Data"><span class="pre">Data</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="Data.html#src.abstractions.data.Data" title="src.abstractions.data.Data"><span class="pre">Data</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#challenges.follow.FollowJudge.query_from_examinee" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method is called by the examinee to query the judge, which the judge will answer according to human preferences at the current timestep.
+The examinee will use this information to learn about the latest human preference, and update its language model accordingly.</p>
+<p>The base class implementation answers the prompt by directly querying <cite>self.current_model`</cite>
+You could either call the base class implementation in your subclass's implementation (possibly supplying a different <cite>model</cite>),
+or override it if necessary.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="challenges.follow.FollowJudge.query_total_length">
+<span class="sig-name descname"><span class="pre">query_total_length</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#challenges.follow.FollowJudge.query_total_length" title="Permalink to this definition">¶</a></dt>
+<dd><p>Current model</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="challenges.follow.FollowJudge.reset">
+<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#challenges.follow.FollowJudge.reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reset the internal state of the judge to start a new evaluation. This method is called before each test.</p>
+<p>The base class implementation resets the internal state of the judge to the initial state.
+Normally, you should optionally call the base class implementation in your subclass's implementation, and then add
+any additional reset logic that you need.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="challenges.follow.FollowJudge.tick">
+<span class="sig-name descname"><span class="pre">tick</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#challenges.follow.FollowJudge.tick" title="Permalink to this definition">¶</a></dt>
+<dd><p>move one timestep forward, without changing the examinee.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="challenges.predict.PredictJudge">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">challenges.predict.</span></span><span class="sig-name descname"><span class="pre">PredictJudge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#challenges.predict.PredictJudge" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="challenges.predict.PredictJudge.eval_snapshot">
+<span class="sig-name descname"><span class="pre">eval_snapshot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">examinee</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="Examinee.html#benchmark.framework.ExamineeBase" title="benchmark.framework.ExamineeBase"><span class="pre">ExamineeBase</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#challenges.predict.PredictJudge.eval_snapshot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluates examinee's performance</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="challenges.predict.PredictJudge.eval_times">
+<span class="sig-name descname"><span class="pre">eval_times</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#challenges.predict.PredictJudge.eval_times" title="Permalink to this definition">¶</a></dt>
+<dd><p>Query statistics</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="challenges.predict.PredictJudge.model_size">
+<span class="sig-name descname"><span class="pre">model_size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#challenges.predict.PredictJudge.model_size" title="Permalink to this definition">¶</a></dt>
+<dd><p>Information determined at initialization</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="challenges.predict.PredictJudge.query_from_examinee">
+<span class="sig-name descname"><span class="pre">query_from_examinee</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prompt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="Data.html#src.abstractions.data.Data" title="src.abstractions.data.Data"><span class="pre">Data</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="Data.html#src.abstractions.data.Data" title="src.abstractions.data.Data"><span class="pre">Data</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#challenges.predict.PredictJudge.query_from_examinee" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method is called by the examinee to query the judge, which the judge will answer according to human preferences at the current timestep.
+The examinee will use this information to learn about the latest human preference, and update its language model accordingly.</p>
+<p>The base class implementation answers the prompt by directly querying <cite>self.current_model`</cite>
+You could either call the base class implementation in your subclass's implementation (possibly supplying a different <cite>model</cite>),
+or override it if necessary.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="challenges.predict.PredictJudge.query_total_length">
+<span class="sig-name descname"><span class="pre">query_total_length</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#challenges.predict.PredictJudge.query_total_length" title="Permalink to this definition">¶</a></dt>
+<dd><p>Current model</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="challenges.predict.PredictJudge.reset">
+<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#challenges.predict.PredictJudge.reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reset the internal state of the judge to start a new evaluation. This method is called before each test.</p>
+<p>The base class implementation resets the internal state of the judge to the initial state.
+Normally, you should optionally call the base class implementation in your subclass's implementation, and then add
+any additional reset logic that you need.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="challenges.predict.PredictJudge.tick">
+<span class="sig-name descname"><span class="pre">tick</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#challenges.predict.PredictJudge.tick" title="Permalink to this definition">¶</a></dt>
+<dd><p>move one timestep forward, without changing the examinee.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="Examinee.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Examinee</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="Data.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Data</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2024, Tianyi Qiu, Yang Zhang, Xuchuan Huang, Xinze Li
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Judge</a><ul>
+<li><a class="reference internal" href="#benchmark.framework.JudgeBase"><code class="docutils literal notranslate"><span class="pre">JudgeBase</span></code></a><ul>
+<li><a class="reference internal" href="#benchmark.framework.JudgeBase.__init__"><code class="docutils literal notranslate"><span class="pre">JudgeBase.__init__()</span></code></a></li>
+<li><a class="reference internal" href="#benchmark.framework.JudgeBase.eval_snapshot"><code class="docutils literal notranslate"><span class="pre">JudgeBase.eval_snapshot()</span></code></a></li>
+<li><a class="reference internal" href="#benchmark.framework.JudgeBase.eval_times"><code class="docutils literal notranslate"><span class="pre">JudgeBase.eval_times</span></code></a></li>
+<li><a class="reference internal" href="#benchmark.framework.JudgeBase.interpret_result"><code class="docutils literal notranslate"><span class="pre">JudgeBase.interpret_result()</span></code></a></li>
+<li><a class="reference internal" href="#benchmark.framework.JudgeBase.model_size"><code class="docutils literal notranslate"><span class="pre">JudgeBase.model_size</span></code></a></li>
+<li><a class="reference internal" href="#benchmark.framework.JudgeBase.produce_final_result"><code class="docutils literal notranslate"><span class="pre">JudgeBase.produce_final_result()</span></code></a></li>
+<li><a class="reference internal" href="#benchmark.framework.JudgeBase.query_from_examinee"><code class="docutils literal notranslate"><span class="pre">JudgeBase.query_from_examinee()</span></code></a></li>
+<li><a class="reference internal" href="#benchmark.framework.JudgeBase.query_total_length"><code class="docutils literal notranslate"><span class="pre">JudgeBase.query_total_length</span></code></a></li>
+<li><a class="reference internal" href="#benchmark.framework.JudgeBase.reset"><code class="docutils literal notranslate"><span class="pre">JudgeBase.reset()</span></code></a></li>
+<li><a class="reference internal" href="#benchmark.framework.JudgeBase.test"><code class="docutils literal notranslate"><span class="pre">JudgeBase.test()</span></code></a></li>
+<li><a class="reference internal" href="#benchmark.framework.JudgeBase.tick"><code class="docutils literal notranslate"><span class="pre">JudgeBase.tick()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#challenges.coevolve.CoevolveJudge"><code class="docutils literal notranslate"><span class="pre">CoevolveJudge</span></code></a><ul>
+<li><a class="reference internal" href="#challenges.coevolve.CoevolveJudge.eval_snapshot"><code class="docutils literal notranslate"><span class="pre">CoevolveJudge.eval_snapshot()</span></code></a></li>
+<li><a class="reference internal" href="#challenges.coevolve.CoevolveJudge.eval_times"><code class="docutils literal notranslate"><span class="pre">CoevolveJudge.eval_times</span></code></a></li>
+<li><a class="reference internal" href="#challenges.coevolve.CoevolveJudge.interpret_result"><code class="docutils literal notranslate"><span class="pre">CoevolveJudge.interpret_result()</span></code></a></li>
+<li><a class="reference internal" href="#challenges.coevolve.CoevolveJudge.model_size"><code class="docutils literal notranslate"><span class="pre">CoevolveJudge.model_size</span></code></a></li>
+<li><a class="reference internal" href="#challenges.coevolve.CoevolveJudge.produce_final_result"><code class="docutils literal notranslate"><span class="pre">CoevolveJudge.produce_final_result()</span></code></a></li>
+<li><a class="reference internal" href="#challenges.coevolve.CoevolveJudge.query_from_examinee"><code class="docutils literal notranslate"><span class="pre">CoevolveJudge.query_from_examinee()</span></code></a></li>
+<li><a class="reference internal" href="#challenges.coevolve.CoevolveJudge.query_total_length"><code class="docutils literal notranslate"><span class="pre">CoevolveJudge.query_total_length</span></code></a></li>
+<li><a class="reference internal" href="#challenges.coevolve.CoevolveJudge.reset"><code class="docutils literal notranslate"><span class="pre">CoevolveJudge.reset()</span></code></a></li>
+<li><a class="reference internal" href="#challenges.coevolve.CoevolveJudge.tick"><code class="docutils literal notranslate"><span class="pre">CoevolveJudge.tick()</span></code></a></li>
+<li><a class="reference internal" href="#challenges.coevolve.CoevolveJudge.update_human_proxy"><code class="docutils literal notranslate"><span class="pre">CoevolveJudge.update_human_proxy()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#challenges.follow.FollowJudge"><code class="docutils literal notranslate"><span class="pre">FollowJudge</span></code></a><ul>
+<li><a class="reference internal" href="#challenges.follow.FollowJudge.eval_snapshot"><code class="docutils literal notranslate"><span class="pre">FollowJudge.eval_snapshot()</span></code></a></li>
+<li><a class="reference internal" href="#challenges.follow.FollowJudge.eval_times"><code class="docutils literal notranslate"><span class="pre">FollowJudge.eval_times</span></code></a></li>
+<li><a class="reference internal" href="#challenges.follow.FollowJudge.interpret_result"><code class="docutils literal notranslate"><span class="pre">FollowJudge.interpret_result()</span></code></a></li>
+<li><a class="reference internal" href="#challenges.follow.FollowJudge.model_size"><code class="docutils literal notranslate"><span class="pre">FollowJudge.model_size</span></code></a></li>
+<li><a class="reference internal" href="#challenges.follow.FollowJudge.produce_final_result"><code class="docutils literal notranslate"><span class="pre">FollowJudge.produce_final_result()</span></code></a></li>
+<li><a class="reference internal" href="#challenges.follow.FollowJudge.query_from_examinee"><code class="docutils literal notranslate"><span class="pre">FollowJudge.query_from_examinee()</span></code></a></li>
+<li><a class="reference internal" href="#challenges.follow.FollowJudge.query_total_length"><code class="docutils literal notranslate"><span class="pre">FollowJudge.query_total_length</span></code></a></li>
+<li><a class="reference internal" href="#challenges.follow.FollowJudge.reset"><code class="docutils literal notranslate"><span class="pre">FollowJudge.reset()</span></code></a></li>
+<li><a class="reference internal" href="#challenges.follow.FollowJudge.tick"><code class="docutils literal notranslate"><span class="pre">FollowJudge.tick()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#challenges.predict.PredictJudge"><code class="docutils literal notranslate"><span class="pre">PredictJudge</span></code></a><ul>
+<li><a class="reference internal" href="#challenges.predict.PredictJudge.eval_snapshot"><code class="docutils literal notranslate"><span class="pre">PredictJudge.eval_snapshot()</span></code></a></li>
+<li><a class="reference internal" href="#challenges.predict.PredictJudge.eval_times"><code class="docutils literal notranslate"><span class="pre">PredictJudge.eval_times</span></code></a></li>
+<li><a class="reference internal" href="#challenges.predict.PredictJudge.model_size"><code class="docutils literal notranslate"><span class="pre">PredictJudge.model_size</span></code></a></li>
+<li><a class="reference internal" href="#challenges.predict.PredictJudge.query_from_examinee"><code class="docutils literal notranslate"><span class="pre">PredictJudge.query_from_examinee()</span></code></a></li>
+<li><a class="reference internal" href="#challenges.predict.PredictJudge.query_total_length"><code class="docutils literal notranslate"><span class="pre">PredictJudge.query_total_length</span></code></a></li>
+<li><a class="reference internal" href="#challenges.predict.PredictJudge.reset"><code class="docutils literal notranslate"><span class="pre">PredictJudge.reset()</span></code></a></li>
+<li><a class="reference internal" href="#challenges.predict.PredictJudge.tick"><code class="docutils literal notranslate"><span class="pre">PredictJudge.tick()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=4db9c54d"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="_static/scripts/furo.js?v=4e2eecee"></script>
+    </body>
+</html>

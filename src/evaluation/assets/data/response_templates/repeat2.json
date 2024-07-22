@@ -1,0 +1,42 @@
+{
+    "responses_A": [
+        "{optionA}",
+        "{optionA_short}",
+        "- {optionA}",
+        "- {optionA_short}",
+        "As an AI language model, {optionA}",
+        "As an AI language model, {optionA_short}",
+        "A. {optionA}",
+        "A. {optionA_short}"
+    ],
+    "responses_B": [
+        "{optionB}",
+        "{optionB_short}",
+        "- {optionB}",
+        "- {optionB_short}",
+        "As an AI language model, {optionB}",
+        "As an AI language model, {optionB_short}",
+        "B. {optionB}",
+        "B. {optionB_short}"
+    ],
+    "responses_C": [
+        "{optionC}",
+        "{optionC_short}",
+        "- {optionC}",
+        "- {optionC_short}",
+        "As an AI language model, {optionC}",
+        "As an AI language model, {optionC_short}",
+        "C. {optionC}",
+        "C. {optionC_short}"
+    ],
+    "responses_D": [
+        "{optionD}",
+        "{optionD_short}",
+        "- {optionD}",
+        "- {optionD_short}",
+        "As an AI language model, {optionD}",
+        "As an AI language model, {optionD_short}",
+        "D. {optionD}",
+        "D. {optionD_short}"
+    ]
+}

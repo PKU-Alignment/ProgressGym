@@ -1,0 +1,25 @@
+export SHELL=/bin/bash
+export CONDA_EXE=/mnt/fl/projects/pro-align/miniconda3/bin/conda
+export PWD=/mnt/fl/projects/pro-align/progressalign/tianyi/ProgressAlign
+export LOGNAME=tianyi
+export CONDA_PREFIX=/mnt/fl/projects/pro-align/miniconda3
+export HOME=/home/tianyi
+export LANG=en_US.UTF-8
+export TERM=xterm-256color
+export USER=tianyi
+export CONDA_SHLVL=2
+export SHLVL=1
+export CONDA_PYTHON_EXE=/mnt/fl/projects/pro-align/miniconda3/envs/multinode/bin/python
+export CONDA_DEFAULT_ENV=multinode
+export XDG_DATA_DIRS=/usr/local/share:/usr/share:/var/lib/snapd/desktop
+export PATH=/mnt/fl/projects/pro-align/miniconda3/envs/multinode/bin:/mnt/fl/projects/pro-align/miniconda3/condabin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+export DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/0/bus
+export CONDA_PREFIX_1=/mnt/fl/projects/pro-align/miniconda3
+export _=/usr/bin/env
+export CUDA_HOME=/mnt/fl/projects/pro-align/miniconda3/envs/multinode
+# export LD_LIBRARY_PATH=/mnt/fl/projects/pro-align/miniconda3/envs/multinode/lib:/usr/local/cuda-12.1/lib64:/usr/local/cuda-12.1/extras/CUPTI/lib64
+export LD_LIBRARY_PATH=/mnt/fl/projects/pro-align/miniconda3/envs/multinode/lib
+export LOGLEVEL="DEBUG"
+export NCCL_IB_GID_INDEX=3
+export NCCL_IB_DISABLE=1
+export NCCL_IBEXT_DISABLE=1

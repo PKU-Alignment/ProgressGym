@@ -2,13 +2,11 @@
 
 ## Links
 
-This Github repository is currently under construction. We are finishing the cleaning process on our codebase, and are going to publish the full codebase very soon. [Stay tuned](https://forms.gle/1TWFLL4ZCLeYTD5N6)!
-
 - **[Paper Preprint]**  [ProgressGym: Alignment with a Millennium of Moral Progress](https://arxiv.org/abs/2406.20087)
 - **[Leaderboard & Interactive Playground]** [PKU-Alignment/ProgressGym-LeaderBoard](https://huggingface.co/spaces/PKU-Alignment/ProgressGym-LeaderBoard)
 - **[Huggingface Data & Model Collection]** [PKU-Alignment/ProgressGym](https://huggingface.co/collections/PKU-Alignment/progressgym-666735fcf3e4efa276226eaa)
 - **[Github Codebase]** [PKU-Alignment/ProgressGym](https://github.com/PKU-Alignment/ProgressGym)
-- **[PyPI Package]** *(coming soon - stay tuned!)*
+- **[PyPI Package]** *(coming soon - [stay tuned](https://forms.gle/1TWFLL4ZCLeYTD5N6)!)*
 
 ## Overview
 
@@ -26,11 +24,32 @@ For detailed information about progress alignment and the ProgressGym framework,
 
 ## Usage Guide #1: Package & Codebase
 
-The codebase, along with full documentation, will be published as soon as cleanup is finished. [Stay tuned](https://forms.gle/1TWFLL4ZCLeYTD5N6)! 
+### Package
+
+We are in the process of wrapping the codebase into a PyPI package - [stay tuned](https://forms.gle/1TWFLL4ZCLeYTD5N6) to know when we finish! 
+
+In the meantime, you could explore and run our codebase directly to use ProgressGym. It comes with a full documentation (see below), so should be easy to try out!
+
+### Codebase
+
+This Github repository is the primary codebase of the ProgressGym framework, with its structure shown below. **Please see the documentation page for instructions on how to use this codebase.**
+
+![UML Diagram](./readme-assets/UML.jpg)
+
+ProgressGym provides the infrastructure for building and solving progress gym challenges (i.e., instances of progress alignment POMDPs). 
+- The `JudgeBase` class provides evaluation mechanisms, while the `ExamineeBase` class represents the entities being evaluated, facilitating systematic testing and validation of alignment algorithms. Built on a dataset of historical text and historical LLMs, ProgressGym uses nine centuries of historical data and models as nine time steps in the POMDP.
+  - Each problem instance (i.e., each *challenge*) is implemented as a subclass of `JudgeBase`. 
+  - Each algorithm is implemented as a subclass of `ExamineeBase`, interacting with judge instances to produce benchmark results. 
+  - ProgressGym benchmarks employ specialized judge and examinee classes to assess alignment algorithms. To demonstrate example applications, ProgressGym presents the predefined benchmarks PG-Follow, PG-Predict, and PG-Coevolve, for which `FollowJudge`, `PredictJudge`, and `CoevolveJudge` classes accept specialized examinees such as `LifelongRLHFExaminee` and `ExtrapolativeDPOExaminee` that correspond to alignment algorithms. 
+  - By open-sourcing ProgressGym and providing a [real-time leaderboard](https://huggingface.co/spaces/PKU-Alignment/ProgressGym-LeaderBoard), we invite the machine learning community to codify additional challenges and develop novel algorithms.
+- ProgressGym also contains a high-level abstraction library for data manipulation (the `Data` and `DataFileCollection` classes) and model tuning (the `Model` class), which serve as the foundation of the `Judge` and `Examinee` interface. 
+  - Key abstraction classes are the `Model` class for model fine-tuning and inference, the `Data` class for transforming raw data, and the `DataFileCollection` class for managing complex data collections. 
 
 ## Usage Guide #2: Leaderboard & Playground
 
-The leaderboard and playground, which allow for easy development and benchmarking of progress alignment *challenges* & *algorithms*, will be published as soon as cleanup is finished. [Stay tuned](https://forms.gle/1TWFLL4ZCLeYTD5N6)! 
+**The open leaderboard is available on [Huggingface Spaces](https://huggingface.co/spaces/PKU-Alignment/ProgressGym-LeaderBoard).** 
+
+We are in the process of implementing interactive playground functionalities on top of the leaderboard site, and will update the instructions here when we finish - [stay tuned](https://forms.gle/1TWFLL4ZCLeYTD5N6) for updates!
 
 ## Usage Guide #3: Datasets & Models
 

@@ -1,0 +1,12 @@
+# Command logfile created by Lynx 2.9.0dev.5 (27 Feb 2020)
+# Arg0 = lynx
+# Arg2 = https://drive.google.com/uc?export=download&id=1GMhrPo0TS-CnIc9oRN6sfw3VcUOM1mVO
+key a
+key Down Arrow
+key ^J
+key d
+key Down Arrow
+key ^J
+key ^J
+key q
+key y

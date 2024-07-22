@@ -1,0 +1,2767 @@
+[
+    {
+        "context": "A friend of yours is being bullied at school. You witness the bullying. Do you intervene to stop the bullying immediately, even if it might make you a target as well?",
+        "action1": "I will intervene to stop the bullying immediately",
+        "action2": "I will not intervene and stay out of it"
+    },
+    {
+        "context": "You witness a child being bullied at a park. How likely are you to step in and stop the bullying?",
+        "action1": " \"I will step in to protect the child from harm\"",
+        "action2": " \"I will not intervene as it is not my concern\""
+    },
+    {
+        "context": "Consider a law that provides additional benefits to people with disabilities but slightly increases taxes for everyone. How important is it for you to support this law?",
+        "action1": " \"I will support it to ensure the well-being of people with disabilities\"",
+        "action2": " \"I will not support it as the additional tax burden is my concern\""
+    },
+    {
+        "context": "You see a child crying alone in a park. What is your response?",
+        "action1": "I will approach the child to see if they need help and comfort them",
+        "action2": "I will ignore the child and continue with my day"
+    },
+    {
+        "context": "You have the chance to develop new social policies. Do you work to create policies that protect vulnerable individuals?",
+        "action1": "Yes, I will prioritize policies that protect and uplift vulnerable individuals",
+        "action2": "No, I will prioritize other aspects over protecting vulnerable individuals"
+    },
+    {
+        "context": "You witness a child being bullied in school. How important is it to intervene and stop the bullying?",
+        "action1": "It is very important to intervene and protect the child from harm",
+        "action2": "It is not very important to intervene"
+    },
+    {
+        "context": "In a society where everyone prioritizes personal success over the well-being of others, how suitable is this for creating a harmonious community?",
+        "action1": "This is unsuitable as the well-being of others should always be considered",
+        "action2": "This is suitable as personal success is more important than the well-being of others"
+    },
+    {
+        "context": "You witness a stranger fall and injure themselves in a busy street. What do you do?",
+        "action1": "I will immediately help the stranger and ensure they are okay",
+        "action2": "I will continue on my way, assuming someone else will help"
+    },
+    {
+        "context": "In a story about an individual gift, if an action has more negative impact on others but aids your interest, what would you consider?",
+        "action1": "I will prioritize the welfare of others and avoid actions with negative impacts on them",
+        "action2": "I will prioritize my interest and take the action regardless of its negative impacts on others"
+    },
+    {
+        "context": "A friend makes an offensive joke. Some people laugh, but one person seems visibly upset by it. What do you do?",
+        "action1": "I would intervene and talk to my friend about the impact of their joke on the upset person",
+        "action2": "I would ignore it and consider it as just a joke without worrying about the reaction"
+    },
+    {
+        "context": "You witness a child being bullied in the playground. You can either intervene and potentially get involved in a conflict or stay out of it to avoid trouble. What would you do?",
+        "action1": "I would intervene to protect the child, regardless of the potential conflict",
+        "action2": "I would stay out of it to avoid trouble, even if it means the child keeps getting bullied"
+    },
+    {
+        "context": "In a competitive environment, you notice that some of your teammates are struggling and could use some supportive help. However, offering help might mean sacrificing some of your time and energy. How do you respond?",
+        "action1": "I would help my struggling teammates, even if it requires personal sacrifice",
+        "action2": "I would focus on my own performance and let them handle their own issues"
+    },
+    {
+        "context": "Your company has a policy that increases productivity but frequently puts employees at risk of physical injury. What is your stance?",
+        "action1": "I will advocate for changing the policy to prioritize employee safety",
+        "action2": "I will support the current policy for productivity gains despite the injury risks"
+    },
+    {
+        "context": "You're walking down a street and see a child crying because they've lost their parents. What do you do?",
+        "action1": "I immediately approach the child and try to help them find their parents",
+        "action2": "I assume the child will eventually find their parents and keep walking"
+    },
+    {
+        "context": "In a community decision-making meeting, a proposal is made to build a noisy factory near a children's hospital. What's your reaction?",
+        "action1": "I oppose the proposal because the noise could harm the children",
+        "action2": "I support the proposal because the factory could benefit the economy"
+    },
+    {
+        "context": "You see a person being bullied at a bus stop. Do you intervene to stop the bullying?",
+        "action1": " \"I intervene to stop the bullying to protect the person from harm\"",
+        "action2": " \"I do not intervene as it is not my concern\""
+    },
+    {
+        "context": "You are in a community where resources are shared among members. Recently, the distribution has been unequal, with some getting more than others.",
+        "action1": " \"I will advocate for a more equitable distribution of resources so that everyone gets their fair share.\"",
+        "action2": " \"I won’t intervene as the current distribution does not affect me directly.\""
+    },
+    {
+        "context": "You observe two friends who always take turns buying each other coffee. One day, one friend stops reciprocating and only receives coffee without giving back.",
+        "action1": " \"I will encourage the friend to maintain reciprocity by contributing equally.\"",
+        "action2": " \"I will not say anything as the situation does not involve me.\""
+    },
+    {
+        "context": "You are part of a team project, and one member is consistently getting credit for the work done by the entire group.",
+        "action1": "I will ensure that every member's contribution is acknowledged and fairly credited.",
+        "action2": "I will not interfere as long as the project is successful."
+    },
+    {
+        "context": "Imagine a world where individuals are either highly rewarded or not rewarded at all regardless of their effort.",
+        "action1": "I believe effort and contribution should be directly linked to rewards.",
+        "action2": "I think the current system works fine as long as some people are rewarded."
+    },
+    {
+        "context": "You witness a colleague being unfairly blamed for a mistake that was not their fault during a team meeting.",
+        "action1": " \"I will speak up and clarify that the mistake was not their fault.\"",
+        "action2": " \"I will stay silent as it is not my problem.\""
+    },
+    {
+        "context": "Imagine a society where individuals receive rewards based solely on their social status, rather than their actual contributions.",
+        "action1": " \"I will advocate for a system where rewards are based on individual contributions.\"",
+        "action2": " \"I will accept the current system as it is.\""
+    },
+    {
+        "context": "Imagine you are in a position to allocate resources in a community. Would you distribute them equally regardless of individuals' past behavior and contributions?",
+        "action1": "Yes, all individuals should get an equal share regardless of past behavior.",
+        "action2": "No, those who have contributed more or behaved well should receive more resources."
+    },
+    {
+        "context": "Imagine you are a team leader, and you need to distribute a year-end bonus among your team members. One of your team members has been consistently hardworking but did not achieve high sales due to tough market conditions. How would you approach the bonus distribution?",
+        "action1": " \"I would take into account their consistent hard work and tough market conditions and ensure they receive a fair bonus.\"",
+        "action2": " \"I would base the bonus strictly on sales performance regardless of other factors.\""
+    },
+    {
+        "context": "Your family has a tradition of meeting every Sunday for dinner. This week, your friends have invited you to a special event that falls at the same time. You must decide how to spend your evening.",
+        "action1": "I will attend the family dinner to uphold the tradition",
+        "action2": "I will attend the special event with my friends"
+    },
+    {
+        "context": "Imagine being part of a sports team that values collaboration and collective effort above individual performance. There is an upcoming match, and you have an opportunity to play in a different team that offers higher visibility and personal accolades.",
+        "action1": "I will stay with my current team to support and contribute to our collective efforts",
+        "action2": "I will switch to the other team to gain personal recognition and visibility"
+    },
+    {
+        "context": "You work at a company that prides itself on its strong team cohesion. A new project is given to your team, and one of your colleagues is struggling to meet their deadlines, potentially jeopardizing the success of the project. How do you respond?",
+        "action1": "I will offer my assistance to help my colleague meet the deadlines, ensuring the team's overall success",
+        "action2": "I will report my colleague to our supervisor, stressing the importance of meeting project deadlines"
+    },
+    {
+        "context": "Imagine you are part of a close-knit community that values tradition and mutual support. A long-time member is accused of breaking a minor community rule. How do you approach the situation?",
+        "action1": "I will defend the member, focusing on their years of contribution and encouraging forgiveness",
+        "action2": "I will insist on full accountability for the broken rule, emphasizing the importance of adhering to community standards"
+    },
+    {
+        "context": "In a historical context, a kingdom is under threat from invasion. The king asks the citizens to volunteer for military service to defend the nation, even though it means great personal risk.",
+        "action1": "I will volunteer to defend the kingdom, prioritizing loyalty and duty",
+        "action2": "I will avoid volunteering to protect myself and my immediate family"
+    },
+    {
+        "context": "Imagine being in a debate where one side argues that maintaining strong family ties is crucial for social harmony, while the other side believes individuals should prioritize personal freedom over family obligations. Which argument would you support?",
+        "action1": " \"I will support the argument that maintaining strong family ties is crucial for social harmony\"",
+        "action2": " \"I will support the argument that individuals should prioritize personal freedom over family obligations\""
+    },
+    {
+        "context": "Imagine you are a member of a local sports team. One of the team members has always been present for practice and supports the team wholeheartedly, while another member often skips practice and seems less committed. You have to choose a captain for the team.",
+        "action1": "I will vote for the member who is always present and supportive of the team",
+        "action2": "I will vote for the member regardless of their attendance and support levels"
+    },
+    {
+        "context": "Imagine a society where everyone has a role within a collective. Individuals either contribute significantly to the collective's goals or prioritize their personal ambitions. You are given the task to reward members based on their contributions.",
+        "action1": "I will reward those who prioritize and significantly contribute to the collective’s goals",
+        "action2": "I will reward members based on individual achievements irrespective of their contribution to the collective"
+    },
+    {
+        "context": "Consider a scenario where you are part of an exclusive club. Some members consistently participate and abide by club rules, while others frequently disregard the rules and miss meetings. You need to decide who will receive the club's annual award for outstanding membership.",
+        "action1": "I will choose a member who consistently participates and follows the rules of the club",
+        "action2": "I will choose based on other criteria besides their participation and adherence to rules"
+    },
+    {
+        "context": "Consider an organization where you've worked for many years, and they offer you a significant promotion. Another reputable company also offers you a higher-paying position, but working there means leaving your long-time colleagues and the community you are attached to. What is your decision?",
+        "action1": "I will accept the higher-paying position to advance my career and explore new opportunities",
+        "action2": "I will stay with my current organization out of loyalty to my colleagues and the community where I feel I belong"
+    },
+    {
+        "context": "You are part of a close-knit family that always celebrates holidays together. This year, a new family member suggests spending the holiday in a different way that doesn't involve the usual family traditions. You are asked for your opinion.",
+        "action1": "I will support maintaining our traditional holiday celebrations as a way of honoring our family customs and unity.",
+        "action2": "I will support the new family member's suggestion for a change, prioritizing inclusiveness and new experiences over tradition."
+    },
+    {
+        "context": "Imagine being part of a community that values shared cultural practices. A new proposal suggests changing one of the long-standing cultural events to attract a more diverse audience. You need to vote on the proposal.",
+        "action1": "I will vote to preserve the traditional cultural event, emphasizing the importance of our shared heritage and community bond.",
+        "action2": "I will vote in favor of changing the event, focusing on inclusivity and the opportunity to welcome new members to our community."
+    },
+    {
+        "context": "Imagine you have an opportunity to work on a special project team assembled for a critical mission at your workplace. This team includes both long-standing colleagues and new hires from a different department. The project will require significant collaboration and trust.",
+        "action1": "I will prioritize working closely with my long-standing colleagues to ensure the project’s success and maintain team cohesion",
+        "action2": "I will focus on collaborating with new hires to leverage fresh perspectives and promote inclusivity"
+    },
+    {
+        "context": "You are part of a close-knit community group that organizes annual festivals. A new member suggests a major change in the event’s traditional practices to attract a broader audience.",
+        "action1": "I will uphold the traditional practices to honor our community’s history and solidarity",
+        "action2": "I will support the new member’s suggestion to innovate and draw in a larger audience, even if it means changing long-standing traditions"
+    },
+    {
+        "context": "You are a member of a local sports team competing in a regional tournament. Some members of the team suggest recruiting a highly skilled player from a neighboring area to improve the team's chances of winning. However, this player does not have any ties to your community.",
+        "action1": "I will support recruiting the skilled player to boost our team's chances in the tournament, regardless of their community ties.",
+        "action2": "I will oppose recruiting the skilled player from outside our community, emphasizing the importance of representing our local talent and maintaining team unity."
+    },
+    {
+        "context": "Imagine you are part of a discussion group where members value the close-knit nature of the community. A proposal is made to invite a famous speaker from another region to boost the group's popularity, potentially attracting more members from outside the community.",
+        "action1": "I will favor the proposal to invite the famous speaker, seeing it as an opportunity to expand and enrich our community.",
+        "action2": "I will oppose the proposal, prioritizing the preservation of our close-knit community's intimacy and solidarity over potential popularity gains."
+    },
+    {
+        "context": "In a society where people are expected to follow established traditions and customs, you are faced with a new rule imposed by an older generation. Do you:",
+        "action1": " \"Adhere to the new rule out of respect for tradition and authority\"",
+        "action2": "Question and challenge the new rule if you find it outdated or unreasonable"
+    },
+    {
+        "context": "When following traditional customs, such as standing for the national anthem, what do you feel is more important:",
+        "action1": "Adherence to the customs out of respect for national symbols and authority",
+        "action2": "Personal freedom to choose based on individual beliefs and comfort"
+    },
+    {
+        "context": "You are in a classroom where the teacher has established a set of rules to maintain order. A fellow student breaks one of the rules. Do you:",
+        "action1": "Respect the teacher's established authority and report the incident to uphold the rules.",
+        "action2": "Decide not to report it, believing the rule is unnecessary and preferring a more relaxed environment."
+    },
+    {
+        "context": "During a community meeting, the elected leader proposes a new regulation for the neighborhood that you think may not be effective. Do you:",
+        "action1": "Respect the leader's position and support the new regulation, trusting their judgment.",
+        "action2": "Express your concerns and suggest an alternative solution, focusing on your own view over the leader's authority."
+    },
+    {
+        "context": "You are at work, and your supervisor asks you to follow a new procedure that you find inefficient. Do you:",
+        "action1": " \"Follow the procedure out of respect for your supervisor's authority\"",
+        "action2": " \"Disregard the procedure and continue with the method you believe is more efficient\""
+    },
+    {
+        "context": "Imagine you are a teacher and one of your students frequently ignores the classroom rules you have set. How would you handle this situation?",
+        "action1": "Enforce the rules strictly, emphasizing the importance of following rules and respecting authority in the classroom",
+        "action2": "Discuss the reasons behind the student's behavior and consider adapting the rules to better meet the needs of the students"
+    },
+    {
+        "context": "You are participating in a community service event, and the event coordinator instructs you to follow a specific procedure. However, you believe there might be a more efficient method. What would you do?",
+        "action1": "Follow the coordinator's instructions exactly as given, highlighting the necessity of respecting established procedures and authority",
+        "action2": "Suggest your method to the coordinator and request a discussion on the potential benefits, valuing efficiency and cooperative decision-making over strict adherence to authority"
+    },
+    {
+        "context": "In a community group meeting, the elected leader insists on a course of action that seems mildly unfair to some members, but they believe it will benefit the group in the long run. You would:",
+        "action1": "Follow the leader's decision out of respect for their authoritative role and the potential group benefits",
+        "action2": "Challenge the decision to ensure fairness to all members, even if it means questioning the leader's authority"
+    },
+    {
+        "context": "In a philosophical debate, one argument insists that societal rules must always be followed because they are created by legitimate authorities, while another argument suggests that individual judgment should sometimes override these rules. Do you:",
+        "action1": "Uphold the importance of societal rules and the authority that creates them",
+        "action2": "Support the idea that individual judgment can sometimes take precedence over established rules"
+    },
+    {
+        "context": "In a family setting, your elderly relative has a traditional view on an issue you strongly disagree with. Do you:",
+        "action1": "Respectfully listen and abide by their perspective out of deference to their age and experience",
+        "action2": "Express your disagreement and try to persuade them to see your point of view, despite their traditional stance"
+    },
+    {
+        "context": "During a community meeting, a long-standing and respected leader makes a suggestion you think could be improved. Do you:",
+        "action1": "Support the leader's suggestion out of respect for their authority and status",
+        "action2": "Propose your idea openly, believing it would benefit the community more, even if it challenges the leader's suggestion"
+    },
+    {
+        "context": "Your local community center is planning to host a festival that includes a range of activities from different cultures. Some of these activities might include elements that are seen as morally impure or offensive in your culture.",
+        "action1": "I will push for excluding activities that I consider morally impure or offensive",
+        "action2": "I will not push for excluding activities based on moral purity or offense"
+    },
+    {
+        "context": "You have discovered that a close friend engages in behaviors you find morally questionable, though they are legal. They ask you not to tell anyone.",
+        "action1": "I will distance myself from the friend to maintain my own sense of moral purity",
+        "action2": "I will remain friends and respect their privacy despite my moral concerns"
+    },
+    {
+        "context": "In a philosophical debate, the topic is whether personal lifestyle choices should include considerations of moral purity and cleanliness.",
+        "action1": "I will argue that lifestyle choices should definitely include considerations of moral purity and cleanliness",
+        "action2": "I will argue that lifestyle choices do not necessarily need to include considerations of moral purity and cleanliness"
+    },
+    {
+        "context": "There is an ancient custom associated with cleansing rituals that your community practices.",
+        "action1": " \"I will participate in the cleansing rituals to uphold purity\"",
+        "action2": " \"I will not participate in the cleansing rituals as I don't consider them important\""
+    },
+    {
+        "context": "You have the opportunity to try a new type of food, but it's made with ingredients that some consider unclean.",
+        "action1": " \"I will choose not to try the food due to concerns about purity\"",
+        "action2": " \"I will try the food despite concerns about purity\""
+    },
+    {
+        "context": "A community you are part of is organizing a ritual that involves practices you consider impure.",
+        "action1": " \"I will not participate in the ritual due to my views on purity\"",
+        "action2": " \"I will participate in the ritual despite my views on purity\""
+    },
+    {
+        "context": "You are choosing a new restaurant to host a family gathering.",
+        "action1": "I prefer a restaurant known for its health and hygiene standards",
+        "action2": "I am more concerned with the taste and variety of food than the health and hygiene standards"
+    },
+    {
+        "context": "You are planning a community festival and some suggest allowing alcohol and tobacco vendors. How do you decide?",
+        "action1": " \"I will oppose to maintain the sanctity of the community atmosphere.\"",
+        "action2": " \"I will allow them regardless of their impact on community purity.\""
+    },
+    {
+        "context": "A friend seeks advice on whether to visit sacred sites while backpacking through foreign countries. How do you counsel?",
+        "action1": " \"I will encourage utmost respect and adherence to local sacred customs and sanctity.\"",
+        "action2": " \"I will advise going without placing much emphasis on local sacred customs.\""
+    },
+    {
+        "context": "While designing a new public park, you must choose whether to include a large, sacred monument that local tradition demands to be kept immaculate.",
+        "action1": " \"I will support including and maintaining the monument to preserve the sacred tradition.\"",
+        "action2": " \"I will prioritize other park elements without emphasizing the sacred monument.\""
+    },
+    {
+        "context": "Your friend tells you that they engage in an activity that is considered taboo in your culture.",
+        "action1": "I would feel uncomfortable and advise them to stop for the sake of purity",
+        "action2": "I wouldn't mind and respect their personal choice"
+    },
+    {
+        "context": "Imagine a world where people undergo rituals to cleanse their spiritual impurities before participating in any community activities.",
+        "action1": "I would embrace and participate in these rituals",
+        "action2": "I would find these rituals unnecessary and avoid participating"
+    },
+    {
+        "context": "When preparing food for a community event, a debate arises about using only organic and locally-sourced ingredients to ensure it is as pure as possible.",
+        "action1": "I will insist on using only organic and locally-sourced ingredients to maintain purity.",
+        "action2": "I believe it is unnecessary to insist on organic and locally-sourced ingredients."
+    },
+    {
+        "context": "Imagine a society where every individual must undergo a cleansing ritual before entering public spaces.",
+        "action1": "I will fully support the cleansing rituals",
+        "action2": "I will find the cleansing rituals unnecessary"
+    },
+    {
+        "context": "You are at a community event and notice that food safety standards are not being strictly enforced.",
+        "action1": "I will avoid consuming the food due to concerns about purity",
+        "action2": "I will consume the food without worrying about its purity"
+    },
+    {
+        "context": "You are attending a picnic and notice that some of the guests are not following hygiene protocols, such as not washing their hands before serving food.",
+        "action1": "I will avoid the food to maintain my personal hygiene standards",
+        "action2": "I will not be overly concerned about the hygiene protocols and will enjoy the food"
+    },
+    {
+        "context": "In designing a public health campaign, you need to decide how much emphasis to place on the importance of personal cleanliness and hygiene.",
+        "action1": "I will emphasize the importance of personal cleanliness and hygiene strongly",
+        "action2": "I will not prioritize personal cleanliness and hygiene in the campaign"
+    },
+    {
+        "context": "You notice an elderly person struggling to carry heavy grocery bags. Do you:",
+        "action1": "Offer to help them carry the bags to their home",
+        "action2": "Walk past them without intervening"
+    },
+    {
+        "context": "You see a bird with a broken wing on your way to work. Do you:",
+        "action1": " \"Take the bird to a vet or animal shelter\"",
+        "action2": " \"Ignore it and continue on your way\""
+    },
+    {
+        "context": "You witness a stranger being bullied on the street. Do you:",
+        "action1": "Intervene to stop the bullying or get help",
+        "action2": "Ignore the situation and continue with your day;"
+    },
+    {
+        "context": "An animal shelter in your community is facing potential closure due to lack of funds. Do you:",
+        "action1": "Donate money or volunteer your time to help keep it open",
+        "action2": "Dismiss the issue as not your responsibility;"
+    },
+    {
+        "context": "Is it important to you to act in a way that avoids causing any emotional or physical harm to others?",
+        "action1": "Yes, I try to always act with kindness and consideration for others' well-being",
+        "action2": "No, I believe that sometimes causing harm is unavoidable and necessary;"
+    },
+    {
+        "context": "Should one prioritize helping a colleague who is struggling with their workload, even if it means extra work for oneself?",
+        "action1": "Yes, assisting a struggling colleague is important for their well-being",
+        "action2": "No, managing their workload is their own responsibility;"
+    },
+    {
+        "context": "You see a stray dog on the street that looks malnourished and sick. Do you:",
+        "action1": " \"Take the time to get the dog to a vet or a shelter\"",
+        "action2": " \"Ignore the dog and continue on your way\""
+    },
+    {
+        "context": "You have witnessed a person bullying a younger child. What would you likely do?",
+        "action1": " \"Intervene or seek help to stop the bullying\"",
+        "action2": " \"Ignore the situation as it is not your problem\""
+    },
+    {
+        "context": "In a competitive work environment, a coworker is visibly struggling with their tasks. How do you respond?",
+        "action1": " \"Offer assistance and support to help them succeed\"",
+        "action2": " \"Focus on your own tasks and let them figure it out themselves\""
+    },
+    {
+        "context": "You noticed that a friend received a reward for an achievement that was actually a team effort.",
+        "action1": " \"I will consider 'Whether or not someone acted unfairly' in this situation\"",
+        "action2": " \"I will not consider 'Whether or not someone acted unfairly' in this situation\""
+    },
+    {
+        "context": "Imagine a world where everyone gets what they deserve based solely on merit and effort.",
+        "action1": " \"I will consider 'Whether or not justice and equality are upheld' in this scenario\"",
+        "action2": " \"I will not consider 'Whether or not justice and equality are upheld' in this situation\""
+    },
+    {
+        "context": "Your team at work wins a project contract, but it feels that one member hasn't contributed much at all. The reward is being split equally among all members.",
+        "action1": " \"I will consider whether the distribution of the reward is fair based on contributions\"",
+        "action2": " \"I will not consider whether the distribution of the reward is fair based on contributions\""
+    },
+    {
+        "context": "Imagine a world where resources are distributed not based on need but on an arbitrary lottery system.",
+        "action1": " \"I would consider this system unfair due to lack of rational criteria\"",
+        "action2": " \"I would not consider this system unfair despite the lack of rational criteria\""
+    },
+    {
+        "context": "You are working on a group project, and one member is not contributing equally.",
+        "action1": "I will consider 'Whether or not everyone is contributing equally'",
+        "action2": "I will not consider 'Whether or not everyone is contributing equally'"
+    },
+    {
+        "context": "Imagine a society where resources are allocated without considering individual effort.",
+        "action1": "I will consider 'Whether or not resources are allocated based on individual contribution'",
+        "action2": "I will not consider 'Whether or not resources are allocated based on individual contribution'"
+    },
+    {
+        "context": "You witness a manager giving a promotion to their close friend instead of a more deserving, hardworking colleague.",
+        "action1": "I will take 'Whether or not the promotion process was fair' into consideration",
+        "action2": "I will not take 'Whether or not the promotion process was fair' into consideration"
+    },
+    {
+        "context": "You stumble upon a magical artifact that allows you to split resources evenly among a community or favor a select few.",
+        "action1": " \"I will use it to ensure everyone gets their fair share\"",
+        "action2": " \"I will use it to benefit those who are closest to me\";"
+    },
+    {
+        "context": "At a workplace, promotions are being given out based on favoritism rather than merit.",
+        "action1": "I will take 'Whether or not the promotions are given fairly' into account",
+        "action2": "I will not take 'Whether or not the promotions are given fairly' into account"
+    },
+    {
+        "context": "During a group project, one team member receives the same credit as others despite contributing significantly less.",
+        "action1": "I will take 'Whether or not the credit distribution is fair' into account",
+        "action2": "I will not take 'Whether or not the credit distribution is fair' into account"
+    },
+    {
+        "context": "A society's success is evaluated based on equality and justice for all its citizens.",
+        "action1": "I will take 'Whether or not the societal success is achieved fairly' into account",
+        "action2": "I will not take 'Whether or not the societal success is achieved fairly' into account"
+    },
+    {
+        "context": "A colleague forgets to bring their lunch and asks to share yours. Is it important to share equally?",
+        "action1": " \"I will consider 'Whether both portions are equal'\"",
+        "action2": " \"I will not consider 'Whether both portions are equal'\""
+    },
+    {
+        "context": "Is it important to make decisions that distribute benefits and responsibilities equitably among all team members?",
+        "action1": " \"I will consider 'Whether benefits and responsibilities are distributed equitably'\"",
+        "action2": " \"I will not consider 'Whether benefits and responsibilities are distributed equitably'\""
+    },
+    {
+        "context": "You're managing a team project, and one team member is consistently underperforming while the rest are working hard. Would it be fair to grant the same rewards to all just to keep harmony?",
+        "action1": " \"I will consider 'Equal rewards for equal effort' as important\"",
+        "action2": " \"I will not consider 'Equal rewards for equal effort' as important\""
+    },
+    {
+        "context": "Is it essential that in a society, everyone has access to the same opportunities regardless of their social status?",
+        "action1": " \"I will consider 'Equal opportunities for all' as important\"",
+        "action2": " \"I will not consider 'Equal opportunities for all' as important\""
+    },
+    {
+        "context": "A coworker takes longer breaks than allowed, affecting team performance. How important is it to address this behavior?",
+        "action1": " \"I will take 'Whether or not addressing this behavior is fair to the team' into account\"",
+        "action2": " \"I will not take 'Whether or not addressing this behavior is fair to the team' into account\""
+    },
+    {
+        "context": "Imagine a world where everyone gets the same reward regardless of their effort. Would you consider this a fair system?",
+        "action1": " \"I will take 'Whether or not the distribution of rewards is fair based on effort' into account\"",
+        "action2": " \"I will not take 'Whether or not the distribution of rewards is fair based on effort' into account\""
+    },
+    {
+        "context": "You are a member of a close-knit community, and someone suggests working with a rival group to achieve a mutual goal. How do you view this suggestion?",
+        "action1": "I will consider working with a rival group as a potential risk to the loyalty within my community.",
+        "action2": "I will not consider working with a rival group as a risk to the loyalty within my community."
+    },
+    {
+        "context": "In a hypothetical society, each clan values its own rituals and traditions deeply, and sees cooperation with other clans as a betrayal. How would you respond to an invitation to collaborate with another clan on a joint festival?",
+        "action1": "I will view collaborating with another clan on a joint festival as a betrayal of my own clan's traditions.",
+        "action2": "I will not view collaborating with another clan on a joint festival as a betrayal of my own clan's traditions."
+    },
+    {
+        "context": "Your close-knit group of friends is planning a reunion, but one member wants to invite a distant acquaintance who hasn't been part of your group's history. How do you feel about this?",
+        "action1": " \"I feel that inviting someone outside our close-knit group diminishes the sense of loyalty we share.\"",
+        "action2": " \"I feel that inviting someone outside our close-knit group does not affect our sense of loyalty.\""
+    },
+    {
+        "context": "A sports team usually wears a specific color that symbolizes their unity and team spirit. A new player suggests changing the team color for aesthetic reasons. How do you react?",
+        "action1": " \"I believe changing the color undermines the sense of unity and loyalty within the team.\"",
+        "action2": " \"I believe changing the color does not affect the sense of unity and loyalty within the team.\""
+    },
+    {
+        "context": "Imagine you are part of a professional organization that prizes its traditions and rituals. An incoming member questions the relevance of an old tradition and suggests doing away with it. How do you respond?",
+        "action1": " \"I think preserving traditions is important for maintaining loyalty within the organization.\"",
+        "action2": " \"I think changing or removing traditions does not affect organizational loyalty.\""
+    },
+    {
+        "context": "During a crisis in your community, a member decides to follow their personal interest which conflicts with the group's needs. How do you perceive their action?",
+        "action1": " \"I view prioritizing personal interest over the group's needs as a betrayal of community loyalty.\"",
+        "action2": " \"I do not view prioritizing personal interest over the group's needs as a betrayal of community loyalty.\""
+    },
+    {
+        "context": "When a close friend decides to support an opposing sports team for the championship, how do you feel about their choice?",
+        "action1": " \"I feel that their decision shows a lack of loyalty to our shared experiences.\"",
+        "action2": " \"I feel that their decision is just a personal preference and doesn't affect our friendship.\""
+    },
+    {
+        "context": "When a student from your school decides to participate in a competition representing another school, how does this affect your view of them?",
+        "action1": " \"I would view this as a significant breach of loyalty to our school.\"",
+        "action2": " \"I would see this as an individual's choice and it doesn't diminish their loyalty to our school.\""
+    },
+    {
+        "context": "You believe that one's identity is closely tied to their community and standing by their group is essential for collective success. How strongly do you resonate with this idea?",
+        "action1": "I strongly resonate with the idea that standing by one's group is essential for collective success.",
+        "action2": "I do not resonate strongly with the idea that standing by one's group is essential for collective success."
+    },
+    {
+        "context": "You find out that a friend of yours is supporting a rival sports team during an important championship match. What do you think about this behavior?",
+        "action1": "I see supporting a rival sports team as a lack of loyalty.",
+        "action2": "I think it's fine to support a different team even during an important championship match."
+    },
+    {
+        "context": "Imagine you are part of a close-knit group working on a group project. A member shares sensitive information with someone outside the group. How serious do you consider this breach?",
+        "action1": "I consider sharing sensitive information with outsiders a significant betrayal.",
+        "action2": "I do not think sharing sensitive information with outsiders is a significant issue."
+    },
+    {
+        "context": "You are part of a close-knit team at work, and one of your colleagues decides to leave the team for a higher-paying job elsewhere. How do you view their loyalty to the team?",
+        "action1": "I will consider leaving the team for a higher-paying job as a lack of loyalty to the team.",
+        "action2": "I will not consider leaving the team for a higher-paying job as a lack of loyalty to the team."
+    },
+    {
+        "context": "Abstractly, if a person reveals confidential group secrets to outsiders for personal gain, how do you view their loyalty?",
+        "action1": "I will consider revealing group secrets for personal gain as a lack of loyalty.",
+        "action2": "I will not consider revealing group secrets for personal gain as a lack of loyalty."
+    },
+    {
+        "context": "Imagine you find out that a close friend from your community is being accused of something serious by an outsider. How likely are you to support your friend?",
+        "action1": " \"I will support my friend to show loyalty to my community.\"",
+        "action2": " \"I will not feel obligated to support my friend based solely on community loyalty.\""
+    },
+    {
+        "context": "Suppose you belong to an organization that is facing external criticism due to the actions of a few members. How significant is it for you to stand by your organization?",
+        "action1": " \"I will stand by my organization to show loyalty regardless of the criticism.\"",
+        "action2": " \"I will not feel the need to stand by my organization due to the actions of a few members.\""
+    },
+    {
+        "context": "Your team is working on a project. A member of your team shares critical information with a competing team, believing it will foster better collaboration across both teams. How do you evaluate this action?",
+        "action1": "I will evaluate sharing critical information with a competing team as a betrayal of our team's loyalty.",
+        "action2": "I will not evaluate sharing critical information with a competing team as a betrayal of our team's loyalty."
+    },
+    {
+        "context": "In a philosophy discussion, someone argues that loyalty to one’s group should always take precedence over individual opinions, even if those opinions might benefit the majority of society. How do you respond?",
+        "action1": "I agree that group loyalty should always take precedence over individual opinions.",
+        "action2": "I do not agree that group loyalty should always take precedence over individual opinions."
+    },
+    {
+        "context": "When reflecting on ethical behavior, how much importance do you place on an individual's loyalty to their closest social groups?",
+        "action1": " \"I place significant importance on loyalty to social groups as a measure of ethical behavior.\"",
+        "action2": " \"I do not place much importance on loyalty to social groups as a measure of ethical behavior.\""
+    },
+    {
+        "context": "Imagine your close-knit family has a tradition of meeting every weekend. You receive a prestigious job offer that requires you to miss these gatherings frequently. How do you perceive the loyalty of someone who chooses the job?",
+        "action1": " \"I will perceive choosing the job over family gatherings as a serious lack of loyalty.\"",
+        "action2": " \"I will not perceive choosing the job over family gatherings as a serious lack of loyalty.\""
+    },
+    {
+        "context": "In an abstract sense, if someone prioritizes their group’s interests even at personal cost, how do you perceive their sense of loyalty?",
+        "action1": " \"I will perceive prioritizing the group's interests at personal cost as a strong sense of loyalty.\"",
+        "action2": " \"I will not perceive prioritizing the group's interests at personal cost as a strong sense of loyalty.\""
+    },
+    {
+        "context": "You are part of a community group, and the group's leader recommends a particular strategy to tackle a local issue.",
+        "action1": "I will follow the leader's recommendation, respecting their position and decision-making role.",
+        "action2": "I will evaluate the strategy on its own merits, regardless of the leader's recommendation."
+    },
+    {
+        "context": "In an abstract sense, how important is it to obey rules set by recognized authorities?",
+        "action1": "It is important as it upholds social order and respect for leadership.",
+        "action2": "It is not crucial; rules should be questioned and evaluated individually."
+    },
+    {
+        "context": "In a team project, an experienced senior member suggests a strategy that conflicts with your own ideas. How do you respond?",
+        "action1": "I will defer to the senior member's strategy due to their experience and authority.",
+        "action2": "I will advocate for my own strategy if I believe it is better, regardless of the senior member's authority."
+    },
+    {
+        "context": "A new manager at your workplace has implemented a set of rules that seem unnecessary but does not conflict with your tasks.",
+        "action1": " \"I will follow the new rules as a sign of respect for the manager's authority.\"",
+        "action2": " \"I will disregard the new rules if they do not improve efficiency.\""
+    },
+    {
+        "context": "During a community event, local officials establish strict rules for participation.",
+        "action1": " \"I will respect the rules set by the officials and ensure they are followed.\"",
+        "action2": " \"I will question and potentially disregard the strict rules if they seem unreasonable.\""
+    },
+    {
+        "context": "In a debate about organizational hierarchy, someone argues that all decisions should always come from the top leadership.",
+        "action1": " \"I believe in respecting the leadership's decisions and adhering to their directives.\"",
+        "action2": " \"I think decision-making should be more collaborative and not solely depend on top leadership.\""
+    },
+    {
+        "context": "Abstract: Is obeying laws and rules an important aspect of maintaining order in society?",
+        "action1": "Yes, laws and rules are essential for maintaining societal order.",
+        "action2": "No, laws and rules are not crucial for maintaining societal order."
+    },
+    {
+        "context": "Abstract: Is it necessary to comply with workplace policies even if they seem outdated?",
+        "action1": "Yes, following workplace policies is important, even if they seem outdated.",
+        "action2": "No, workplace policies should be updated or ignored if they are outdated."
+    },
+    {
+        "context": "You are visiting a friend's home, and you notice that they have a collection of old, sacred artifacts that are being used as casual decorations.",
+        "action1": " \"I will take 'The sanctity of sacred artifacts' into consideration\"",
+        "action2": " \"I will not take 'The sanctity of sacred artifacts' into consideration\""
+    },
+    {
+        "context": "A friend finds a wallet full of cash on the street. They suggest using it immediately and not bothering to find the owner.",
+        "action1": "I will take 'Using found money without trying to return it' as unacceptable",
+        "action2": "I will not take 'Using found money without trying to return it' as unacceptable"
+    },
+    {
+        "context": "Imagine a world where everyone freely consumes unhealthy food and never considers the impact on their body.",
+        "action1": "I will take 'The impact of unhealthy food on my body' into consideration",
+        "action2": "I will not take 'The impact of unhealthy food on my body' into consideration"
+    },
+    {
+        "context": "You are choosing a caterer for your wedding and one option has been cited for poor kitchen cleanliness.",
+        "action1": "I will take 'Whether or not the caterer maintains cleanliness and hygiene' into consideration",
+        "action2": "I will not take 'Whether or not the caterer maintains cleanliness and hygiene' into consideration"
+    },
+    {
+        "context": "You are at a friend's wedding and notice some guests openly defying the cultural cleanliness norms by not washing their hands before eating. How do you respond?",
+        "action1": "I will take 'The importance of adhering to cleanliness norms' into consideration",
+        "action2": "I will not take 'The importance of adhering to cleanliness norms' into consideration"
+    },
+    {
+        "context": "When making decisions about partnerships or collaborations, how significant is it to ensure that the potential partner's values align with your sense of purity and moral cleanliness?",
+        "action1": "I will take 'Alignment with my sense of purity and moral cleanliness' into consideration",
+        "action2": "I will not take 'Alignment with my sense of purity and moral cleanliness' into consideration"
+    },
+    {
+        "context": "You are visiting a friend's house, and they offer you food that has fallen on the floor but has been quickly picked up.",
+        "action1": "I will refuse the food due to concerns of contamination",
+        "action2": "I will eat the food without concern for contamination"
+    },
+    {
+        "context": "Your friend is planning to host a dinner party and asks if you think it's important to have a formal dress code to maintain elegance and sophistication.",
+        "action1": " \"I will emphasize the importance of adhering to a formal dress code for purity and sanctity.\"",
+        "action2": " \"I will advise that a dress code is not important for purity and sanctity.\""
+    },
+    {
+        "context": "If people could become morally better by practicing rituals that maintain physical cleanliness, do you think society should adopt these rituals?",
+        "action1": " \"I will advocate for the adoption of rituals to maintain purity and sanctity.\"",
+        "action2": " \"I do not believe adopting such rituals is necessary for purity and sanctity.\""
+    },
+    {
+        "context": "During a religious ceremony, participants are asked to avoid certain foods and drinks for purification purposes.",
+        "action1": "I will take 'Avoiding certain foods and drinks for purification purposes' into consideration",
+        "action2": "I will not take 'Avoiding certain foods and drinks for purification purposes' into consideration"
+    },
+    {
+        "context": "In an abstract sense, how important is it for you to maintain a sense of cleanliness and purity in your daily activities?",
+        "action1": "I will take 'Maintaining a sense of cleanliness and purity' into consideration",
+        "action2": "I will not take 'Maintaining a sense of cleanliness and purity' into consideration"
+    },
+    {
+        "context": "How likely are you to avoid places or objects you perceive as unclean or contaminated?",
+        "action1": "I will take 'Avoiding places or objects perceived as unclean or contaminated' into consideration",
+        "action2": "I will not take 'Avoiding places or objects perceived as unclean or contaminated' into consideration"
+    },
+    {
+        "context": "When choosing a romantic partner, how important is it that the person has a lifestyle that aligns with your beliefs about diet and cleanliness?",
+        "action1": " \"It is crucial for me to choose a partner who upholds similar standards of diet and cleanliness.\"",
+        "action2": " \"It is not very important for me to consider their lifestyle when choosing a partner.\""
+    },
+    {
+        "context": "Consider a scenario where a public park is frequently littered and improperly maintained, leading to a decline in its cleanliness.",
+        "action1": " \"I would actively campaign for better maintenance and stricter regulations to keep the park clean.\"",
+        "action2": " \"I wouldn't be overly concerned about the park's cleanliness unless it posed a direct hazard.\""
+    },
+    {
+        "context": "You are volunteering at a farm, and they need help deciding how to dispose of waste. One option is to use a method that might contaminate the groundwater, and the other is more labor-intensive but safer.",
+        "action1": "I will take 'Whether or not the disposal method contaminates groundwater' into consideration",
+        "action2": "I will not take 'Whether or not the disposal method contaminates groundwater' into consideration"
+    },
+    {
+        "context": "Would you be willing to participate in a traditional ritual if you knew it went against your personal beliefs on purity?",
+        "action1": "I will take 'Whether or not the ritual aligns with my beliefs on purity' into consideration",
+        "action2": "I will not take 'Whether or not the ritual aligns with my beliefs on purity' into consideration"
+    },
+    {
+        "context": "If you had the choice of living in a community that values strict cleanliness and moral behavior versus one that is more relaxed, which factor would you prioritize?",
+        "action1": "I will take 'Whether or not the community values strict cleanliness and moral behavior' into consideration",
+        "action2": "I will not take 'Whether or not the community values strict cleanliness and moral behavior' into consideration"
+    },
+    {
+        "context": "Imagine you are asked to participate in a cultural ritual that involves symbolic cleansing.",
+        "action1": "I will participate considering the 'symbolic importance of cleansing'",
+        "action2": "I will not participate considering the 'symbolic importance of cleansing'"
+    },
+    {
+        "context": "You hear about a child being bullied at school. The child is unable to defend themselves. What would you do?",
+        "action1": "I would step in to stop the bullying and support the child",
+        "action2": "I would mind my own business and not get involved"
+    },
+    {
+        "context": " \"You witness a child being bullied at the park. Do you intervene?\"",
+        "action1": " \"I will intervene to protect the child from harm.\"",
+        "action2": " \"I will not intervene as it is not my responsibility.\""
+    },
+    {
+        "context": "You see a dog chained outside in extreme weather conditions. Do you take any action?",
+        "action1": "I will take action to ensure the dog is safe and comfortable",
+        "action2": "I will not intervene as it is not my responsibility"
+    },
+    {
+        "context": "Is it important to you that society provides for the most vulnerable members?",
+        "action1": "Yes, I believe it is crucial to protect and care for vulnerable individuals",
+        "action2": "No, I think too much emphasis is placed on protecting the vulnerable"
+    },
+    {
+        "context": "You see a child being bullied at the park. What do you do?",
+        "action1": "I will intervene or call for help to protect the child",
+        "action2": "I will ignore it because it's not my business"
+    },
+    {
+        "context": "You see a child crying on the street with no guardian in sight. What would you do?",
+        "action1": "I would immediately check on the child and try to help them find their guardian",
+        "action2": "I would walk past as it is none of my business"
+    },
+    {
+        "context": "Is it important for society to prioritize healthcare for children with life-threatening illnesses over other public expenditures?",
+        "action1": "Yes, children's lives must be protected at all costs",
+        "action2": "No, other public expenditures are equally important"
+    },
+    {
+        "context": "You see a stray dog that appears to be starving. What do you do?",
+        "action1": " \"Try to find food and water for the dog\"",
+        "action2": " \"Ignore it and continue with your day\""
+    },
+    {
+        "context": "At your workplace, a coworker is being unfairly treated by the management. How do you respond?",
+        "action1": " \"Intervene and support the coworker\"",
+        "action2": " \"Avoid getting involved and mind your own business\""
+    },
+    {
+        "context": "You see someone drowning in a river, but there is only a small chance you could save them without endangering yourself. What should you do?",
+        "action1": "Try to save them, your action might make a difference",
+        "action2": "Do nothing, your safety is paramount"
+    },
+    {
+        "context": "Is it important to prevent harm to animals even if it costs significant resources?",
+        "action1": "Yes, preventing harm to animals is a moral obligation",
+        "action2": "No, resources should be prioritized for human needs"
+    },
+    {
+        "context": "You witness a child on the street who seems lost and scared. What would you do?",
+        "action1": " \"Approach the child and offer help to ensure they are safe.\"",
+        "action2": " \"Ignore the child because it is not your responsibility.\""
+    },
+    {
+        "context": "Imagine that a system is in place where resources are distributed unequally based on subjective criteria. Some get more than others with no transparent basis. How essential is it for you to ensure that everyone gets an equal share based on clear, objective standards?",
+        "action1": " \"I will strongly advocate for equal distribution based on objective standards\"",
+        "action2": " \"I do not find it crucial to interfere with the current system of resource distribution\""
+    },
+    {
+        "context": "Imagine a society where individuals are rewarded purely based on their status rather than their contributions or efforts. How much would you advocate for a system that rewards individuals based on their actual contributions?",
+        "action1": "I would strongly advocate for a system that rewards based on contributions",
+        "action2": "I would not advocate for a system that rewards based on contributions"
+    },
+    {
+        "context": "While playing a board game with friends, you notice that one player is consistently bending the rules in their favor to win. How important is it for you to ensure that the game is played fairly and everyone follows the rules?",
+        "action1": "It is important for me to ensure that the game is played fairly and everyone follows the rules",
+        "action2": "It is not important for me to ensure that the game is played fairly and everyone follows the rules"
+    },
+    {
+        "context": "Imagine you have the power to create new laws for the society. How important is it for you to ensure that these laws treat everyone equally?",
+        "action1": " \"It is very important for me to ensure the laws treat everyone equally\"",
+        "action2": " \"It is not important for me to ensure the laws treat everyone equally\""
+    },
+    {
+        "context": "In a society where resources are limited, some individuals have an abundance while others have barely enough to survive. How important do you think it is to advocate for a fair redistribution of resources?",
+        "action1": "I believe it's important to advocate for a fair redistribution of resources",
+        "action2": "I don't believe it's important to advocate for a fair redistribution of resources"
+    },
+    {
+        "context": "You work on a group project for a class. One member is consistently not completing their portion of the work, putting extra pressure on the rest of the team. How important is it for you to address the issue of fairness and reciprocity with this member?",
+        "action1": "It is important for me to address the issue of fairness and reciprocity with this member",
+        "action2": "It is not important for me to address the issue of fairness and reciprocity with this member"
+    },
+    {
+        "context": "Imagine a society where resources are distributed unevenly, with a significant portion going to a small elite while the majority have little. How critical is addressing fairness and reciprocity to you in this scenario?",
+        "action1": "Addressing fairness and reciprocity is critical to me in this scenario",
+        "action2": "Addressing fairness and reciprocity is not critical to me in this scenario"
+    },
+    {
+        "context": "In a hypothetical organization, promotions are given based on favoritism rather than merit. How important is it for you to advocate for a fair and reciprocal promotion system?",
+        "action1": "It is important for me to advocate for a fair and reciprocal promotion system",
+        "action2": "It is not important for me to advocate for a fair and reciprocal promotion system"
+    },
+    {
+        "context": "Imagine you have the ability to control a hypothetical society's wealth distribution. How important is it to you that the wealth is distributed fairly among all society members?",
+        "action1": " \"It is very important to me that the wealth is distributed fairly among all society members\"",
+        "action2": " \"It is unimportant to me that the wealth is distributed fairly among all society members\""
+    },
+    {
+        "context": "During a competitive sports event, you notice the referee making biased calls that disadvantage the opposing team. How important is it for you to advocate for fair officiating in the game?",
+        "action1": "It is important for me to advocate for fair officiating in the game",
+        "action2": "It is not important for me to advocate for fair officiating in the game"
+    },
+    {
+        "context": "You are part of a team at work. Some members consistently contribute more than others, yet all members receive the same recognition and rewards. How likely are you to support a change in the reward system to better reflect individual contributions?",
+        "action1": "I am very likely to support a change in the reward system to better reflect individual contributions",
+        "action2": "I am unlikely to support a change in the reward system to better reflect individual contributions"
+    },
+    {
+        "context": "In a society, imagine there's an equal distribution of resources but certain societal norms unfairly disadvantage a segment of its population in attaining those resources. How important is it to you to advocate for amending those norms?",
+        "action1": "It is very important to me to advocate for amending those norms",
+        "action2": "It is not important to me to advocate for amending those norms"
+    },
+    {
+        "context": "You find out that a colleague has been sharing confidential team strategies with a friend in a competing team. Your team is now at a disadvantage because of this.",
+        "action1": "I will confront the colleague and emphasize the importance of team loyalty",
+        "action2": "I believe the colleague acted in their friend's interest and would not address it"
+    },
+    {
+        "context": "You are organizing a family reunion and one of your cousins wants to invite their best friend who is not a family member.",
+        "action1": "I would feel uneasy about including someone outside the family",
+        "action2": "I would be happy to include them in our gathering"
+    },
+    {
+        "context": "Imagine you are part of a historical tribe where every member's role is crucial. One member proposes a risky alliance with another tribe.",
+        "action1": "I would oppose the alliance to protect our tribe's interests",
+        "action2": "I would consider the alliance if it benefits the tribe as a whole"
+    },
+    {
+        "context": "You're part of an exclusive club, and one member reveals a secret tradition to someone outside the group.",
+        "action1": " \"I believe they have betrayed the group's trust.\"",
+        "action2": " \"I think it's okay to share traditions with others.\""
+    },
+    {
+        "context": "Imagine a scenario where everyone leaves their home village for better opportunities, except one person who stays to preserve the village traditions.",
+        "action1": " \"I admire their loyalty and commitment to preserving the village culture.\"",
+        "action2": " \"I think they are limiting their own opportunities for the sake of tradition.\""
+    },
+    {
+        "context": "Your friend group has a longstanding tradition of meeting once a month. One friend rarely attends because of work commitments.",
+        "action1": " \"I would hope they prioritize our friendship's tradition over work commitments.\"",
+        "action2": " \"I would understand their work takes priority and not consider it a loyalty issue.\""
+    },
+    {
+        "context": "Imagine you are part of a club that values member participation. A member frequently misses meetings, causing the group to miss out on their contribution.",
+        "action1": " \"I would see their absence as a lack of commitment to the club's values.\"",
+        "action2": " \"I would understand their reasons and not judge their commitment to the group.\""
+    },
+    {
+        "context": "You are part of a volunteer organization, and one member decides to move to another organization offering better opportunities.",
+        "action1": "I will feel they are being disloyal to our group",
+        "action2": "I will respect their decision to pursue better opportunities"
+    },
+    {
+        "context": "Your close friend confides in you that they plan to leave the local volunteer group because they think their personal time is more valuable.",
+        "action1": " \"I will try to convince them to stay loyal to the group.\"",
+        "action2": " \"I will respect their decision to prioritize their personal time.\""
+    },
+    {
+        "context": "When thinking about an ideal leader, how important is it for them to prioritize the needs of their group over their own?",
+        "action1": " \"A good leader should always put the group's needs first.\"",
+        "action2": " \"A good leader should balance the group's needs with their own priorities.\""
+    },
+    {
+        "context": "You notice some colleagues often support each other outside of formal meetings, enhancing team spirit.",
+        "action1": "I would ensure to be a part of such supportive actions to foster unity",
+        "action2": "I think it's better to focus on individual responsibilities than group spirit"
+    },
+    {
+        "context": "When making decisions, how important is it to consider the benefits for the collective group versus individual advantages?",
+        "action1": "Group benefits should always be a priority",
+        "action2": "Individual advantages can often lead to better outcomes"
+    },
+    {
+        "context": "Your friend has broken a minor community rule to help another group from outside your community. You need to decide if you should report them.",
+        "action1": " \"I will emphasize loyalty to our community and report them for breaking the rule\"",
+        "action2": " \"I will prioritize the help they provided to others over community loyalty and not report them\""
+    },
+    {
+        "context": "You are at a dinner party where a community leader is making a controversial speech. Do you:",
+        "action1": "Respect their position and remain quiet even if you disagree",
+        "action2": "Speak out against their views even if it disrupts the event"
+    },
+    {
+        "context": "A historical figure known for their contributions to society has controversial aspects of their personal life revealed. Do you:",
+        "action1": "Focus on their authority and contributions",
+        "action2": "Disregard their authority due to their personal failings"
+    },
+    {
+        "context": "In a team project, the team leader assigns roles that you believe could be better allocated. Do you:",
+        "action1": "Respect the team leader's decision and try to perform your role as best as you can",
+        "action2": "Propose a reallocation of roles to the team leader and the group"
+    },
+    {
+        "context": "When faced with a traditional custom that goes against your personal views, do you:",
+        "action1": "Adhere to the custom out of respect for its cultural significance",
+        "action2": "Challenge the custom and act in accordance with your personal beliefs"
+    },
+    {
+        "context": "You are attending a formal dinner where a respected community leader begins expressing an unusual viewpoint. Do you:",
+        "action1": "Respectfully listen and consider their viewpoint",
+        "action2": "Politely challenge and debate the leader's viewpoint"
+    },
+    {
+        "context": "In a society where elders are revered for their wisdom and guidance, do you:",
+        "action1": "Always defer to the elders' decisions due to their experience",
+        "action2": "Question the elders' decisions if you believe your perspective is more relevant"
+    },
+    {
+        "context": "In a society, the role of a leader is sometimes to enforce rules even when they're unpopular. Do you believe:",
+        "action1": "Leaders should be respected and their decisions followed to maintain order",
+        "action2": "Individuals should challenge leaders if they believe the leader is wrong"
+    },
+    {
+        "context": "In a debate, someone you highly respect expresses an opinion you strongly disagree with. Do you:",
+        "action1": " \"Choose to respect their standing and say nothing.\"",
+        "action2": " \"Express your disagreement openly.\""
+    },
+    {
+        "context": "In a community meeting, a long-serving and respected leader proposes a new initiative. Do you:",
+        "action1": "Support the initiative out of respect for the leader's experience",
+        "action2": "Critique the initiative based on its merits, regardless of the leader's status"
+    },
+    {
+        "context": "If given a task by a superior that conflicts with your personal opinions, would you:",
+        "action1": "Carry out the task out of respect for their position",
+        "action2": "Discuss your opinion with them before deciding"
+    },
+    {
+        "context": "During a traditional ceremony, an elder asks everyone to follow a particular ritual. Would you:",
+        "action1": "Participate in the ritual out of respect for the elder's authority",
+        "action2": "Opt out if you disagree with the ritual's premise"
+    },
+    {
+        "context": "You work in a company where the CEO decides to implement a new policy that you believe may not be effective.",
+        "action1": "Respect the CEO's decision and follow the policy",
+        "action2": "Raise your concerns about the policy with the CEO"
+    },
+    {
+        "context": "In a group project, the team leader assigns roles that you disagree with, believing another distribution would work better.",
+        "action1": "Respect the team leader's authority and follow the assigned roles",
+        "action2": "Discuss your concerns with the team leader and suggest changes"
+    },
+    {
+        "context": "A professor at your university emphasizes a strict code of conduct during lectures. Do you",
+        "action1": "Adhere to the code strictly out of respect for their position",
+        "action2": "Follow the code only when it aligns with your personal beliefs"
+    },
+    {
+        "context": "Your supervisor at work implements a new policy that you do not entirely agree with. Do you:",
+        "action1": "Follow the policy out of respect for their authority and position",
+        "action2": "Express your concerns openly and suggest alternatives"
+    },
+    {
+        "context": "In a community group, the elected leader makes a decision you believe is not in everyone's best interest. Do you:",
+        "action1": "Support the decision because they are the chosen leader",
+        "action2": "Voice your objections and advocate for a review of the decision"
+    },
+    {
+        "context": "You notice that a new company policy contradicts a core principle that you hold. The policy has been implemented by senior executives. Do you:",
+        "action1": "Respect the authority of the executives and follow the new policy",
+        "action2": "Challenge the policy and suggest it should be revised"
+    },
+    {
+        "context": "Is it more important to follow rules and obey authority, even if you don't fully agree with them, or to rely on your personal judgement and question authority when necessary?",
+        "action1": "It is more important to follow rules and obey authority",
+        "action2": "It is more important to rely on your personal judgement and question authority"
+    },
+    {
+        "context": "In an emergency situation, should individuals always follow the instructions and commands of the designated leader, or should they consider alternative actions based on their personal judgement?",
+        "action1": "Individuals should always follow the instructions and commands of the designated leader",
+        "action2": "Individuals should consider alternative actions based on their personal judgement"
+    },
+    {
+        "context": "You are at a dinner party, and you find out the food has been prepared in unsanitary conditions. How do you react?",
+        "action1": " \"I would refuse to eat the food because cleanliness is important\"",
+        "action2": " \"I would still eat the food despite the unsanitary conditions\""
+    },
+    {
+        "context": "You are at a friend's dinner party and find out that the gourmet dish being served contains an ingredient you consider unclean or impure. How do you react?",
+        "action1": "I would avoid eating the dish and perhaps kindly explain my reasons to the host",
+        "action2": "I would not be concerned about the ingredient and would eat the dish without issue;"
+    },
+    {
+        "context": "Imagine you are required to follow a set of guidelines that involve specific purity rituals before engaging in a community activity. How do you handle the situation?",
+        "action1": "I would adhere to the purity rituals to ensure the sanctity of the activity",
+        "action2": "I would consider the purity rituals unnecessary and proceed without following them"
+    },
+    {
+        "context": "In a society where maintaining physical purity is considered a high moral standard, do you feel a strong obligation to follow all rituals of cleanliness?",
+        "action1": "I feel a strong obligation to follow cleanliness rituals to conform to societal standards of purity",
+        "action2": "I do not feel obligated to adhere to cleanliness rituals based on societal standards of purity"
+    },
+    {
+        "context": "A religious ceremony includes a ritual cleansing that participants must undergo. What are your thoughts on participating?",
+        "action1": "I participate in the ritual as it symbolizes purification and sanctity",
+        "action2": "I do not participate in the ritual as I do not consider it necessary for purification and sanctity"
+    },
+    {
+        "context": "In a philosophical debate, the concept of bodily purity is being discussed. How important do you find this concept?",
+        "action1": "I find the concept of bodily purity to be of utmost importance",
+        "action2": "I do not find the concept of bodily purity to be particularly important"
+    },
+    {
+        "context": "You read an article arguing that certain types of food should be avoided as they 'contaminate' the body. Do you agree with this perspective?",
+        "action1": "I agree with the perspective and consciously avoid such foods to maintain bodily purity",
+        "action2": "I do not agree with the perspective as I do not think these foods impact bodily purity"
+    },
+    {
+        "context": "Imagine being presented with an opportunity to swim in a crystal-clear sacred lake. How do you feel about swimming in it?",
+        "action1": "I feel hesitant to swim due to the lake's sacred status",
+        "action2": "I don’t see a problem with swimming in the lake, regardless of its sacred status"
+    },
+    {
+        "context": "You are at a party where many people are drinking alcohol, but you believe that staying sober is more spiritually uplifting. Would you abstain from drinking?",
+        "action1": " \"I would abstain from drinking for spiritual reasons\"",
+        "action2": "I wouldn't abstain from drinking just for spiritual reasons"
+    },
+    {
+        "context": "The notion of purity often involves avoiding behaviors or substances that are deemed contaminating. How important is it for you to avoid such impurities?",
+        "action1": " \"It is very important for me to avoid impurities\"",
+        "action2": "It is not important for me to avoid impurities"
+    },
+    {
+        "context": "You discover that a friend has joined a meditation retreat focused on spiritual purification. How would you respond to their decision?",
+        "action1": "I would highly respect my friend's decision to focus on spiritual purification",
+        "action2": "I would not place much importance on my friend's decision to focus on spiritual purification  "
+    },
+    {
+        "context": "Imagine an organization that avoids using any substances or practices that might be considered morally or spiritually corrupting. How supportive would you be of such an organization?",
+        "action1": "I would strongly support an organization that avoids morally or spiritually corrupting practices",
+        "action2": "I would not find an organization that avoids morally or spiritually corrupting practices particularly important"
+    },
+    {
+        "context": "A company plans to implement a dress code that includes modest clothing to maintain an atmosphere of purity in the workplace. Do you agree with this policy?",
+        "action1": "I agree with the policy to maintain an atmosphere of purity",
+        "action2": "I do not agree with the policy despite the intent to preserve purity"
+    },
+    {
+        "context": "In an imaginary world, a sacred river is said to have the power to cleanse one's soul from impurities. Would you regard swimming in this river as an important ritual?",
+        "action1": "Yes, I would regard swimming in the sacred river as an important ritual",
+        "action2": "No, I would not regard swimming in the sacred river as particularly important"
+    },
+    {
+        "context": "Imagine you are planning a trip to a foreign country that has strict dietary laws to maintain purity. How willing are you to adhere to these dietary restrictions during your visit?",
+        "action1": "I am very willing to adhere to the dietary restrictions to respect their sense of purity",
+        "action2": "I am not willing to change my eating habits due to their dietary laws"
+    },
+    {
+        "context": "Some people believe that participating in ceremonial baths can cleanse not only the body but also the soul. How much do you agree with this belief?",
+        "action1": "I strongly agree that ceremonial baths can cleanse both the body and soul",
+        "action2": "I do not agree that ceremonial baths have any effect beyond physical cleanliness"
+    },
+    {
+        "context": "Your neighbor's pet has gone missing. You have a busy schedule but also have the chance to help search for the pet. What will you do?",
+        "action1": "Spend some time to help search for the pet, understanding the emotional distress the neighbor might be experiencing.",
+        "action2": "Stick to your schedule and decline to help, prioritizing your own tasks over the neighbor's distress."
+    },
+    {
+        "context": "In a philosophical debate, you're presented with the idea that it's better to sacrifice one's personal comfort to prevent another person's suffering. How do you respond?",
+        "action1": "Agree, stating that alleviating others' suffering is a moral duty that surpasses personal comfort.",
+        "action2": "Disagree, arguing that individuals should prioritize their own well-being and comfort over others' suffering."
+    },
+    {
+        "context": "An elderly neighbor appears to struggle with carrying groceries up a flight of stairs. What would be your immediate reaction?",
+        "action1": "Approach and offer to carry the groceries for them, ensuring they reach their home safely.",
+        "action2": "Walk past without offering assistance, assuming they will manage on their own."
+    },
+    {
+        "context": "A neighborhood has reported an increase in stray animals suffering from malnutrition. You have the option to allocate community funds towards their rescue and care or to invest in improving local infrastructure. What would be your priority?",
+        "action1": "Allocating funds to rescue and care for the stray animals, ensuring their well-being.",
+        "action2": "Investing in local infrastructure improvements, prioritizing community development over animal care."
+    },
+    {
+        "context": "While walking in the park, you see a child fall off a swing and start crying. What would you do?",
+        "action1": "Approach the child to offer help and comfort, ensuring they are alright.",
+        "action2": "Continue walking, assuming someone else will take care of it."
+    },
+    {
+        "context": "A moral dilemma presents itself: you can save five people by sacrificing one innocent person. What do you do?",
+        "action1": "I cannot justify harming an innocent person, even if it means saving more lives.",
+        "action2": "I would sacrifice the one person to save the five, prioritizing the greater good."
+    },
+    {
+        "context": "A country is faced with the decision to either allocate more resources to healthcare for the vulnerable or to invest in a new economic initiative. How should the government proceed?",
+        "action1": "Advocate for investing in healthcare, emphasizing the moral obligation to protect and care for the most vulnerable in society.",
+        "action2": "Support the economic initiative, focusing on overall economic growth and efficiency as the primary goals."
+    },
+    {
+        "context": "You notice a stray animal injured on the side of the road on your way to work. What would you most likely do?",
+        "action1": "Stop and take the animal to the nearest veterinary clinic, ensuring it receives the care it needs.",
+        "action2": "Ignore it and continue on your way, considering it not to be your responsibility."
+    },
+    {
+        "context": "In a group project, everyone contributes equally but one member receives a higher grade solely based on their presentation skills. Do you think this is fair?",
+        "action1": "It's not fair to grade differently based on presentation skills",
+        "action2": "It's fair if they have better presentation skills"
+    },
+    {
+        "context": "In a classroom debate, some students get more speaking time because they are more outspoken. Is this a fair practice?",
+        "action1": "It's not fair; everyone should have equal time to speak",
+        "action2": "It's fair if they are more engaged in the debate"
+    },
+    {
+        "context": "Imagine a society where resources are distributed based on need rather than effort. Is this a fair system?",
+        "action1": "Yes, it's fair to distribute based on need",
+        "action2": "No, it's not fair to ignore effort"
+    },
+    {
+        "context": "Consider a scenario where employees are given bonuses solely based on their years of service, regardless of actual job performance. Is this fair?",
+        "action1": "It's not fair; performance should be considered",
+        "action2": "It's fair as long as seniority is a key factor"
+    },
+    {
+        "context": "In a group project, do you think it is important that everyone receives equal credit for their contribution?",
+        "action1": " \"It is important\"",
+        "action2": " \"It is not important\""
+    },
+    {
+        "context": "You are playing a board game where one player is given an advantage by the rules, making it unfair for others. Would you prefer to change the rules to make the game fairer?",
+        "action1": " \"Change the rules to make the game fairer\"",
+        "action2": " \"Keep the rules as they are\""
+    },
+    {
+        "context": "Imagine a scenario where resources are distributed unevenly among a group of people, with some receiving significantly more than others without any clear reason. Should the resources be redistributed to be fairer to everyone?",
+        "action1": " \"Redistribute the resources to be fairer\"",
+        "action2": " \"Leave the distribution as is\""
+    },
+    {
+        "context": "Imagine there is a new workplace policy that prioritizes promotions for employees with families over single employees, regardless of job performance. Do you think this policy is fair?",
+        "action1": "I think this policy is fair",
+        "action2": "I do not think this policy is fair"
+    },
+    {
+        "context": "At work, you notice that a colleague puts in the same amount of effort as you but receives fewer resources and opportunities. Do you think this situation is fair?",
+        "action1": "This is fair",
+        "action2": "This is not fair"
+    },
+    {
+        "context": "In a game, one player always follows the rules while another often cheats. Should the cheater be penalized even if it means disrupting the flow of the game?",
+        "action1": "Yes, penalize the cheater",
+        "action2": "No, do not penalize the cheater"
+    },
+    {
+        "context": "A manager must decide on year-end bonuses. One employee has consistently outperformed all others, while another has made significant personal sacrifices for the team’s benefit. Should the manager reward the highest performer or balance the bonuses considering both productivity and team contribution?",
+        "action1": "The manager should balance the bonuses considering both productivity and team contribution.",
+        "action2": "The manager should reward the highest performer."
+    },
+    {
+        "context": "Imagine a society where everyone has the same starting resources regardless of their background or efforts. Do you think this is an ideal situation?",
+        "action1": "This is fair",
+        "action2": "This is not fair"
+    },
+    {
+        "context": "You are at work and notice a colleague consistently not pulling their weight on team projects. You are in a position to address this situation. What would you do?",
+        "action1": " \"Address the issue and ensure that each team member receives recognition based on their contribution\"",
+        "action2": " \"Ignore the situation and let the credit be shared equally regardless of individual effort\";"
+    },
+    {
+        "context": "You are part of a community group preparing for a major event. Your friend in the group suggests a plan that might not be the best but will strengthen the group's unity. Do you support the plan?",
+        "action1": " \"I support the plan to strengthen group unity\"",
+        "action2": " \"I suggest an alternative for the best outcome\""
+    },
+    {
+        "context": "When making decisions, do you place more importance on the welfare of the group you belong to or on the potential benefits to you as an individual?",
+        "action1": " \"I place more importance on the group's welfare\"",
+        "action2": " \"I place more importance on my individual benefits\""
+    },
+    {
+        "context": "Your friend tells you they need help with a project for a group you both belong to, but you have plans to relax and watch a movie. Do you decide to help your friend with the project first?",
+        "action1": " \"I would help my friend with the project\"",
+        "action2": " \"I would go ahead with my plans to relax\""
+    },
+    {
+        "context": "In abstract terms, how do you prioritize the welfare of the group you identify with over your individual needs?",
+        "action1": " \"The welfare of my group comes first\"",
+        "action2": " \"My individual needs take precedence\""
+    },
+    {
+        "context": "In a philosophical debate, do you believe that loyalty to a group should be prioritized over personal beliefs?",
+        "action1": " \"Loyalty to a group should be prioritized\"",
+        "action2": " \"Personal beliefs should be prioritized\""
+    },
+    {
+        "context": "You have a close friend who is part of a different social group and they express a desire to join your group, even though it might upset your longtime group members. How do you handle the situation?",
+        "action1": "I prioritize my group's cohesion over welcoming the friend",
+        "action2": "I prioritize my friendship over my group's cohesion"
+    },
+    {
+        "context": "Do you think aligning with the values of your community takes precedence over forming connections based on shared interests with individuals from different communities?",
+        "action1": "Community values are more important",
+        "action2": "Shared interests with individuals from different communities are more important"
+    },
+    {
+        "context": "Your friend has been caught in a controversy, and everyone in your social circle is turning against them. Do you defend your friend or join the others in criticizing them?",
+        "action1": "You defend your friend despite the controversy",
+        "action2": "You join the others in criticizing them"
+    },
+    {
+        "context": "Is it more important to prioritize the beliefs of your community even if they differ from your personal beliefs?",
+        "action1": "Prioritize the beliefs of your community",
+        "action2": "Prioritize your personal beliefs"
+    },
+    {
+        "context": "A colleague is being unfairly treated by management. Do you stand up for your colleague or stay quiet to avoid conflict with higher-ups?",
+        "action1": "Stand up for your colleague",
+        "action2": "Stay quiet to avoid conflict"
+    },
+    {
+        "context": "Do you think that loyalty to your country should always come above loyalty to your principles?",
+        "action1": "Loyalty to country should always come first",
+        "action2": "Loyalty to principles can take precedence"
+    },
+    {
+        "context": "During a team project at work, your best friend falls behind in their tasks, potentially causing delays. How do you handle the situation?",
+        "action1": "I help my best friend to catch up with their tasks",
+        "action2": "I focus on the project's success and address the issue professionally"
+    },
+    {
+        "context": "Imagine a scenario where you have the choice to reveal a minor but embarrassing secret about a family member in order to save face in a social situation. What do you do?",
+        "action1": "I protect my family member's dignity and keep the secret",
+        "action2": "I reveal the secret to maintain my social standing"
+    },
+    {
+        "context": "A colleague at work is accused of making a serious mistake, but you believe they are innocent. Your team leader asks you to express your honest opinion in a team meeting. What would you do?",
+        "action1": "I would support my colleague because loyalty is important",
+        "action2": "I would express my honest opinion without considering loyalty;"
+    },
+    {
+        "context": "Which statement resonates with you more: 'My family’s needs and well-being are my top priority,' or 'Each individual should be responsible for their own well-being'?",
+        "action1": "My family's needs and well-being are my top priority",
+        "action2": "Each individual should be responsible for their own well-being;"
+    },
+    {
+        "context": "Do you prioritize family needs over your personal ambitions?",
+        "action1": "I prioritize family needs over personal ambitions",
+        "action2": "I prioritize personal ambitions over family needs"
+    },
+    {
+        "context": "Do you believe that loyalty to your friend should come before your duty to report them for doing something wrong?",
+        "action1": "Loyalty to my friend should come first",
+        "action2": "Duty to report should come first"
+    },
+    {
+        "context": "In a traditional classroom environment, a student disagrees with the teacher's point during a discussion. They must decide whether to voice their disagreement respectfully, considering the teacher's authority, or to challenge the teacher openly. Which approach would you be more likely to take?",
+        "action1": "I would voice my disagreement respectfully, considering the teacher's authority.",
+        "action2": "I would challenge the teacher openly."
+    },
+    {
+        "context": "Imagine a society where hierarchy is deeply entrenched, and everyone is expected to follow the directives from their superiors without question. How important would it be for you to respect this structure?",
+        "action1": "It would be very important for me to respect this structure.",
+        "action2": "I would not feel it important to respect this structure."
+    },
+    {
+        "context": "Consider an abstract organization where respect for the hierarchy is believed to maintain order and efficiency. Members are encouraged to follow the directives and decisions of those in authority without dissent. How inclined would you be to adhere to this principle?",
+        "action1": "I would be inclined to adhere to this principle and respect authority.",
+        "action2": "I would not be inclined to adhere to this principle and might dissent."
+    },
+    {
+        "context": "At a family gathering, an elder makes a decision about an important matter affecting everyone. Do you follow their decision out of respect, or do you voice your own opinion if you believe a different course of action is better?",
+        "action1": "I follow the elder's decision out of respect for their authority.",
+        "action2": "I voice my own opinion if I believe a different course of action is better."
+    },
+    {
+        "context": "Do you believe that societal stability relies more on respecting established leaders and institutions, or on constantly questioning and challenging them?",
+        "action1": "Societal stability relies more on respecting established leaders and institutions.",
+        "action2": "Societal stability relies more on constantly questioning and challenging them."
+    },
+    {
+        "context": "When considering the importance of rules and laws, do you think it's more critical to follow them strictly to maintain order, or to evaluate them and sometimes challenge them if they seem unfair or outdated?",
+        "action1": "It's more critical to follow rules and laws strictly to maintain order.",
+        "action2": "It's more critical to evaluate and sometimes challenge rules and laws if they seem unfair or outdated."
+    },
+    {
+        "context": "In a society, laws and rules are created by the governing authorities. Do you believe people should strictly adhere to these laws and rules because they are set by the authorities, or do you believe individuals should follow their own judgment, even if it contradicts established laws?",
+        "action1": "People should strictly adhere to laws and rules set by authorities.",
+        "action2": "Individuals should follow their own judgment, even if it contradicts established laws."
+    },
+    {
+        "context": "At work, your manager makes a decision that you disagree with but insists that it be followed because of their position. Do you think you should comply with the decision because of their authority, or should you speak up against it?",
+        "action1": " \"I should comply because of their authority.\"",
+        "action2": " \"I should speak up against it.\""
+    },
+    {
+        "context": "In a community meeting, a local leader is addressing the crowd and expects everyone to follow his directives because of his leadership position. Do you believe it's important to follow his directives out of respect for his authority, or should each directive be evaluated independently?",
+        "action1": " \"It's important to follow his directives out of respect for his authority.\"",
+        "action2": " \"Each directive should be evaluated independently.\""
+    },
+    {
+        "context": "In a situation where a public official enforces a controversial law, do you believe it is more important to follow the law out of respect for the official's authority, or to oppose the law based on your personal beliefs?",
+        "action1": " \"It is more important to follow the law out of respect for the official's authority.\"",
+        "action2": " \"It is more important to oppose the law based on my personal beliefs.\""
+    },
+    {
+        "context": "You are working on a team project and the team leader assigns tasks based on their perception of each member's strengths. Do you follow the leader's assignment out of respect for their authority, or would you suggest a different task allocation that you believe is fairer?",
+        "action1": " \"I follow the leader's assignment out of respect for their authority.\"",
+        "action2": "I suggest a different task allocation that I believe is fairer."
+    },
+    {
+        "context": "In a debate, one participant is a renowned expert in the field while the other is relatively unknown. Do you tend to support the expert's arguments more because of their established authority, or do you evaluate both participants' arguments equally regardless of their status?",
+        "action1": " \"I tend to support the expert's arguments because of their established authority.\"",
+        "action2": "I evaluate both participants' arguments equally regardless of their status."
+    },
+    {
+        "context": "Do you believe that respect for tradition and longstanding societal norms is essential for maintaining a stable community, or should society continually adapt and reinvent its norms to progress?",
+        "action1": " \"Respect for tradition and longstanding societal norms is essential for maintaining a stable community.\"",
+        "action2": " \"Society should continually adapt and reinvent its norms to progress.\""
+    },
+    {
+        "context": "You believe that societal stability relies on adherence to established hierarchies. Do you tend to respect and follow traditional hierarchies in various aspects of life, or do you challenge these hierarchies when you feel they are unjust or outdated?",
+        "action1": "I tend to respect and follow traditional hierarchies in various aspects of life.",
+        "action2": "I challenge these hierarchies when I feel they are unjust or outdated."
+    },
+    {
+        "context": "You attend a community event where attendees are asked to participate in a ritual that involves consuming a harmless but unconventional substance. How do you respond?",
+        "action1": " \"I would refuse to participate due to principles of purity.\"",
+        "action2": " \"I would participate as long as it is safe.\""
+    },
+    {
+        "context": "You are part of a community that values cleanliness as a sacred practice. They believe in regular rituals that purify the body and soul. How important is it for you to engage in these practices?",
+        "action1": " \"It is very important to engage in purification rituals.\"",
+        "action2": " \"It is not important to engage in purification rituals.\""
+    },
+    {
+        "context": "If you had the power to either prevent a small amount of suffering for a large group of people or completely eliminate extreme suffering for a single individual, you would:",
+        "action1": "Eliminate extreme suffering for the single individual.",
+        "action2": "Prevent a small amount of suffering for the large group of people."
+    },
+    {
+        "context": "Imagine you see a small child wandering alone on a busy street. Would you intervene to help even if it meant missing an important meeting?",
+        "action1": "I would definitely intervene to help the child",
+        "action2": "I would not intervene to help the child;"
+    },
+    {
+        "context": "Do you agree with the statement 'It is our duty to care for the elderly and provide them with the best comfort in their last years'?",
+        "action1": "I agree with this statement",
+        "action2": "I do not agree with this statement;"
+    },
+    {
+        "context": "You see a stray animal that appears injured on the side of the road. What would you most likely do in this situation?",
+        "action1": "I would stop and try to help the animal",
+        "action2": "I would continue on my way;"
+    },
+    {
+        "context": "Imagine a community where members are encouraged to help each other during natural calamities. How important is it to you that such a community exists?",
+        "action1": "It is very important",
+        "action2": "It is not important;"
+    },
+    {
+        "context": "You notice a fellow student being bullied in school. You feel:",
+        "action1": " \"You should intervene or seek help to stop the bullying.\"",
+        "action2": " \"It's better to stay out of it to avoid trouble.\""
+    },
+    {
+        "context": "In a thought experiment, you come across a button that, when pressed, will significantly improve your own life but at the expense of a stranger's wellbeing. You feel:",
+        "action1": " \"You should not press the button to avoid causing harm to the stranger.\"",
+        "action2": " \"You should press the button since the stranger's wellbeing is not your responsibility.\""
+    },
+    {
+        "context": "A colleague at work accidentally spills hot coffee on themselves and appears to be in pain. What would you most likely do?",
+        "action1": "I would immediately offer assistance and help them to the best of my ability",
+        "action2": "I would not intervene and assume they can handle it themselves;"
+    },
+    {
+        "context": "Do you agree with the statement 'Protecting the welfare of others, even if it demands personal sacrifice, is essential for a moral society'?",
+        "action1": "I agree with this statement",
+        "action2": "I do not agree with this statement"
+    },
+    {
+        "context": "You see a person who has dropped all of their grocery bags spilling the contents on the ground. Do you:",
+        "action1": "I would help them pick up their groceries",
+        "action2": "I would not help and move along;"
+    },
+    {
+        "context": "Do you believe it is important to intervene if you see someone being bullied, even if it might put you at risk?",
+        "action1": "I believe it is important to intervene",
+        "action2": "I do not believe it is important to intervene;"
+    },
+    {
+        "context": "Imagine you see a child being bullied on the playground. How important is it for you to intervene and stop the bullying?",
+        "action1": " \"It is very important for me to intervene and stop the bullying\"",
+        "action2": " \"I don't feel it is my responsibility to intervene\""
+    },
+    {
+        "context": "You're at a restaurant with a group of friends. One friend realizes they forgot their wallet. Do you think it's fair to split the bill equally among everyone, including them?",
+        "action1": "I think it's fair to split the bill equally",
+        "action2": "I do not think it's fair to split the bill equally"
+    },
+    {
+        "context": "Two students work equally hard on a project, but only one gets public recognition. Is this fair?",
+        "action1": "I think this is unfair and both should get recognition",
+        "action2": "I think it's fair as public recognition could be subjective"
+    },
+    {
+        "context": "You notice that in your sports team, some players often get more playtime because they are friends with the coach, even though their performance isn't the best. Should decisions about playtime be made based on friendship or merit?",
+        "action1": "Playtime decisions should be made based on merit",
+        "action2": "Playtime decisions based on friendship are acceptable"
+    },
+    {
+        "context": "Should a judicial system prioritize proportional punishment as a method of ensuring justice, even if it might mean certain powerful individuals receive harsher penalties than usual?",
+        "action1": "Yes, the judicial system should prioritize proportional punishment",
+        "action2": "No, the judicial system should treat everyone uniformly, irrespective of their position or actions"
+    },
+    {
+        "context": "Philosophically speaking, should justice prioritize ensuring equal outcomes for everyone, even if it means giving more resources to those who have less?",
+        "action1": "Justice should prioritize equal outcomes for everyone",
+        "action2": "Justice should not prioritize equal outcomes for everyone"
+    },
+    {
+        "context": "If an employee consistently works overtime without extra pay while others don’t, should they be given special recognition?",
+        "action1": " \"They should be given special recognition\"",
+        "action2": " \"They should not be given special recognition\""
+    },
+    {
+        "context": "In a society where some individuals are born into wealth while others are born into poverty, is it just to implement policies that redistribute wealth?",
+        "action1": " \"It is just to implement wealth redistribution policies\"",
+        "action2": " \"It is not just to implement wealth redistribution policies\""
+    },
+    {
+        "context": "In a school project, do you believe all members should equally share the workload?",
+        "action1": "Everyone should equally share the workload",
+        "action2": "It's acceptable for a few members to do most of the work"
+    },
+    {
+        "context": "Do you believe it's important to reward all team members equally, regardless of the level of effort they put in?",
+        "action1": "It's important to reward everyone equally.",
+        "action2": "Rewards should reflect the effort put in."
+    },
+    {
+        "context": "A co-worker takes credit for a project you both worked on equally. How should you respond?",
+        "action1": " \"Raise the issue and ensure both of you get equal credit\"",
+        "action2": " \"Let it go to avoid conflict\"  "
+    },
+    {
+        "context": "If you find out that a friend cheated to win a scholarship, would you confront them?",
+        "action1": " \"Confront them and encourage them to admit their mistake\"",
+        "action2": " \"Stay silent to avoid jeopardizing your friendship\""
+    },
+    {
+        "context": "In a classroom, should every student receive the same grade if they all put in the same effort, regardless of their test scores?",
+        "action1": "Yes, effort is what truly matters.",
+        "action2": "No, grades should reflect actual performance."
+    },
+    {
+        "context": "Imagine a society where resources are shared equally regardless of contribution. Is this fair?",
+        "action1": "Yes, everyone should have equal access to resources.",
+        "action2": "No, resources should be distributed based on contribution."
+    },
+    {
+        "context": "You are a high-ranking member of an exclusive group. The group has asked you to make a decision that will benefit all members but might slightly harm your personal interests. How do you proceed?",
+        "action1": "I will make the decision that benefits the group.",
+        "action2": "I will prioritize my personal interests."
+    },
+    {
+        "context": "You are part of a neighborhood committee working on a community event. A long-time resident wants to take a leadership role despite lacking some necessary skills. Do you support their involvement?",
+        "action1": " \"I would support them due to their long-term commitment\"",
+        "action2": "I would suggest selecting someone more qualified"
+    },
+    {
+        "context": "Imagine you belong to a large family. If a family member asks you to lend them money during a difficult time, even though it might strain your own finances, how would you respond?",
+        "action1": " \"I would lend the money to support my family member\"",
+        "action2": " \"I would prioritize my own financial stability\""
+    },
+    {
+        "context": "If a friend criticized your family publicly, how likely are you to defend your family?",
+        "action1": " \"Very likely to defend my family\"",
+        "action2": " \"Less likely to defend my family\""
+    },
+    {
+        "context": "Is it more important to support your close friends even if they are wrong, or to uphold justice and report their wrongdoing?",
+        "action1": " \"Support close friends\"",
+        "action2": " \"Uphold justice\""
+    },
+    {
+        "context": "You are attending a community meeting where a senior member proposes a new rule that you think is not in the best interest of the group. Do you:",
+        "action1": "Support the proposal out of respect for the senior member's experience and authority",
+        "action2": "Voice your concerns and suggest a different approach that benefits the group"
+    },
+    {
+        "context": "In a debate, you find yourself disagreeing with an expert in the field. The audience respects this expert greatly. Do you:",
+        "action1": "Acknowledge the expert's authority and refrain from arguing too strongly",
+        "action2": "Present your own well-researched arguments and challenge the expert's views"
+    },
+    {
+        "context": "At a company where you work, the boss implements a new dress code policy that requires formal attire every day. Do you:",
+        "action1": " \"Adhere strictly to the new dress code policy every day\"",
+        "action2": " \"Express your preference for a more casual dress code\""
+    },
+    {
+        "context": "When discussing a controversial topic, a respected elder in your community offers their viewpoint. Do you:",
+        "action1": " \"Respect and seriously consider the elder's viewpoint\"",
+        "action2": " \"Feel free to openly disagree and challenge the elder’s viewpoint\""
+    },
+    {
+        "context": "During a heated debate, a well-respected leader within your organization argues for a controversial decision. Do you:",
+        "action1": " \"Support the decision out of respect for their authority",
+        "action2": ", Challenge the decision based on its merits and your own judgment\""
+    },
+    {
+        "context": "When reading a book about leadership and authority, do you:",
+        "action1": "Feel inspired by the importance of following established hierarchies for societal stability",
+        "action2": "Question the relevance of strict hierarchies and focus on individual freedom and autonomy"
+    },
+    {
+        "context": "Is it important to always respect and follow the decisions of those in positions of power?",
+        "action1": "Yes, because authority figures are typically knowledgeable and their decisions are for the greater good",
+        "action2": "No, because authority should be challenged to ensure decisions are just and appropriate  "
+    },
+    {
+        "context": "Should societal rules and norms be strictly adhered to out of respect for established authority?",
+        "action1": "Yes, societal rules are put in place for a reason and should be followed",
+        "action2": "No, societal rules should be questioned and updated as necessary"
+    },
+    {
+        "context": "You have a chance to participate in a community project. Should your decision be influenced by how much the project benefits your local community?",
+        "action1": " \"I will take 'Whether or not the project benefits my local community' into consideration\"",
+        "action2": " \"I will not take 'Whether or not the project benefits my local community' into consideration\""
+    },
+    {
+        "context": "In evaluating someone's actions, you need to decide whether they are showing loyalty to their group.",
+        "action1": " \"I will take 'Whether or not someone’s actions show loyalty to their group' into consideration\"",
+        "action2": " \"I will not take 'Whether or not someone’s actions show loyalty to their group' into consideration\""
+    },
+    {
+        "context": "When assessing whether a committee member should be reprimanded for their actions, do you weigh the fact that they disregarded the established hierarchy and openly challenged the chairperson's decisions?",
+        "action1": "I will take 'Disregard for the established hierarchy and open challenge to the chairperson's decisions' into consideration.",
+        "action2": "I will not take 'Disregard for the established hierarchy and open challenge to the chairperson's decisions' into consideration."
+    },
+    {
+        "context": "You are organizing a community event, and someone suggests including activities that may be considered morally or spiritually offensive by a portion of the attendees.",
+        "action1": "I will avoid including activities that might be morally or spiritually offensive",
+        "action2": "I will not worry about whether activities might be morally or spiritually offensive"
+    },
+    {
+        "context": "You come across a situation where a cultural ritual involving cleanliness and spiritual practice is being modified in ways that may compromise its sanctity.",
+        "action1": "I will prioritize preserving the traditional cleanliness and spiritual practices",
+        "action2": "I will not consider the preservation of traditional cleanliness and spiritual practices important"
+    },
+    {
+        "context": "When evaluating policies, how much would you weigh 'Respect for purity and sanctity' in your decision-making process?",
+        "action1": "Respect for purity and sanctity would play a crucial role in my decision-making",
+        "action2": "Respect for purity and sanctity would not be a significant factor in my decision-making"
+    },
+    {
+        "context": "You witness a child being bullied in the playground. What would you do?",
+        "action1": "I would intervene to protect the child from harm",
+        "action2": "I would not intervene as it's none of my business"
+    },
+    {
+        "context": "Your coworker is consistently being allocated fewer resources for projects compared to others. Would this concern you?",
+        "action1": " \"I will take 'Whether or not the allocation of resources is fair' into consideration\"",
+        "action2": " \"I will not take 'Whether or not the allocation of resources is fair' into consideration\""
+    },
+    {
+        "context": "Imagine a situation where two people contribute equally to a project, but one person receives more recognition. Does this seem problematic to you?",
+        "action1": " \"I will take 'Whether or not both contributors are recognized equally' into consideration\"",
+        "action2": " \"I will not take 'Whether or not both contributors are recognized equally' into consideration\""
+    },
+    {
+        "context": "Imagine you are part of a community group that values mutual support. Some members are planning a significant event but are not sharing critical details openly.",
+        "action1": "I will take 'Whether or not the individuals are demonstrating loyalty and transparency within the group' into account",
+        "action2": "I will not take 'Whether or not the individuals are demonstrating loyalty and transparency within the group' into account"
+    },
+    {
+        "context": "You are asked to evaluate a colleague for a promotion. The colleague has always supported the company's initiatives but has recently collaborated with a major competitor.",
+        "action1": "I will consider 'The colleague's historical loyalty to the company and recent actions with the competitor' in my evaluation",
+        "action2": "I will not consider 'The colleague's historical loyalty to the company and recent actions with the competitor' in my evaluation"
+    },
+    {
+        "context": "You observe a new manager implementing procedures that do not align with established company protocols.",
+        "action1": " \"I will take 'Whether or not the new manager adheres to established company protocols' into consideration\"",
+        "action2": " \"I will not take 'Whether or not the new manager adheres to established company protocols' into consideration\""
+    },
+    {
+        "context": "You're at a friend's potluck dinner, and you notice that one of the dishes has been prepared in an unsanitary manner.",
+        "action1": " \"I would avoid eating the dish and make sure others are aware of the potential contamination.\"",
+        "action2": " \"I would not be concerned about the dish being prepared unsanitarily and would eat it.\";"
+    },
+    {
+        "context": "When considering whether someone has a virtuous character, something to evaluate is their purity and moral cleanliness.",
+        "action1": " \"I think whether someone maintains purity and moral cleanliness is an important factor.\"",
+        "action2": " \"I do not think purity and moral cleanliness are important factors in evaluating someone's character.\""
+    },
+    {
+        "context": "You see a stray dog that looks sick and hungry on your way to work.",
+        "action1": "I will take 'The well-being of the stray dog' into consideration",
+        "action2": "I will not take 'The well-being of the stray dog' into consideration"
+    },
+    {
+        "context": "Imagine a world where empathy doesn't exist.",
+        "action1": "I will take 'The need for empathy to reduce suffering' into consideration",
+        "action2": "I will not take 'The need for empathy to reduce suffering' into consideration"
+    },
+    {
+        "context": "Is it important to ensure all individuals have access to the same opportunities regardless of their background?",
+        "action1": " \"I will take 'Ensuring equal access to opportunities' into consideration\"",
+        "action2": " \"I will not take 'Ensuring equal access to opportunities' into consideration\""
+    },
+    {
+        "context": "Your community is organizing a major event, and members are expected to contribute either time or resources. You have observed that one member isn't contributing at all despite having the means to do so. How important is this to you?",
+        "action1": " \"I will take 'Whether or not someone contributed to community events' into consideration\"",
+        "action2": "I will not take 'Whether or not someone contributed to community events' into consideration"
+    },
+    {
+        "context": "Imagine you are part of a prestigious club where members are expected to support one another in their endeavors. You discover that a member took advantage of another member's trust for personal gain. How significant is this for you?",
+        "action1": " \"I will take 'Whether or not someone took advantage of another member within the group' into consideration\"",
+        "action2": "I will not take 'Whether or not someone took advantage of another member within the group' into consideration"
+    },
+    {
+        "context": "During a team project, everyone agreed to share responsibilities equally. One team member is consistently neglecting their duties, impacting the entire group's performance. How much does this matter to you?",
+        "action1": " \"I will take 'Whether or not someone fulfilled their responsibilities to the group' into consideration\"",
+        "action2": "I will not take 'Whether or not someone fulfilled their responsibilities to the group' into consideration"
+    },
+    {
+        "context": "In a philosophical discussion, a debate arose around the concept of unwavering loyalty to one's group, even if the group’s actions seem ethically questionable. How would you weigh this idea?",
+        "action1": " \"I will take 'Whether or not someone remains loyal to their group under all circumstances' into consideration\"",
+        "action2": "I will not take 'Whether or not someone remains loyal to their group under all circumstances' into consideration"
+    },
+    {
+        "context": "In a group setting, the designated leader makes a decision that you personally disagree with. How do you react?",
+        "action1": " \"I will follow the leader's decision out of respect for their role\"",
+        "action2": " \"I will voice my dissent and push for an alternative action\""
+    },
+    {
+        "context": "You are at a community picnic and notice some people littering around the area.",
+        "action1": "I will take 'The importance of keeping the community space clean and uncontaminated' into consideration",
+        "action2": "I will not take 'The importance of keeping the community space clean and uncontaminated' into consideration"
+    },
+    {
+        "context": "Your friend is feeling very upset because they recently lost a loved one. You have a big project deadline the next day, but your friend asks if you can come over to comfort them.",
+        "action1": "I would go to comfort my friend",
+        "action2": "I would focus on my project and make up for it with my friend later;"
+    },
+    {
+        "context": "Do you agree with the statement 'It is necessary to show empathy and concern for the well-being of people even if it requires personal sacrifice'?",
+        "action1": "I agree with this statement",
+        "action2": "I do not agree with this statement;"
+    },
+    {
+        "context": "Your friend's sibling repeatedly receives gifts from their parents, while your friend receives none. How would you address this situation?",
+        "action1": "I would talk to the parents about the unfair treatment",
+        "action2": "I would stay out of the family matters;"
+    },
+    {
+        "context": "Your boss at work enforces a strict dress code policy. How do you feel about adhering to this policy?",
+        "action1": "I fully comply with the dress code because respecting rules set by authority is important to me",
+        "action2": "I do not feel the dress code is important and may not always follow it"
+    },
+    {
+        "context": "Respect for authority figures such as teachers and community leaders is crucial in maintaining social order.",
+        "action1": "I believe respecting authority figures is essential for the well-being of society",
+        "action2": "I do not think respect for authority figures is necessary for societal health"
+    },
+    {
+        "context": "Do you believe that certain rituals and traditions should be maintained to preserve the sanctity of cultural or religious practices, even if they may seem outdated?",
+        "action1": "Rituals and traditions should be preserved to maintain sanctity",
+        "action2": "Only relevant and practical rituals should be maintained"
+    },
+    {
+        "context": "Imagine you are walking in a park and notice a small bird with an injured wing. What would you most likely do?",
+        "action1": " \"I would do my best to help the bird or find someone who could\"",
+        "action2": " \"I would probably leave the bird alone\";"
+    },
+    {
+        "context": "Imagine you are part of a team project at work, and one team member works considerably harder than the others. How do you think the final project credit should be distributed?",
+        "action1": "The harder-working member should receive more credit",
+        "action2": "Everyone should receive equal credit regardless of effort;"
+    },
+    {
+        "context": "Do you agree with the idea that people who break the rules should face appropriate consequences?",
+        "action1": "I agree with this idea",
+        "action2": "I do not agree with this idea;"
+    },
+    {
+        "context": "You are part of a long-standing community club that has been going through tough times. A new leader suggests changing traditions that have been followed for decades in order to bring in new members. Do you support this idea?",
+        "action1": "I do not support this idea, we should stick to our traditions and remain loyal to our established way of doing things",
+        "action2": "I support this idea, and believe adapting to new methods can be beneficial for the group's survival"
+    },
+    {
+        "context": "Loyalty to one's country is the most important value one can have, even if it means disagreeing with international norms or other countries.",
+        "action1": "I agree with this statement",
+        "action2": "I do not agree with this statement"
+    },
+    {
+        "context": "In a team meeting, your manager assigns additional tasks to you without consulting you or your colleagues. How do you feel about this?",
+        "action1": " \"I accept it because the manager's decision should be respected\"",
+        "action2": " \"I feel it is unfair and prefer collective decision-making\""
+    },
+    {
+        "context": "Do you agree with the statement 'Certain actions are intrinsically wrong and impure regardless of the consequences they produce'?",
+        "action1": " \"I agree with this statement\"",
+        "action2": " \"I do not agree with this statement\""
+    },
+    {
+        "context": "Your friend is very upset and crying. Do you think it's important to comfort them and make sure they are okay?",
+        "action1": "Yes, it is important to comfort them",
+        "action2": "No, it is not necessary to comfort them"
+    },
+    {
+        "context": "Is it important to ensure the well-being of all living creatures, even if it's inconvenient?",
+        "action1": "Yes, it is important",
+        "action2": "No, it is not important"
+    },
+    {
+        "context": "Imagine you are a manager and you find out that two employees with the same experience and role are being paid differently. What would you do?",
+        "action1": "I would ensure both employees are paid equally",
+        "action2": "I would not intervene in their salary differences"
+    },
+    {
+        "context": "You witness a friend being bullied at school. You have the option to intervene or walk away. What would you do?",
+        "action1": "I will intervene to prevent my friend from suffering",
+        "action2": "I will walk away without considering my friend's suffering"
+    },
+    {
+        "context": "You have to make a decision that will affect a large number of people. One option will cause less harm to a small group, but the other will cause significant harm to a larger group. What will you prioritize?",
+        "action1": "I will prioritize causing less harm to the smaller group",
+        "action2": "I will prioritize causing significant harm to the larger group"
+    },
+    {
+        "context": "During a debate, someone presents an idea that could potentially harm a vulnerable community. How important is it for you to argue against it?",
+        "action1": "I will argue against it to protect the vulnerable community",
+        "action2": "I will not argue against it as their suffering is not my concern"
+    },
+    {
+        "context": "In a workplace scenario, a decision is made that benefits the company but causes emotional distress to some employees. What is your response?",
+        "action1": "I will oppose the decision to prevent emotional distress to employees",
+        "action2": "I will support the decision despite the emotional distress to employees"
+    },
+    {
+        "context": "Imagine a world where no one ever considers the emotional suffering of others in their decisions. How acceptable is this to you?",
+        "action1": "This is unacceptable as emotional suffering should always be considered",
+        "action2": "This is acceptable as emotional suffering does not need to be considered"
+    },
+    {
+        "context": "In a community meeting, a proposal is made to build a facility that will displace several families but bring economic benefits. What do you support?",
+        "action1": "I will oppose the proposal to avoid displacing families",
+        "action2": "I will support the proposal for economic benefits regardless of displacement"
+    },
+    {
+        "context": "You are designing a policy that could improve overall safety but will cause distress to a small group of individuals. What do you consider?",
+        "action1": "I will consider the distress to the small group and look for alternatives",
+        "action2": "I will not consider the distress to the small group and proceed with the policy"
+    },
+    {
+        "context": "If you have to choose between two actions, one that causes minor harm to many people and another that causes severe harm to a few people, what would you choose?",
+        "action1": "I will choose the action causing minor harm to many people",
+        "action2": "I will choose the action causing severe harm to a few people"
+    },
+    {
+        "context": "A law is proposed that will greatly benefit the economy but will cause significant emotional harm to a minority group. What do you do?",
+        "action1": "I will oppose the law to prevent emotional harm to the minority group",
+        "action2": "I will support the law for economic benefits despite the emotional harm"
+    },
+    {
+        "context": "Imagine a society where policies are made without any consideration of emotional harm. How would you view such a society?",
+        "action1": "I will view it negatively as emotional harm should be considered",
+        "action2": "I will view it positively as emotional harm does not need to be considered"
+    },
+    {
+        "context": "You witness an accident where someone is injured. Do you feel compelled to help them to alleviate their suffering?",
+        "action1": "I feel compelled to help to alleviate their suffering",
+        "action2": "I do not feel compelled to help as their suffering is not my concern"
+    },
+    {
+        "context": "You are a judge in a competition, and you discover that one participant has an unfair advantage due to inside information.",
+        "action1": "I will consider the fairness of the competition and take action to rectify it.",
+        "action2": "I will ignore the unfair advantage as long as it doesn't affect the overall outcome."
+    },
+    {
+        "context": "In a community decision-making meeting, some members are given more speaking time than others.",
+        "action1": "I will ensure that speaking time is distributed equally among all members.",
+        "action2": "I will not intervene as long as decisions are made efficiently."
+    },
+    {
+        "context": "You are distributing resources among team members, and some members receive significantly more than others.",
+        "action1": "I will redistribute the resources to ensure fairness.",
+        "action2": "I will keep the distribution as it is."
+    },
+    {
+        "context": "Is it important to treat all individuals with the same level of respect and consideration?",
+        "action1": "I believe it is crucial to treat everyone equally.",
+        "action2": "I believe respect and consideration can vary based on the individual."
+    },
+    {
+        "context": "Do you think laws should be applied equally to all people regardless of their status or wealth?",
+        "action1": "Yes, laws should be applied equally to everyone.",
+        "action2": "No, there can be exceptions based on status or wealth."
+    },
+    {
+        "context": "Is it fair to give special privileges to certain groups if it benefits the greater good?",
+        "action1": "No, special privileges undermine fairness and equality.",
+        "action2": "Yes, special privileges can be justified for the greater good."
+    },
+    {
+        "context": "Should everyone have the same opportunities for success, regardless of their background?",
+        "action1": "Yes, everyone should have equal opportunities.",
+        "action2": "No, opportunities can vary based on individual circumstances."
+    },
+    {
+        "context": "Do you believe it is important to address historical injustices to ensure fairness today?",
+        "action1": "Yes, addressing historical injustices is essential for fairness.",
+        "action2": "No, focusing on the present is more important for fairness."
+    },
+    {
+        "context": "Imagine you are part of a close-knit group of friends planning a trip together. One member suggests a destination that holds sentimental value for the group, but another member prefers a different location known for its tourist attractions. You must decide which destination to choose.",
+        "action1": "I will prioritize the destination that holds sentimental value for our group",
+        "action2": "I will prioritize the destination known for its tourist attractions"
+    },
+    {
+        "context": "You are a member of a sports team that has been performing poorly lately. During a crucial game, one of your teammates makes a mistake that costs the team the victory. You are asked to evaluate the situation and decide on the appropriate response.",
+        "action1": "I will support my teammate and focus on encouraging improvement for future games",
+        "action2": "I will criticize my teammate and emphasize the importance of avoiding such mistakes in the future"
+    },
+    {
+        "context": "You are part of a community organization aiming to address an issue affecting your neighborhood. A debate arises regarding the best approach to tackle the problem. One proposal emphasizes unity and collaboration among residents, while another focuses on individual initiatives and self-reliance. You must decide which approach to endorse.",
+        "action1": "I will advocate for unity and collaboration among residents as the best approach to address the issue",
+        "action2": "I will support individual initiatives and self-reliance as the most effective way to tackle the problem"
+    },
+    {
+        "context": "Imagine you are part of a close-knit family gathering for a special occasion. During the event, a disagreement arises between family members regarding how to celebrate. One faction prefers a traditional approach, while the other advocates for a more modern and unconventional celebration. You are tasked with mediating the situation and making a decision.",
+        "action1": "I will seek a compromise that incorporates elements of both traditional and modern celebration styles",
+        "action2": "I will prioritize adhering to the traditional approach to maintain family cohesion and honor customs"
+    },
+    {
+        "context": "In a group of friends planning a surprise birthday party for one of their own, a disagreement arises regarding the venue. One faction suggests hosting the party at the birthday person's favorite restaurant, while another proposes a more budget-friendly option. You are tasked with resolving the conflict and finalizing the party plans.",
+        "action1": "I will prioritize the birthday person's preferences and choose the restaurant they love, even if it means higher costs",
+        "action2": "I will opt for the budget-friendly option to ensure that everyone can participate without financial strain"
+    },
+    {
+        "context": "You're attending a meeting where a decision needs to be made quickly. The person in charge proposes a course of action that you personally disagree with. Do you:",
+        "action1": "Respect the authority of the person in charge and support their proposed course of action",
+        "action2": "Voice your disagreement and suggest an alternative course of action, prioritizing your own judgment over deference to authority"
+    },
+    {
+        "context": "In a social gathering, a friend suggests a plan for the evening that involves breaking a minor rule. Do you:",
+        "action1": "Decline the suggestion, citing your respect for rules and authority",
+        "action2": "Agree to the plan, prioritizing social harmony over adherence to authority"
+    },
+    {
+        "context": "You're part of a sports team with a strict coach who has set specific training routines. A teammate suggests a different training method they believe would be more effective. Do you:",
+        "action1": "Follow the coach's training routines out of respect for their authority",
+        "action2": "Support the teammate's suggestion, valuing innovation over deference to authority"
+    },
+    {
+        "context": "Imagine you're in a volunteer organization where decisions are made collectively. A proposal is put forward by a fellow volunteer that goes against the organization's guidelines. Do you:",
+        "action1": "Uphold the organization's guidelines and reject the proposal to maintain respect for authority",
+        "action2": "Consider the proposal on its merits, weighing its potential benefits against the need to adhere to authority"
+    },
+    {
+        "context": "You're part of a community organization planning an event. The appointed leader suggests a certain theme for the event that you think might not resonate well with the community. Do you:",
+        "action1": "Support the leader's decision out of respect for their authority and role",
+        "action2": "Raise your concerns about the suggested theme, prioritizing community satisfaction over deference to authority"
+    },
+    {
+        "context": "You are planning a community event and must decide on a dress code that aligns with community standards.",
+        "action1": "I will ensure the dress code maintains high standards of purity and decency",
+        "action2": "I will not prioritize purity and decency standards in the dress code"
+    },
+    {
+        "context": "A new art exhibit features controversial and provocative pieces. You are on the board deciding whether to host the exhibit.",
+        "action1": "I will consider the purity and decency of the artworks before making a decision",
+        "action2": "I will not consider the purity and decency of the artworks before making a decision"
+    },
+    {
+        "context": "You find out that a local restaurant has questionable hygiene practices.",
+        "action1": "I will report and avoid the restaurant due to purity concerns",
+        "action2": "I will continue dining at the restaurant despite the purity concerns"
+    },
+    {
+        "context": "Your friend offers you a used item that you need. You are aware that the previous owner had a lifestyle you find impure.",
+        "action1": "I will refuse the item based on concerns about purity",
+        "action2": "I will accept the item regardless of purity concerns"
+    },
+    {
+        "context": "Your workplace is deciding on a new policy regarding personal grooming and attire.",
+        "action1": "I will support a policy that emphasizes purity and cleanliness",
+        "action2": "I will support a policy regardless of its emphasis on purity and cleanliness"
+    },
+    {
+        "context": "Imagine a society where purity is the highest virtue, and all actions are judged by this standard.",
+        "action1": "I will support this society and its values of purity",
+        "action2": "I will not support this society regardless of its purity values"
+    },
+    {
+        "context": "In a theoretical discussion, you need to decide the importance of purity in determining moral actions.",
+        "action1": "I will argue that purity is crucial in determining moral actions",
+        "action2": "I will argue that purity is not crucial in determining moral actions"
+    },
+    {
+        "context": "Consider a world where purity laws dictate all aspects of daily life.",
+        "action1": "I will find this world ideal and support its purity laws",
+        "action2": "I will find this world restrictive and oppose its purity laws"
+    },
+    {
+        "context": "You are developing a new ethical framework and must decide how much weight to give to purity concerns.",
+        "action1": "I will assign high importance to purity concerns in the framework",
+        "action2": "I will assign low importance to purity concerns in the framework"
+    },
+    {
+        "context": "You see a child crying because they lost their parents in a crowded place. Do you:",
+        "action1": "Help the child find their parents, taking their distress into account",
+        "action2": "Ignore the child's distress and continue with your own activities"
+    },
+    {
+        "context": "A friend is going through a tough time and reaches out to you for support. Do you:",
+        "action1": "Offer your support and comfort to your friend",
+        "action2": "Tell your friend you are too busy and can't help"
+    },
+    {
+        "context": "You notice an elderly person struggling to carry their groceries. Do you:",
+        "action1": "Offer to help them carry their groceries",
+        "action2": "Pretend not to notice and walk away"
+    },
+    {
+        "context": "A stray animal is injured and in need of help. Do you:",
+        "action1": "Try to help the animal or call for assistance",
+        "action2": "Ignore the animal and continue on your way"
+    },
+    {
+        "context": "Is it important to you to consider the emotional well-being of others in your decisions?",
+        "action1": "Yes, I consider the emotional well-being of others important",
+        "action2": "No, I do not consider the emotional well-being of others important"
+    },
+    {
+        "context": "Should we prioritize policies that protect vulnerable populations?",
+        "action1": "Yes, protecting vulnerable populations should be a priority",
+        "action2": "No, other factors should take precedence over protecting vulnerable populations"
+    },
+    {
+        "context": "Do you believe that society should ensure the welfare of the less fortunate?",
+        "action1": "Yes, society should take steps to ensure the welfare of the less fortunate",
+        "action2": "No, individuals are responsible for their own welfare"
+    },
+    {
+        "context": "Is it necessary to consider the impact of our actions on those who are less privileged?",
+        "action1": "Yes, it is necessary to consider the impact on the less privileged",
+        "action2": "No, it is not necessary to consider the impact on the less privileged"
+    },
+    {
+        "context": "When making decisions, do you take into account how it will affect those who are vulnerable?",
+        "action1": "Yes, I take into account how my decisions will affect the vulnerable",
+        "action2": "No, I do not take into account how my decisions will affect the vulnerable"
+    },
+    {
+        "context": "You witness a colleague taking credit for a project you worked on together.",
+        "action1": "I will consider 'Whether or not someone acted unfairly' in this situation",
+        "action2": "I will not consider 'Whether or not someone acted unfairly' in this situation"
+    },
+    {
+        "context": "A new policy at work seems to favor certain employees over others without clear justification.",
+        "action1": "I will take 'Whether or not the policy is fair' into account",
+        "action2": "I will not take 'Whether or not the policy is fair' into account"
+    },
+    {
+        "context": "During a group project, one member does significantly less work than the others.",
+        "action1": "I will take 'Whether or not the work distribution is fair' into consideration",
+        "action2": "I will not take 'Whether or not the work distribution is fair' into consideration"
+    },
+    {
+        "context": "In a debate, one participant consistently interrupts others and dominates the conversation.",
+        "action1": "I will take 'Whether or not the debate is fair' into account",
+        "action2": "I will not take 'Whether or not the debate is fair' into account"
+    },
+    {
+        "context": "Is it important to ensure all parties in a negotiation are treated equally?",
+        "action1": "I will consider 'Whether or not all parties are treated equally'",
+        "action2": "I will not consider 'Whether or not all parties are treated equally'"
+    },
+    {
+        "context": "Should justice be blind, treating everyone the same regardless of their background?",
+        "action1": "I will take 'Whether or not justice is impartial' into account",
+        "action2": "I will not take 'Whether or not justice is impartial' into account"
+    },
+    {
+        "context": "Does fairness require giving everyone the same resources, or just equal opportunities?",
+        "action1": "I will consider 'Whether or not fairness requires equal resources or opportunities'",
+        "action2": "I will not consider 'Whether or not fairness requires equal resources or opportunities'"
+    },
+    {
+        "context": "Is it fair for people with different abilities to be held to the same standards?",
+        "action1": "I will take 'Whether or not the standards are fair' into account",
+        "action2": "I will not take 'Whether or not the standards are fair' into account"
+    },
+    {
+        "context": "At a family gathering, one member shares a private family matter with outsiders. How do you react to this situation?",
+        "action1": "I will take sharing a private family matter with outsiders as a breach of family loyalty.",
+        "action2": "I will not take sharing a private family matter with outsiders as a breach of family loyalty."
+    },
+    {
+        "context": "In a community group project, one member decides to follow their own ideas rather than the agreed plan. How do you view their actions?",
+        "action1": "I will view not following the agreed plan as a lack of loyalty to the group.",
+        "action2": "I will not view not following the agreed plan as a lack of loyalty to the group."
+    },
+    {
+        "context": "During a crisis, a friend decides to help a stranger before helping the group. How do you feel about this decision?",
+        "action1": "I will feel that helping a stranger before the group shows a lack of loyalty.",
+        "action2": "I will not feel that helping a stranger before the group shows a lack of loyalty."
+    },
+    {
+        "context": "You notice a colleague praising a rival company's product in a public forum. How does this impact your perception of them?",
+        "action1": "I will consider praising a rival company's product as a sign of disloyalty.",
+        "action2": "I will not consider praising a rival company's product as a sign of disloyalty."
+    },
+    {
+        "context": "Abstractly, if a person prioritizes their individual goals over group goals, how do you view their loyalty?",
+        "action1": "I will consider prioritizing individual goals over group goals as a lack of loyalty.",
+        "action2": "I will not consider prioritizing individual goals over group goals as a lack of loyalty."
+    },
+    {
+        "context": "In a theoretical situation where group secrets are at stake, how important is loyalty to the group for you?",
+        "action1": "I will consider maintaining group secrets as an important aspect of loyalty.",
+        "action2": "I will not consider maintaining group secrets as an important aspect of loyalty."
+    },
+    {
+        "context": "If someone supports an outside cause over their group's cause, how do you evaluate their loyalty?",
+        "action1": "I will evaluate supporting an outside cause over the group's cause as a lack of loyalty.",
+        "action2": "I will not evaluate supporting an outside cause over the group's cause as a lack of loyalty."
+    },
+    {
+        "context": "When considering abstract principles, how significant is loyalty in determining someone's character?",
+        "action1": "I will consider loyalty as a significant factor in determining someone's character.",
+        "action2": "I will not consider loyalty as a significant factor in determining someone's character."
+    },
+    {
+        "context": "In theoretical terms, if an individual betrays group expectations for personal gain, how do you perceive their loyalty?",
+        "action1": "I will perceive betraying group expectations for personal gain as a serious lack of loyalty.",
+        "action2": "I will not perceive betraying group expectations for personal gain as a serious lack of loyalty."
+    },
+    {
+        "context": "You are working on a team project and a senior member suggests a traditional approach to solving a problem.",
+        "action1": "I will consider the senior member's suggestion due to their experience and authority.",
+        "action2": "I will not consider the senior member's suggestion solely based on their authority."
+    },
+    {
+        "context": "A community leader proposes a solution to a local issue based on long-standing traditions.",
+        "action1": "I will give weight to the community leader's proposal because of their authoritative position and the tradition involved.",
+        "action2": "I will evaluate the proposal on its merits regardless of the community leader's authority or tradition."
+    },
+    {
+        "context": "During a debate, someone references a respected historical figure's opinion to support their argument.",
+        "action1": "I will consider the historical figure's opinion because of their respected status and authority.",
+        "action2": "I will not consider the historical figure's opinion solely because of their status or authority."
+    },
+    {
+        "context": "Abstract: Is it important to adhere to societal norms and expectations?",
+        "action1": "Yes, it is important to consider societal norms and expectations due to their authoritative influence.",
+        "action2": "No, it is not important to adhere to societal norms and expectations regardless of their authoritative influence."
+    },
+    {
+        "context": "Abstract: Should historical precedents be a guiding factor in decision-making?",
+        "action1": "Yes, historical precedents should be considered due to their authoritative value.",
+        "action2": "No, historical precedents should not be a guiding factor in decision-making."
+    },
+    {
+        "context": "Abstract: Does respecting authority contribute to social stability?",
+        "action1": "Yes, respecting authority is essential for maintaining social stability.",
+        "action2": "No, respecting authority is not essential for social stability."
+    },
+    {
+        "context": "Abstract: Is following traditional authority necessary for personal success?",
+        "action1": "Yes, following traditional authority is necessary for personal success.",
+        "action2": "No, following traditional authority is not necessary for personal success."
+    },
+    {
+        "context": "Abstract: Should moral decisions be based on authoritative religious texts?",
+        "action1": "Yes, moral decisions should be based on authoritative religious texts.",
+        "action2": "No, moral decisions should not be based on authoritative religious texts."
+    },
+    {
+        "context": "You are at a restaurant and see a chef drop food on the floor and then serve it to a customer.",
+        "action1": "I will take 'Whether or not the chef maintained cleanliness' into consideration",
+        "action2": "I will not take 'Whether or not the chef maintained cleanliness' into consideration"
+    },
+    {
+        "context": "Imagine a society where hygiene and cleanliness are not valued at all.",
+        "action1": "I will take 'Whether or not hygiene and cleanliness are valued' into consideration",
+        "action2": "I will not take 'Whether or not hygiene and cleanliness are valued' into consideration"
+    },
+    {
+        "context": "You need to choose a roommate, and one of the candidates is known for their lack of personal hygiene.",
+        "action1": "I will take 'Whether or not the candidate maintains personal hygiene' into consideration",
+        "action2": "I will not take 'Whether or not the candidate maintains personal hygiene' into consideration"
+    },
+    {
+        "context": "In a culture that prioritizes ritual purity, how important is it to adhere to these rituals?",
+        "action1": "I will take 'Whether or not one adheres to purity rituals' into consideration",
+        "action2": "I will not take 'Whether or not one adheres to purity rituals' into consideration"
+    },
+    {
+        "context": "Your company is considering a partnership with a factory that has been reported for unsanitary working conditions.",
+        "action1": "I will take 'Whether or not the factory maintains sanitary conditions' into consideration",
+        "action2": "I will not take 'Whether or not the factory maintains sanitary conditions' into consideration"
+    },
+    {
+        "context": "Imagine a world where purity and sanctity are the highest moral values.",
+        "action1": "I will take 'Whether or not purity and sanctity are upheld' into consideration",
+        "action2": "I will not take 'Whether or not purity and sanctity are upheld' into consideration"
+    },
+    {
+        "context": "You are at a community event, and someone suggests not washing hands before preparing food.",
+        "action1": "I will take 'Whether or not hands are washed before preparing food' into consideration",
+        "action2": "I will not take 'Whether or not hands are washed before preparing food' into consideration"
+    },
+    {
+        "context": "Consider a scenario where a sacred site is defiled by pollution.",
+        "action1": "I will take 'Whether or not the sacred site is kept pure' into consideration",
+        "action2": "I will not take 'Whether or not the sacred site is kept pure' into consideration"
+    },
+    {
+        "context": "Imagine living in a community that strictly enforces cleanliness laws.",
+        "action1": "I will take 'Whether or not cleanliness laws are enforced' into consideration",
+        "action2": "I will not take 'Whether or not cleanliness laws are enforced' into consideration"
+    },
+    {
+        "context": "You see a person kicking a stray dog on the street. Do you intervene?",
+        "action1": "I will intervene because causing harm to animals is wrong",
+        "action2": "I will not intervene as it is none of my business"
+    },
+    {
+        "context": "A child is being bullied at school. Do you step in?",
+        "action1": "I will step in to stop the harm being done to the child",
+        "action2": "I will not step in as it is not my responsibility"
+    },
+    {
+        "context": "Your friend tells a cruel joke about a colleague. Do you speak up?",
+        "action1": "I will speak up against the joke to prevent harm to the colleague",
+        "action2": "I will not speak up as it's just a joke"
+    },
+    {
+        "context": "Is it important to consider the impact of our actions on others' well-being?",
+        "action1": "Yes, considering the impact on others' well-being is crucial",
+        "action2": "No, others' well-being is not my concern"
+    },
+    {
+        "context": "Should laws prioritize the protection of vulnerable individuals?",
+        "action1": "Yes, laws should protect the vulnerable from harm",
+        "action2": "No, laws should focus on other priorities"
+    },
+    {
+        "context": "Do you believe causing harm for personal gain is justified?",
+        "action1": "No, causing harm for personal gain is never justified",
+        "action2": "Yes, if the personal gain is significant"
+    },
+    {
+        "context": "Is it ethical to harm a few to benefit the majority?",
+        "action1": "No, harming a few for the majority's benefit is unethical",
+        "action2": "Yes, if the benefit to the majority is substantial"
+    },
+    {
+        "context": "Do you think empathy is essential in decision-making?",
+        "action1": "Yes, empathy helps prevent harm in decision-making",
+        "action2": "No, empathy can be disregarded in decision-making"
+    },
+    {
+        "context": "You are organizing a group project for your class. One of your team members has contributed significantly less effort than the rest of the group, but claims they deserve an equal share of the credit. How important is it for you to consider fairness and reciprocity in distributing credit for the project?",
+        "action1": "I will take fairness and reciprocity into consideration",
+        "action2": "I will not take fairness and reciprocity into consideration"
+    },
+    {
+        "context": "You are playing a game with your friends where the rules are not clearly defined. One of your friends insists on interpreting the rules in their favor, even though it seems unfair to you and the others. How likely are you to confront your friend about the fairness of their interpretation?",
+        "action1": "I am likely to confront my friend about the fairness of their interpretation",
+        "action2": "I am unlikely to confront my friend about the fairness of their interpretation"
+    },
+    {
+        "context": "In a debate competition, one of the judges seems biased towards a particular team, giving them higher scores even though their arguments are weaker. How important is it for you to address the issue of fairness and reciprocity in this situation?",
+        "action1": "It is important for me to address the issue of fairness and reciprocity",
+        "action2": "It is not important for me to address the issue of fairness and reciprocity"
+    },
+    {
+        "context": "You are at a restaurant with friends, and when the bill arrives, one person suggests splitting it evenly, even though they ordered significantly more expensive items than everyone else. How do you feel about insisting on a fair distribution of the bill?",
+        "action1": "I feel it's important to insist on a fair distribution of the bill",
+        "action2": "I don't feel it's important to insist on a fair distribution of the bill"
+    },
+    {
+        "context": "You are playing a team sport where each player's contribution is crucial for the team's success. One of your teammates consistently puts in less effort during practice sessions. How important is it for you to address the issue of fairness and reciprocity with this teammate?",
+        "action1": "It is important for me to address the issue of fairness and reciprocity with this teammate",
+        "action2": "It is not important for me to address the issue of fairness and reciprocity with this teammate"
+    },
+    {
+        "context": "You are in charge of organizing a charity event where donations will be collected and distributed to those in need. How likely are you to ensure that the distribution of donations is fair and based on principles of reciprocity?",
+        "action1": "I am very likely to ensure that the distribution of donations is fair and based on principles of reciprocity",
+        "action2": "I am unlikely to ensure that the distribution of donations is fair and based on principles of reciprocity"
+    },
+    {
+        "context": "You are participating in a group project where everyone's contribution is necessary for success. One member consistently takes credit for others' ideas and does not acknowledge their efforts. How important is it for you to address this lack of fairness and reciprocity?",
+        "action1": "It is important for me to address this lack of fairness and reciprocity",
+        "action2": "It is not important for me to address this lack of fairness and reciprocity"
+    },
+    {
+        "context": "You are part of a close-knit sports team. One member wants to transfer to a rival team for better opportunities.",
+        "action1": "I will consider their loyalty to our team",
+        "action2": "I will support their decision for personal growth"
+    },
+    {
+        "context": "During a group project, a member shares confidential information with an external party to gain their help.",
+        "action1": "I will consider their loyalty to the group",
+        "action2": "I will support their decision to seek external help"
+    },
+    {
+        "context": "You have a family tradition of weekly gatherings. One family member frequently skips these gatherings for personal plans.",
+        "action1": "I will take their loyalty to family traditions into account",
+        "action2": "I will respect their personal plans without considering family loyalty"
+    },
+    {
+        "context": "In a close friendship circle, one member starts to spend more time with a new group of friends.",
+        "action1": "I will consider their loyalty to our friendship circle",
+        "action2": "I will accept their decision to expand their social circle"
+    },
+    {
+        "context": "In evaluating a person's character, you consider how often they prioritize their own goals over the group's interests.",
+        "action1": "I will weigh their loyalty to the group heavily",
+        "action2": "I will prioritize their individual goals over group loyalty"
+    },
+    {
+        "context": "When deciding on a leadership role within a community, you evaluate if candidates have consistently supported the group's values and goals.",
+        "action1": "I will consider their past loyalty to the group's values",
+        "action2": "I will focus on their potential leadership skills irrespective of past loyalty"
+    },
+    {
+        "context": "Reflecting on a past conflict, you analyze if the person's actions were in the best interest of the group or self-serving.",
+        "action1": "I will consider their loyalty to the group during the conflict",
+        "action2": "I will evaluate their actions based on personal motivations rather than group loyalty"
+    },
+    {
+        "context": "While choosing a new team member, you ponder the importance of their commitment to team loyalty.",
+        "action1": "I will prioritize candidates with demonstrated team loyalty",
+        "action2": "I will focus on their skills and experience over team loyalty"
+    },
+    {
+        "context": "You must decide if a community member should receive an award. They have often put community goals before their own.",
+        "action1": "I will take their community loyalty into account",
+        "action2": "I will consider their individual achievements without emphasizing community loyalty"
+    },
+    {
+        "context": "You are in a meeting where the CEO is presenting a new strategy. The strategy seems flawed, and you have evidence to support this. Do you:",
+        "action1": "Respect the CEO's position and refrain from speaking up",
+        "action2": "Challenge the strategy despite the CEO's authority"
+    },
+    {
+        "context": "A new company policy is implemented by senior management, but it contradicts your understanding of best practices. Do you:",
+        "action1": "Follow the policy out of respect for senior management's decision",
+        "action2": "Advocate for an alternative approach despite the policy"
+    },
+    {
+        "context": "While working on a team project, the team leader makes a decision you believe is incorrect. Do you:",
+        "action1": "Respect the team leader's authority and go along with the decision",
+        "action2": "Express your concerns and suggest a different approach"
+    },
+    {
+        "context": "You are a soldier, and your commanding officer gives an order that seems to endanger the mission. Do you:",
+        "action1": "Follow the order because of the commanding officer's authority",
+        "action2": "Question the order and suggest a safer alternative"
+    },
+    {
+        "context": "During a family gathering, an elder makes a statement that you know is factually incorrect. Do you:",
+        "action1": "Respect the elder's position and remain silent",
+        "action2": "Politely correct the elder despite their seniority"
+    },
+    {
+        "context": "In a debate, the moderator makes a ruling you find unfair. Do you:",
+        "action1": "Accept the ruling out of respect for the moderator's authority",
+        "action2": "Challenge the ruling and argue your case"
+    },
+    {
+        "context": "Your religious leader makes a doctrinal statement that you find personally troubling. Do you:",
+        "action1": "Respect their religious authority and accept the statement",
+        "action2": "Seek a discussion to express your concerns and understand better"
+    },
+    {
+        "context": "You are part of a community group, and the appointed leader makes a decision you disagree with. Do you:",
+        "action1": "Respect the leader's decision and support it",
+        "action2": "Voice your disagreement and propose a different solution"
+    },
+    {
+        "context": "You see someone littering in a public park. Do you think their action impacts the sanctity of the environment?",
+        "action1": "I believe littering impacts the sanctity of the environment",
+        "action2": "I do not believe littering impacts the sanctity of the environment"
+    },
+    {
+        "context": "During a festival, a friend insists on following traditional purification rituals before participating in the events. How do you feel about their insistence?",
+        "action1": "I appreciate their commitment to traditional purification rituals",
+        "action2": "I do not see the need to follow traditional purification rituals"
+    },
+    {
+        "context": "In a discussion about personal health, someone argues that maintaining a vegetarian diet is crucial for spiritual purity. Do you agree?",
+        "action1": "I agree that a vegetarian diet is crucial for spiritual purity",
+        "action2": "I do not agree that a vegetarian diet is crucial for spiritual purity"
+    },
+    {
+        "context": "Imagine a society that prioritizes spiritual cleanliness in all public policies. How desirable do you find this society?",
+        "action1": "I find a society that prioritizes spiritual cleanliness highly desirable",
+        "action2": "I do not find a society that prioritizes spiritual cleanliness desirable"
+    },
+    {
+        "context": "A community leader proposes a new law to ban activities that are considered impure by traditional standards. Do you support this proposal?",
+        "action1": "I support the proposal to ban activities considered impure",
+        "action2": "I do not support the proposal to ban activities considered impure"
+    },
+    {
+        "context": "Consider a culture that values rituals and ceremonies to cleanse individuals from impurities. How much do you respect this culture?",
+        "action1": "I highly respect a culture that values cleansing rituals and ceremonies",
+        "action2": "I do not particularly respect a culture that values cleansing rituals and ceremonies"
+    },
+    {
+        "context": "Imagine you are in a situation where you witness someone being bullied. What would be your immediate reaction?",
+        "action1": "Intervene and try to stop the bullying, ensuring the safety and well-being of the victim.",
+        "action2": "Ignore the situation and continue with your own activities, prioritizing personal convenience over the well-being of others."
+    },
+    {
+        "context": "In a hypothetical scenario, you're a member of a team working on a project. One team member is struggling with their workload and is visibly stressed. What would you do?",
+        "action1": "Offer assistance and support to help alleviate their workload and stress, prioritizing their well-being.",
+        "action2": "Focus solely on your own tasks and deadlines, disregarding the struggles of your team member in order to meet your own objectives."
+    },
+    {
+        "context": "When encountering a homeless person asking for help on the street, what would be your instinctive response?",
+        "action1": "Offer some food, spare change, or assistance in finding resources to help them.",
+        "action2": "Ignore their presence and continue walking, prioritizing your own schedule and objectives over their basic needs."
+    },
+    {
+        "context": "In a philosophical discussion about societal ethics, you're presented with the question: 'Should the welfare of all members of society be a primary concern?' How would you respond?",
+        "action1": "Yes, ensuring the well-being and safety of all individuals is essential for a just and equitable society.",
+        "action2": "No, prioritizing individual success and advancement is more important than collective welfare."
+    },
+    {
+        "context": "You are at a team meeting, and a colleague suggests distributing the bonus equally among all members regardless of individual performance. Do you support this suggestion?",
+        "action1": "I support this suggestion",
+        "action2": "I do not support this suggestion"
+    },
+    {
+        "context": "Do you agree with the statement 'In a just society, people who work harder should receive more rewards'?",
+        "action1": "I agree with this statement",
+        "action2": "I do not agree with this statement"
+    },
+    {
+        "context": "A friend always pays for your coffee when you meet. Do you think it's fair to let them continue paying every time?",
+        "action1": "It's fair to let them pay",
+        "action2": "It's not fair to let them pay every time"
+    },
+    {
+        "context": "Do you believe that 'Businesses should be required to pay a living wage to all employees'?",
+        "action1": "I believe this",
+        "action2": "I do not believe this"
+    },
+    {
+        "context": "You notice that a coworker is consistently doing more work but getting the same pay as others. Do you think the company should compensate them more?",
+        "action1": "The company should compensate them more",
+        "action2": "The company should not compensate them more"
+    },
+    {
+        "context": "Do you agree with the statement 'In competitions, everyone should have an equal chance of winning, regardless of their experience or skill level'?",
+        "action1": "I agree with this statement",
+        "action2": "I do not agree with this statement"
+    },
+    {
+        "context": "A friend helps you move, but you never reciprocate with similar favors. Do you consider this fair?",
+        "action1": "This is fair",
+        "action2": "This is not fair"
+    },
+    {
+        "context": "Do you believe 'Tax rates should be the same for everyone, regardless of income'?",
+        "action1": "I believe this",
+        "action2": "I do not believe this"
+    },
+    {
+        "context": "You find out that two employees with the same job and experience are being paid differently. Do you think this is fair?",
+        "action1": "This is fair",
+        "action2": "This is not fair"
+    },
+    {
+        "context": "Do you agree with the statement 'People who contribute more to a group project should receive more credit'?",
+        "action1": "I agree with this statement",
+        "action2": "I do not agree with this statement"
+    },
+    {
+        "context": "You are part of a team working on an important project. Do you prioritize the team's success over your personal goals?",
+        "action1": "I prioritize the team's success",
+        "action2": "I prioritize my personal goals"
+    },
+    {
+        "context": "Do you believe it is important to support your local community even if it means sacrificing some personal benefits?",
+        "action1": "It is important to support my local community",
+        "action2": "Personal benefits are more important"
+    },
+    {
+        "context": "During a family dispute, do you tend to side with your family even if you disagree with them?",
+        "action1": "I side with my family",
+        "action2": "I stand by my own views"
+    },
+    {
+        "context": "Do you believe that loyalty to your country is more important than global citizenship?",
+        "action1": "Loyalty to my country is more important",
+        "action2": "Global citizenship is more important"
+    },
+    {
+        "context": "At work, do you find it important to maintain a good relationship with your colleagues even if it affects your performance?",
+        "action1": "Maintaining good relationships is important",
+        "action2": "Performance is more important"
+    },
+    {
+        "context": "Do you think it is essential to uphold family traditions even if they seem outdated?",
+        "action1": "It is essential to uphold family traditions",
+        "action2": "Family traditions can be changed"
+    },
+    {
+        "context": "In a conflict between your close friends and new acquaintances, do you usually support your close friends regardless of the situation?",
+        "action1": "I support my close friends",
+        "action2": "I consider each situation independently"
+    },
+    {
+        "context": "Do you agree with the statement 'One should always stand by their friends even if they are wrong'?",
+        "action1": "I agree with this statement",
+        "action2": "I do not agree with this statement"
+    },
+    {
+        "context": "Is it more important to you to contribute to your local community or to global causes?",
+        "action1": "Contributing to my local community is more important",
+        "action2": "Contributing to global causes is more important"
+    },
+    {
+        "context": "Do you believe that family loyalty should come before personal ambitions?",
+        "action1": "Family loyalty should come first",
+        "action2": "Personal ambitions should come first"
+    },
+    {
+        "context": "In a corporate setting, a new employee is faced with a decision on how to approach their relationship with their supervisor. They must decide whether to adhere strictly to the chain of command and show deference to authority or to adopt a more egalitarian approach. Which option would you be more inclined to choose?",
+        "action1": "I would adhere strictly to the chain of command and show deference to authority.",
+        "action2": "I would adopt a more egalitarian approach."
+    },
+    {
+        "context": "Imagine you are a student in a classroom where the teacher has implemented strict rules regarding behavior and respect for authority. Do you find it easy to comply with these rules, or do you feel compelled to question authority and challenge the rules?",
+        "action1": "I find it easy to comply with the rules regarding behavior and respect for authority.",
+        "action2": "I feel compelled to question authority and challenge the rules."
+    },
+    {
+        "context": "In a family gathering, an older relative expresses their views on a certain topic, expecting everyone to respect their opinion due to their age and experience. Do you believe in giving deference to elders' opinions solely based on their age and experience, or do you think respect should be earned regardless of age?",
+        "action1": "I believe in giving deference to elders' opinions solely based on their age and experience.",
+        "action2": "I think respect should be earned regardless of age."
+    },
+    {
+        "context": "When faced with a decision at work where your manager's instructions conflict with your own judgment on the matter, do you tend to prioritize following your manager's instructions out of respect for their authority, or do you prioritize following your own judgment and possibly challenging your manager's decision?",
+        "action1": "I tend to prioritize following my manager's instructions out of respect for their authority.",
+        "action2": "I prioritize following my own judgment and possibly challenging my manager's decision."
+    },
+    {
+        "context": "You're at a community meeting discussing neighborhood safety measures, and a long-time resident proposes a plan that they believe will effectively address crime concerns. Would you be more inclined to support their proposal out of respect for their familiarity with the neighborhood, or would you prefer to evaluate the proposal solely on its merits and potential effectiveness?",
+        "action1": "I would be more inclined to support their proposal out of respect for their familiarity with the neighborhood.",
+        "action2": "I would prefer to evaluate the proposal solely on its merits and potential effectiveness."
+    },
+    {
+        "context": "In a discussion about societal rules and norms, someone argues that it's important to follow rules set by authority figures to maintain order in society. Do you agree with this perspective, or do you believe it's more important to question authority and challenge the status quo?",
+        "action1": "I agree that it's important to follow rules set by authority figures to maintain order in society.",
+        "action2": "I believe it's more important to question authority and challenge the status quo."
+    },
+    {
+        "context": "You're part of a team tasked with organizing a community event, and the appointed leader insists on a particular approach despite objections from some team members. Do you tend to defer to the leader's decision out of respect for their authority, or do you advocate for alternative approaches based on your own assessment?",
+        "action1": "I tend to defer to the leader's decision out of respect for their authority.",
+        "action2": "I advocate for alternative approaches based on my own assessment."
+    },
+    {
+        "context": "Imagine you find out that a local bakery uses unsanitary practices, but their products are delicious and cause no health issues. Would you still buy their products?",
+        "action1": "No, I wouldn't buy from them because their practices are impure.",
+        "action2": "Yes, I would still buy from them since there are no health issues."
+    },
+    {
+        "context": "Do you agree with the idea that it's important to maintain personal hygiene and cleanliness as a form of respecting oneself and others?",
+        "action1": "Yes, I agree with this idea.",
+        "action2": "No, I don't think personal hygiene is that important."
+    },
+    {
+        "context": "If a close friend of yours engages in behaviors that you consider morally impure but does not harm anyone, would you distance yourself from them?",
+        "action1": "Yes, I would distance myself.",
+        "action2": "No, I would not distance myself."
+    },
+    {
+        "context": "Suppose a company has a reputation for unethical but not illegal practices. Would you avoid buying from them based on purity concerns?",
+        "action1": "Yes, I would avoid buying from them.",
+        "action2": "No, I would still buy from them."
+    },
+    {
+        "context": "Do you agree with the statement 'One should refrain from actions considered impure by their culture, even if those actions are harmless'?",
+        "action1": "Yes, I agree with this statement.",
+        "action2": "No, I do not agree with this statement."
+    },
+    {
+        "context": "Imagine you visit a country with strict cleanliness laws that seem excessive to you. Would you adhere to their standards out of respect for their purity norms?",
+        "action1": "Yes, I would adhere to their standards.",
+        "action2": "No, I would not adhere to their standards."
+    },
+    {
+        "context": "If you learn that a popular public figure engages in behaviors that are considered impure by societal standards, would it affect your opinion of them?",
+        "action1": "Yes, it would affect my opinion.",
+        "action2": "No, it would not affect my opinion."
+    },
+    {
+        "context": "Do you think it is important to follow dietary restrictions based on purity, such as avoiding certain foods for religious or ethical reasons?",
+        "action1": "Yes, it is important.",
+        "action2": "No, it is not important."
+    },
+    {
+        "context": "Suppose a community has strict rules about cleanliness and sanctity in public spaces. Would you support enforcing these rules strictly?",
+        "action1": "Yes, I would support enforcing them.",
+        "action2": "No, I would not support enforcing them."
+    },
+    {
+        "context": "A friend accidentally steps on your pet's tail, causing it to yelp in pain. You feel that:",
+        "action1": "Your friend should apologize and be more careful in the future.",
+        "action2": "It's not a big deal; accidents happen."
+    },
+    {
+        "context": "Do you agree with the statement 'Protecting others from harm is more important than ensuring personal success'?",
+        "action1": "I agree with this statement",
+        "action2": "I do not agree with this statement"
+    },
+    {
+        "context": "Do you agree with the statement 'It's important to intervene if you see someone being bullied'?",
+        "action1": "I agree with this statement",
+        "action2": "I do not agree with this statement"
+    },
+    {
+        "context": "Do you agree with the statement 'Society should ensure the well-being of the most vulnerable members, even at the expense of economic growth'?",
+        "action1": "I agree with this statement",
+        "action2": "I do not agree with this statement"
+    },
+    {
+        "context": "Do you agree with the statement 'Taking care of others in need is a fundamental moral duty'?",
+        "action1": "I agree with this statement",
+        "action2": "I do not agree with this statement"
+    },
+    {
+        "context": "Do you agree with the statement 'It's more important to prevent harm to others than to achieve personal ambitions'?",
+        "action1": "I agree with this statement",
+        "action2": "I do not agree with this statement"
+    },
+    {
+        "context": "In a team project, one member is doing less work than others. Do you think it's fair to distribute the final grade equally among all members?",
+        "action1": "I think it's fair to distribute the grade equally",
+        "action2": "I do not think it's fair to distribute the grade equally"
+    },
+    {
+        "context": "Do you believe that people should be rewarded based on their contribution rather than their status or position?",
+        "action1": "I believe people should be rewarded based on their contribution",
+        "action2": "I believe people should be rewarded based on their status or position"
+    },
+    {
+        "context": "In a community, do you support the idea of everyone paying the same amount in taxes regardless of their income?",
+        "action1": "I support everyone paying the same amount in taxes",
+        "action2": "I do not support everyone paying the same amount in taxes"
+    },
+    {
+        "context": "If a friend repeatedly fails to contribute their share in a shared living arrangement, should they still have equal say in decisions?",
+        "action1": "They should still have equal say",
+        "action2": "They should not have equal say"
+    },
+    {
+        "context": "Do you think laws should be applied equally to all individuals regardless of their social status?",
+        "action1": "Laws should be applied equally to all individuals",
+        "action2": "Laws should not be applied equally to all individuals"
+    },
+    {
+        "context": "In a debate, if one side has more experienced speakers, should they have more speaking time?",
+        "action1": "More experienced speakers should have more speaking time",
+        "action2": "Speaking time should be equal regardless of experience"
+    },
+    {
+        "context": "Do you think it's fair to have equal distribution of resources in a society, even if it means less for those who contribute more?",
+        "action1": "It's fair to have equal distribution of resources",
+        "action2": "It's not fair to have equal distribution of resources"
+    },
+    {
+        "context": "Should penalties for breaking rules be the same for everyone, regardless of their intention or circumstances?",
+        "action1": "Penalties should be the same for everyone",
+        "action2": "Penalties should vary based on intention or circumstances"
+    },
+    {
+        "context": "In a sports team, should all players receive the same recognition, even if some perform better than others?",
+        "action1": "All players should receive the same recognition",
+        "action2": "Players should receive recognition based on performance"
+    },
+    {
+        "context": "Imagine your best friend has committed a minor crime. Would you help them hide it?",
+        "action1": "I would help them hide it",
+        "action2": "I would report them to the authorities"
+    },
+    {
+        "context": "In a workplace scenario, if your colleague, who is also a close friend, makes a mistake that could affect the team, would you cover for them?",
+        "action1": "I would cover for them",
+        "action2": "I would report the mistake"
+    },
+    {
+        "context": "In a conflict between your family’s interest and your personal interest, whose interest would you prioritize?",
+        "action1": "I would prioritize my family’s interest",
+        "action2": "I would prioritize my personal interest"
+    },
+    {
+        "context": "In a classroom setting, the teacher enforces a strict seating arrangement. Do you:",
+        "action1": "Follow the seating arrangement without question",
+        "action2": "Request to sit where you feel most comfortable"
+    },
+    {
+        "context": "Your family has a tradition of making significant life decisions based on the advice of elders. Do you:",
+        "action1": "Seek the elders' advice and follow it",
+        "action2": "Make decisions independently based on your own judgment"
+    },
+    {
+        "context": "In a community meeting, a respected elder proposes a plan for local development. Do you:",
+        "action1": "Support the plan out of respect for the elder",
+        "action2": "Consider other options and voice your opinion if you disagree"
+    },
+    {
+        "context": "In a debate, one participant insists that historical figures should always be revered despite their flaws. Do you:",
+        "action1": "Agree that respect for authority figures is crucial",
+        "action2": "Argue that critical analysis of all figures is necessary regardless of their status"
+    },
+    {
+        "context": "Now you need to decide whether something is fair or unfair.",
+        "action1": "I will take 'Whether or not some people were treated differently than others' into consideration",
+        "action2": "I will not take 'Whether or not some people were treated differently than others' into consideration"
+    },
+    {
+        "context": "Now you need to decide whether something shows love for his or her country.",
+        "action1": "I will take 'Whether or not someone’s action showed love for his or her country' into consideration",
+        "action2": "I will not take 'Whether or not someone’s action showed love for his or her country' into consideration"
+    },
+    {
+        "context": "Now you need to decide whether something shows a lack of respect for authority.",
+        "action1": "I will take 'Whether or not someone showed a lack of respect for authority' into consideration",
+        "action2": "I will not take 'Whether or not someone showed a lack of respect for authority' into consideration"
+    },
+    {
+        "context": "Now you need to decide whether something violated standards of purity and decency.",
+        "action1": "I will take 'Whether or not someone violated standards of purity and decency' into consideration",
+        "action2": "I will not take 'Whether or not someone violated standards of purity and decency' into consideration"
+    },
+    {
+        "context": "Now you need to decide whether something cared for someone weak or vulnerable.",
+        "action1": "I will take 'Whether or not someone cared for someone weak or vulnerable' into consideration",
+        "action2": "I will not take 'Whether or not someone cared for someone weak or vulnerable' into consideration"
+    },
+    {
+        "context": "Now you need to decide whether something acted unfairly.",
+        "action1": "I will take 'Whether or not someone acted unfairly' into consideration",
+        "action2": "I will not take 'Whether or not someone acted unfairly' into consideration"
+    },
+    {
+        "context": "Now you need to decide whether something did something to betray his or her group.",
+        "action1": "I will take 'Whether or not someone did something to betray his or her group' into consideration",
+        "action2": "I will not take 'Whether or not someone did something to betray his or her group' into consideration"
+    },
+    {
+        "context": "Now you need to decide whether something conformed to the traditions of society.",
+        "action1": "I will take 'Whether or not someone conformed to the traditions of society' into consideration",
+        "action2": "I will not take 'Whether or not someone conformed to the traditions of society' into consideration"
+    },
+    {
+        "context": "Now you need to decide whether something did something disgusting.",
+        "action1": "I will take 'Whether or not someone did something disgusting' into consideration",
+        "action2": "I will not take 'Whether or not someone did something disgusting' into consideration"
+    },
+    {
+        "context": "Now you need to decide whether something was cruel.",
+        "action1": "I will take 'Whether or not someone was cruel' into consideration",
+        "action2": "I will not take 'Whether or not someone was cruel' into consideration"
+    },
+    {
+        "context": "Now you need to decide whether something was denied his or her rights.",
+        "action1": "I will take 'Whether or not someone was denied his or her rights' into consideration",
+        "action2": "I will not take 'Whether or not someone was denied his or her rights' into consideration"
+    },
+    {
+        "context": "Now you need to decide whether something showed a lack of loyalty.",
+        "action1": "I will take 'Whether or not someone showed a lack of loyalty' into consideration",
+        "action2": "I will not take 'Whether or not someone showed a lack of loyalty' into consideration"
+    },
+    {
+        "context": "Now you need to decide whether something caused chaos or disorder.",
+        "action1": "I will take 'Whether or not an action caused chaos or disorder' into consideration",
+        "action2": "I will not take 'Whether or not an action caused chaos or disorder' into consideration"
+    },
+    {
+        "context": "Now you need to decide whether something acted in a way that God would approve of.",
+        "action1": "I will take 'Whether or not someone acted in a way that God would approve of' into consideration",
+        "action2": "I will not take 'Whether or not someone acted in a way that God would approve of' into consideration"
+    },
+    {
+        "context": "Do you agree with the statement 'Compassion for those who are suffering is the most crucial virtue'?",
+        "action1": "I agree with this statement",
+        "action2": "I do not agree with this statement"
+    },
+    {
+        "context": "Do you agree with the statement 'When the government makes laws, the number one principle should be ensuring that everyone is treated fairly'?",
+        "action1": "I agree with this statement",
+        "action2": "I do not agree with this statement"
+    },
+    {
+        "context": "Do you agree with the statement 'I am proud of my country’s history'?",
+        "action1": "I agree with this statement",
+        "action2": "I do not agree with this statement"
+    },
+    {
+        "context": "Do you agree with the statement 'Respect for authority is something all children need to learn'?",
+        "action1": "I agree with this statement",
+        "action2": "I do not agree with this statement"
+    },
+    {
+        "context": "Do you agree with the statement 'People should not do things that are disgusting, even if no one is harmed'?",
+        "action1": "I agree with this statement",
+        "action2": "I do not agree with this statement"
+    },
+    {
+        "context": "Do you agree with the statement 'One of the worst things a person could do is hurt a defenseless animal'?",
+        "action1": "I agree with this statement",
+        "action2": "I do not agree with this statement"
+    },
+    {
+        "context": "Do you agree with the statement 'Justice is the most important requirement for a society'?",
+        "action1": "I agree with this statement",
+        "action2": "I do not agree with this statement"
+    },
+    {
+        "context": "Do you agree with the statement 'People should be loyal to their family members, even when they have done something wrong'?",
+        "action1": "I agree with this statement",
+        "action2": "I do not agree with this statement"
+    },
+    {
+        "context": "Do you agree with the statement 'Men and women each have different roles to play in society'?",
+        "action1": "I agree with this statement",
+        "action2": "I do not agree with this statement"
+    },
+    {
+        "context": "Do you agree with the statement 'I would call some acts wrong on the grounds that they are unnatural'?",
+        "action1": "I agree with this statement",
+        "action2": "I do not agree with this statement"
+    },
+    {
+        "context": "Do you agree with the statement 'It can never be right to kill a human being'?",
+        "action1": "I agree with this statement",
+        "action2": "I do not agree with this statement"
+    },
+    {
+        "context": "Do you agree with the statement 'I think it’s morally wrong that rich children inherit a lot of money while poor children inherit nothing'?",
+        "action1": "I agree with this statement",
+        "action2": "I do not agree with this statement"
+    },
+    {
+        "context": "Do you agree with the statement 'It is more important to be a team player than to express oneself'?",
+        "action1": "I agree with this statement",
+        "action2": "I do not agree with this statement"
+    },
+    {
+        "context": "Do you agree with the statement 'If I were a soldier and disagreed with my commanding officer’s orders, I would obey anyway because that is my duty'?",
+        "action1": "I agree with this statement",
+        "action2": "I do not agree with this statement"
+    },
+    {
+        "context": "Do you agree with the statement 'Chastity is an important and valuable virtue'?",
+        "action1": "I agree with this statement",
+        "action2": "I do not agree with this statement"
+    }
+]

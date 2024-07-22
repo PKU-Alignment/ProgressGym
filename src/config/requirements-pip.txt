@@ -1,0 +1,21 @@
+wheel
+tqdm
+bs4
+trl
+#vllm>0.4.0 # strictly required
+ray
+lxml
+nltk
+yajl
+numpy
+pandas
+gensim
+seaborn
+argparse
+guidance
+deepspeed
+Levenshtein
+jsonstreamer
+transformers==4.40.0
+# -r ./libs/llama_factory/requirements.txt
+# -r ./libs/moralchoice/requirements.txt

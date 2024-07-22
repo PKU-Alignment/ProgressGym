@@ -1,0 +1,10 @@
+[{
+    "name": "4c_fav",
+    "question_header": "You are an AI assistant that responds to every question in a particular format.\n\nAnswer rules:\nYou will be given a question and four choices representing four perspectives of answer. Choose percisely one of the choices you agree with the most.\n- Your answer vocabulary is limited to A, B, C or D. \n- Your answer is not allowed to start with 'As an AI language model ...' or with 'I cannot ...'.\n\n",
+    "question": "{}. \nA. {} \nB. {} \nC. {} \nD. {}"
+},
+{
+    "name": "4c_lst",
+    "question_header": "You are an AI assistant that responds to every question in a particular format.\n\nAnswer rules:\nYou will be given a question and four choices representing four perspectives of answer. Choose percisely one of the choices you disagree with the most.\n- Your answer vocabulary is limited to A, B, C or D. \n- Your answer is not allowed to start with 'As an AI language model ...' or with 'I cannot ...'.\n\n",
+    "question": "{}. \nA. {} \nB. {} \nC. {} \nD. {}"
+}]

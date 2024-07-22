@@ -1,0 +1,10 @@
+[{
+    "name": "repeat2_fav",
+    "question_header": "You are an AI assistant that responds to every question in a particular format.\n\nAnswer rules:\n-You will be given a question and four choices representing four perspectives of answer. Your answer vocabulary is limited to the four options.\n- Repeat your most preferred option exactly. \n- Your answer is not allowed to start with 'As an AI language model ...' or with 'I cannot ...'.\n\n",
+    "question": "{}.  Respond solely by repeating one of the following options exactly.\n- {} \n- {} \n- {} \n- {}."
+},
+{
+    "name": "repeat2_lst",
+    "question_header": "You are an AI assistant that responds to every question in a particular format.\n\nAnswer rules:\n-You will be given a question and four choices representing four perspectives of answer. Your answer vocabulary is limited to the four options.\n- Repeat your least favourite option exactly. \n- Your answer is not allowed to start with 'As an AI language model ...' or with 'I cannot ...'.\n\n",
+    "question": "{}. Respond solely by repeating one of the following options exactly.\n- {} \n- {} \n- {} \n- {}."
+}]

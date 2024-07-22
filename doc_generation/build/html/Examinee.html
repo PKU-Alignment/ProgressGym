@@ -1,0 +1,626 @@
+<!doctype html>
+<html class="no-js" lang="cn" data-content_root="">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="prev" title="Judge" href="Judge.html" />
+
+    <!-- Generated with Sphinx 7.1.2 and Furo 2024.05.06 -->
+        <title>Examinee - Progress-Gym 1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=362ab14a" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=387cc868" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=36a5483c" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" /
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="index.html"><div class="brand">Progress-Gym 1.0 documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
+  
+  
+  <span class="sidebar-brand-text">Progress-Gym 1.0 documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="running.html">Running the benchmark</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Implementing Your Own Experiment</a></li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="documentation.html">Documentation</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of Documentation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="Model.html">Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Data.html">Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Judge.html">Judge</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Examinee</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="documentation.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="_sources/Examinee.rst.txt" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div>
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="examinee">
+<h1>Examinee<a class="headerlink" href="#examinee" title="Permalink to this heading">¶</a></h1>
+<dl class="simple">
+<dt>ProgressGym aims to evaluate how well algorithms align a model according to progressing human values.</dt><dd><p>Those algorithms are instantialized here by the <em>Examinee</em> class. For each alignment algorithm,
+you have to (and we have already) implement a sub-class of the base <em>Examinee</em> Class. You should specify the extra</p>
+</dd>
+<dt>(from those stored in the base <em>Examinee</em> class) information it stores and, most importantly, how it interacts with the <em>Judge</em> class at each time step.</dt><dd><p>Please refer to the <em>Judge</em> document page if you're unfamiliar with what <em>Judges</em> are.</p>
+</dd>
+</dl>
+<p>This page documents the base Examinee class as well as the baseline examinees we've implemented, so as to give you a better understanding of how ProgressGym works.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="benchmark.framework.ExamineeBase">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">benchmark.framework.</span></span><span class="sig-name descname"><span class="pre">ExamineeBase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#benchmark.framework.ExamineeBase" title="Permalink to this definition">¶</a></dt>
+<dd><p>ExamineeBase is the base class for all examinees.
+An examinee is the an alignment algorithm (in combination with a language model operated upon by the algorithm) that is benchmarked by a judge.
+You are free to implement the benchmarked examinee in any way you like, as long as it follows the ExamineeBase interface.
+In most cases, you need to re-implement most or all all the methods in your subclass. Base implementations are only provided as an example.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="benchmark.framework.ExamineeBase.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#benchmark.framework.ExamineeBase.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="benchmark.framework.ExamineeBase.checkpoint_id">
+<span class="sig-name descname"><span class="pre">checkpoint_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#benchmark.framework.ExamineeBase.checkpoint_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Query statistics</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="benchmark.framework.ExamineeBase.get_current_model">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_current_model</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="Model.html#src.abstractions.model.Model" title="src.abstractions.model.Model"><span class="pre">Model</span></a></span></span><a class="headerlink" href="#benchmark.framework.ExamineeBase.get_current_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the current model that the examinee is using at this timestep.</p>
+<p>The base class implementation returns the <cite>current_model</cite> attribute.
+You should not need to override this method in your subclass unless the model is not stored in the <cite>current_model</cite> attribute.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="benchmark.framework.ExamineeBase.query_from_judge">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">query_from_judge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prompt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="Data.html#src.abstractions.data.Data" title="src.abstractions.data.Data"><span class="pre">Data</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="Model.html#src.abstractions.model.Model" title="src.abstractions.model.Model"><span class="pre">Model</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="Data.html#src.abstractions.data.Data" title="src.abstractions.data.Data"><span class="pre">Data</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#benchmark.framework.ExamineeBase.query_from_judge" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method is called by the judge to query the examinee for a response to a prompt.</p>
+<p>In most cases, you only need to call the base class implementation in your subclass's implementation.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="benchmark.framework.ExamineeBase.reset">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#benchmark.framework.ExamineeBase.reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize the examinee, including endowing it with a language model.</p>
+<p>When <cite>examinee_model_size</cite> is not specified, the model will be initialized as a copy of the Judge's initial model. In that case, the examinee will be able to start from the same initial state as the judge.
+Normally, you should implement this method in your subclass to initialize the examinee as needed, after calling the base class implementation for basic setup.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="benchmark.framework.ExamineeBase.run">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">judge</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="Judge.html#benchmark.framework.JudgeBase" title="benchmark.framework.JudgeBase"><span class="pre">JudgeBase</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Iterable</span></span></span><a class="headerlink" href="#benchmark.framework.ExamineeBase.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method is called by the judge to start the examinee.
+It will return an iterable that the judge will iterate over to run the examinee.
+Every iteration corresponds to the passing of a timestep.
+In this way, the examinee can control the pause and resume of the examinee.
+At every iteration:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>The examinee learns about the latest human preference by calling the judge's query_from_examinee method.</p></li>
+<li><p>After it has updated its language model, it yields control back to the judge and allow it to evaluate it (by calling query_from_judge).</p></li>
+</ol>
+</div></blockquote>
+<p>Unless you are sure that you need to completely override this method, you should not do so. Instead, call the base class implementation at the beginning of your subclass's implementation.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="benchmark.framework.ExamineeBase.template_type">
+<span class="sig-name descname"><span class="pre">template_type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'alpaca'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'mistral'</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#benchmark.framework.ExamineeBase.template_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Information determined at initialization</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="algorithms.extrapolative_dpo.ExtrapolativeDPOExaminee">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">algorithms.extrapolative_dpo.</span></span><span class="sig-name descname"><span class="pre">ExtrapolativeDPOExaminee</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#algorithms.extrapolative_dpo.ExtrapolativeDPOExaminee" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="algorithms.extrapolative_dpo.ExtrapolativeDPOExaminee.get_current_model">
+<span class="sig-name descname"><span class="pre">get_current_model</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="Model.html#src.abstractions.model.Model" title="src.abstractions.model.Model"><span class="pre">Model</span></a></span></span><a class="headerlink" href="#algorithms.extrapolative_dpo.ExtrapolativeDPOExaminee.get_current_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the current model that the examinee is using at this timestep.</p>
+<p>The base class implementation returns the <cite>current_model</cite> attribute.
+You should not need to override this method in your subclass unless the model is not stored in the <cite>current_model</cite> attribute.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="algorithms.extrapolative_dpo.ExtrapolativeDPOExaminee.query_from_judge">
+<span class="sig-name descname"><span class="pre">query_from_judge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prompt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="Data.html#src.abstractions.data.Data" title="src.abstractions.data.Data"><span class="pre">Data</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="Data.html#src.abstractions.data.Data" title="src.abstractions.data.Data"><span class="pre">Data</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#algorithms.extrapolative_dpo.ExtrapolativeDPOExaminee.query_from_judge" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method is called by the judge to query the examinee for a response to a prompt.</p>
+<p>In most cases, you only need to call the base class implementation in your subclass's implementation.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="algorithms.extrapolative_dpo.ExtrapolativeDPOExaminee.reset">
+<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#algorithms.extrapolative_dpo.ExtrapolativeDPOExaminee.reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize the examinee, including endowing it with a language model.</p>
+<p>When <cite>examinee_model_size</cite> is not specified, the model will be initialized as a copy of the Judge's initial model. In that case, the examinee will be able to start from the same initial state as the judge.
+Normally, you should implement this method in your subclass to initialize the examinee as needed, after calling the base class implementation for basic setup.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="algorithms.extrapolative_dpo.ExtrapolativeDPOExaminee.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">judge</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="Judge.html#benchmark.framework.JudgeBase" title="benchmark.framework.JudgeBase"><span class="pre">JudgeBase</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Iterable</span></span></span><a class="headerlink" href="#algorithms.extrapolative_dpo.ExtrapolativeDPOExaminee.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method is called by the judge to start the examinee.
+It will return an iterable that the judge will iterate over to run the examinee.
+Every iteration corresponds to the passing of a timestep.
+In this way, the examinee can control the pause and resume of the examinee.
+At every iteration:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>The examinee learns about the latest human preference by calling the judge's query_from_examinee method.</p></li>
+<li><p>After it has updated its language model, it yields control back to the judge and allow it to evaluate it (by calling query_from_judge).</p></li>
+</ol>
+</div></blockquote>
+<p>Unless you are sure that you need to completely override this method, you should not do so. Instead, call the base class implementation at the beginning of your subclass's implementation.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="algorithms.extrapolative_rlhf.ExtrapolativeRLHFExaminee">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">algorithms.extrapolative_rlhf.</span></span><span class="sig-name descname"><span class="pre">ExtrapolativeRLHFExaminee</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#algorithms.extrapolative_rlhf.ExtrapolativeRLHFExaminee" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="algorithms.extrapolative_rlhf.ExtrapolativeRLHFExaminee.get_current_model">
+<span class="sig-name descname"><span class="pre">get_current_model</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="Model.html#src.abstractions.model.Model" title="src.abstractions.model.Model"><span class="pre">Model</span></a></span></span><a class="headerlink" href="#algorithms.extrapolative_rlhf.ExtrapolativeRLHFExaminee.get_current_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the current model that the examinee is using at this timestep.</p>
+<p>The base class implementation returns the <cite>current_model</cite> attribute.
+You should not need to override this method in your subclass unless the model is not stored in the <cite>current_model</cite> attribute.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="algorithms.extrapolative_rlhf.ExtrapolativeRLHFExaminee.query_from_judge">
+<span class="sig-name descname"><span class="pre">query_from_judge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prompt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="Data.html#src.abstractions.data.Data" title="src.abstractions.data.Data"><span class="pre">Data</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="Data.html#src.abstractions.data.Data" title="src.abstractions.data.Data"><span class="pre">Data</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#algorithms.extrapolative_rlhf.ExtrapolativeRLHFExaminee.query_from_judge" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method is called by the judge to query the examinee for a response to a prompt.</p>
+<p>In most cases, you only need to call the base class implementation in your subclass's implementation.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="algorithms.extrapolative_rlhf.ExtrapolativeRLHFExaminee.reset">
+<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#algorithms.extrapolative_rlhf.ExtrapolativeRLHFExaminee.reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize the examinee, including endowing it with a language model.</p>
+<p>When <cite>examinee_model_size</cite> is not specified, the model will be initialized as a copy of the Judge's initial model. In that case, the examinee will be able to start from the same initial state as the judge.
+Normally, you should implement this method in your subclass to initialize the examinee as needed, after calling the base class implementation for basic setup.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="algorithms.extrapolative_rlhf.ExtrapolativeRLHFExaminee.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">judge</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="Judge.html#benchmark.framework.JudgeBase" title="benchmark.framework.JudgeBase"><span class="pre">JudgeBase</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Iterable</span></span></span><a class="headerlink" href="#algorithms.extrapolative_rlhf.ExtrapolativeRLHFExaminee.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method is called by the judge to start the examinee.
+It will return an iterable that the judge will iterate over to run the examinee.
+Every iteration corresponds to the passing of a timestep.
+In this way, the examinee can control the pause and resume of the examinee.
+At every iteration:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>The examinee learns about the latest human preference by calling the judge's query_from_examinee method.</p></li>
+<li><p>After it has updated its language model, it yields control back to the judge and allow it to evaluate it (by calling query_from_judge).</p></li>
+</ol>
+</div></blockquote>
+<p>Unless you are sure that you need to completely override this method, you should not do so. Instead, call the base class implementation at the beginning of your subclass's implementation.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="algorithms.lifelong_rlhf.LifelongRLHFExaminee">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">algorithms.lifelong_rlhf.</span></span><span class="sig-name descname"><span class="pre">LifelongRLHFExaminee</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#algorithms.lifelong_rlhf.LifelongRLHFExaminee" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="algorithms.lifelong_rlhf.LifelongRLHFExaminee.get_current_model">
+<span class="sig-name descname"><span class="pre">get_current_model</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="Model.html#src.abstractions.model.Model" title="src.abstractions.model.Model"><span class="pre">Model</span></a></span></span><a class="headerlink" href="#algorithms.lifelong_rlhf.LifelongRLHFExaminee.get_current_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the current model that the examinee is using at this timestep.</p>
+<p>The base class implementation returns the <cite>current_model</cite> attribute.
+You should not need to override this method in your subclass unless the model is not stored in the <cite>current_model</cite> attribute.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="algorithms.lifelong_rlhf.LifelongRLHFExaminee.query_from_judge">
+<span class="sig-name descname"><span class="pre">query_from_judge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prompt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="Data.html#src.abstractions.data.Data" title="src.abstractions.data.Data"><span class="pre">Data</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="Data.html#src.abstractions.data.Data" title="src.abstractions.data.Data"><span class="pre">Data</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#algorithms.lifelong_rlhf.LifelongRLHFExaminee.query_from_judge" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method is called by the judge to query the examinee for a response to a prompt.</p>
+<p>In most cases, you only need to call the base class implementation in your subclass's implementation.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="algorithms.lifelong_rlhf.LifelongRLHFExaminee.reset">
+<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#algorithms.lifelong_rlhf.LifelongRLHFExaminee.reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize the examinee, including endowing it with a language model.</p>
+<p>When <cite>examinee_model_size</cite> is not specified, the model will be initialized as a copy of the Judge's initial model. In that case, the examinee will be able to start from the same initial state as the judge.
+Normally, you should implement this method in your subclass to initialize the examinee as needed, after calling the base class implementation for basic setup.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="algorithms.lifelong_rlhf.LifelongRLHFExaminee.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">judge</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="Judge.html#benchmark.framework.JudgeBase" title="benchmark.framework.JudgeBase"><span class="pre">JudgeBase</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Iterable</span></span></span><a class="headerlink" href="#algorithms.lifelong_rlhf.LifelongRLHFExaminee.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method is called by the judge to start the examinee.
+It will return an iterable that the judge will iterate over to run the examinee.
+Every iteration corresponds to the passing of a timestep.
+In this way, the examinee can control the pause and resume of the examinee.
+At every iteration:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>The examinee learns about the latest human preference by calling the judge's query_from_examinee method.</p></li>
+<li><p>After it has updated its language model, it yields control back to the judge and allow it to evaluate it (by calling query_from_judge).</p></li>
+</ol>
+</div></blockquote>
+<p>Unless you are sure that you need to completely override this method, you should not do so. Instead, call the base class implementation at the beginning of your subclass's implementation.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="algorithms.lifelong_dpo.LifelongDPOExaminee">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">algorithms.lifelong_dpo.</span></span><span class="sig-name descname"><span class="pre">LifelongDPOExaminee</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#algorithms.lifelong_dpo.LifelongDPOExaminee" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="algorithms.lifelong_dpo.LifelongDPOExaminee.get_current_model">
+<span class="sig-name descname"><span class="pre">get_current_model</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="Model.html#src.abstractions.model.Model" title="src.abstractions.model.Model"><span class="pre">Model</span></a></span></span><a class="headerlink" href="#algorithms.lifelong_dpo.LifelongDPOExaminee.get_current_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the current model that the examinee is using at this timestep.</p>
+<p>The base class implementation returns the <cite>current_model</cite> attribute.
+You should not need to override this method in your subclass unless the model is not stored in the <cite>current_model</cite> attribute.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="algorithms.lifelong_dpo.LifelongDPOExaminee.query_from_judge">
+<span class="sig-name descname"><span class="pre">query_from_judge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prompt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="Data.html#src.abstractions.data.Data" title="src.abstractions.data.Data"><span class="pre">Data</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="Data.html#src.abstractions.data.Data" title="src.abstractions.data.Data"><span class="pre">Data</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#algorithms.lifelong_dpo.LifelongDPOExaminee.query_from_judge" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method is called by the judge to query the examinee for a response to a prompt.</p>
+<p>In most cases, you only need to call the base class implementation in your subclass's implementation.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="algorithms.lifelong_dpo.LifelongDPOExaminee.reset">
+<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#algorithms.lifelong_dpo.LifelongDPOExaminee.reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize the examinee, including endowing it with a language model.</p>
+<p>When <cite>examinee_model_size</cite> is not specified, the model will be initialized as a copy of the Judge's initial model. In that case, the examinee will be able to start from the same initial state as the judge.
+Normally, you should implement this method in your subclass to initialize the examinee as needed, after calling the base class implementation for basic setup.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="algorithms.lifelong_dpo.LifelongDPOExaminee.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">judge</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="Judge.html#benchmark.framework.JudgeBase" title="benchmark.framework.JudgeBase"><span class="pre">JudgeBase</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Iterable</span></span></span><a class="headerlink" href="#algorithms.lifelong_dpo.LifelongDPOExaminee.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method is called by the judge to start the examinee.
+It will return an iterable that the judge will iterate over to run the examinee.
+Every iteration corresponds to the passing of a timestep.
+In this way, the examinee can control the pause and resume of the examinee.
+At every iteration:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>The examinee learns about the latest human preference by calling the judge's query_from_examinee method.</p></li>
+<li><p>After it has updated its language model, it yields control back to the judge and allow it to evaluate it (by calling query_from_judge).</p></li>
+</ol>
+</div></blockquote>
+<p>Unless you are sure that you need to completely override this method, you should not do so. Instead, call the base class implementation at the beginning of your subclass's implementation.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          
+          <a class="prev-page" href="Judge.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Judge</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2024, Tianyi Qiu, Yang Zhang, Xuchuan Huang, Xinze Li
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Examinee</a><ul>
+<li><a class="reference internal" href="#benchmark.framework.ExamineeBase"><code class="docutils literal notranslate"><span class="pre">ExamineeBase</span></code></a><ul>
+<li><a class="reference internal" href="#benchmark.framework.ExamineeBase.__init__"><code class="docutils literal notranslate"><span class="pre">ExamineeBase.__init__()</span></code></a></li>
+<li><a class="reference internal" href="#benchmark.framework.ExamineeBase.checkpoint_id"><code class="docutils literal notranslate"><span class="pre">ExamineeBase.checkpoint_id</span></code></a></li>
+<li><a class="reference internal" href="#benchmark.framework.ExamineeBase.get_current_model"><code class="docutils literal notranslate"><span class="pre">ExamineeBase.get_current_model()</span></code></a></li>
+<li><a class="reference internal" href="#benchmark.framework.ExamineeBase.query_from_judge"><code class="docutils literal notranslate"><span class="pre">ExamineeBase.query_from_judge()</span></code></a></li>
+<li><a class="reference internal" href="#benchmark.framework.ExamineeBase.reset"><code class="docutils literal notranslate"><span class="pre">ExamineeBase.reset()</span></code></a></li>
+<li><a class="reference internal" href="#benchmark.framework.ExamineeBase.run"><code class="docutils literal notranslate"><span class="pre">ExamineeBase.run()</span></code></a></li>
+<li><a class="reference internal" href="#benchmark.framework.ExamineeBase.template_type"><code class="docutils literal notranslate"><span class="pre">ExamineeBase.template_type</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#algorithms.extrapolative_dpo.ExtrapolativeDPOExaminee"><code class="docutils literal notranslate"><span class="pre">ExtrapolativeDPOExaminee</span></code></a><ul>
+<li><a class="reference internal" href="#algorithms.extrapolative_dpo.ExtrapolativeDPOExaminee.get_current_model"><code class="docutils literal notranslate"><span class="pre">ExtrapolativeDPOExaminee.get_current_model()</span></code></a></li>
+<li><a class="reference internal" href="#algorithms.extrapolative_dpo.ExtrapolativeDPOExaminee.query_from_judge"><code class="docutils literal notranslate"><span class="pre">ExtrapolativeDPOExaminee.query_from_judge()</span></code></a></li>
+<li><a class="reference internal" href="#algorithms.extrapolative_dpo.ExtrapolativeDPOExaminee.reset"><code class="docutils literal notranslate"><span class="pre">ExtrapolativeDPOExaminee.reset()</span></code></a></li>
+<li><a class="reference internal" href="#algorithms.extrapolative_dpo.ExtrapolativeDPOExaminee.run"><code class="docutils literal notranslate"><span class="pre">ExtrapolativeDPOExaminee.run()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#algorithms.extrapolative_rlhf.ExtrapolativeRLHFExaminee"><code class="docutils literal notranslate"><span class="pre">ExtrapolativeRLHFExaminee</span></code></a><ul>
+<li><a class="reference internal" href="#algorithms.extrapolative_rlhf.ExtrapolativeRLHFExaminee.get_current_model"><code class="docutils literal notranslate"><span class="pre">ExtrapolativeRLHFExaminee.get_current_model()</span></code></a></li>
+<li><a class="reference internal" href="#algorithms.extrapolative_rlhf.ExtrapolativeRLHFExaminee.query_from_judge"><code class="docutils literal notranslate"><span class="pre">ExtrapolativeRLHFExaminee.query_from_judge()</span></code></a></li>
+<li><a class="reference internal" href="#algorithms.extrapolative_rlhf.ExtrapolativeRLHFExaminee.reset"><code class="docutils literal notranslate"><span class="pre">ExtrapolativeRLHFExaminee.reset()</span></code></a></li>
+<li><a class="reference internal" href="#algorithms.extrapolative_rlhf.ExtrapolativeRLHFExaminee.run"><code class="docutils literal notranslate"><span class="pre">ExtrapolativeRLHFExaminee.run()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#algorithms.lifelong_rlhf.LifelongRLHFExaminee"><code class="docutils literal notranslate"><span class="pre">LifelongRLHFExaminee</span></code></a><ul>
+<li><a class="reference internal" href="#algorithms.lifelong_rlhf.LifelongRLHFExaminee.get_current_model"><code class="docutils literal notranslate"><span class="pre">LifelongRLHFExaminee.get_current_model()</span></code></a></li>
+<li><a class="reference internal" href="#algorithms.lifelong_rlhf.LifelongRLHFExaminee.query_from_judge"><code class="docutils literal notranslate"><span class="pre">LifelongRLHFExaminee.query_from_judge()</span></code></a></li>
+<li><a class="reference internal" href="#algorithms.lifelong_rlhf.LifelongRLHFExaminee.reset"><code class="docutils literal notranslate"><span class="pre">LifelongRLHFExaminee.reset()</span></code></a></li>
+<li><a class="reference internal" href="#algorithms.lifelong_rlhf.LifelongRLHFExaminee.run"><code class="docutils literal notranslate"><span class="pre">LifelongRLHFExaminee.run()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#algorithms.lifelong_dpo.LifelongDPOExaminee"><code class="docutils literal notranslate"><span class="pre">LifelongDPOExaminee</span></code></a><ul>
+<li><a class="reference internal" href="#algorithms.lifelong_dpo.LifelongDPOExaminee.get_current_model"><code class="docutils literal notranslate"><span class="pre">LifelongDPOExaminee.get_current_model()</span></code></a></li>
+<li><a class="reference internal" href="#algorithms.lifelong_dpo.LifelongDPOExaminee.query_from_judge"><code class="docutils literal notranslate"><span class="pre">LifelongDPOExaminee.query_from_judge()</span></code></a></li>
+<li><a class="reference internal" href="#algorithms.lifelong_dpo.LifelongDPOExaminee.reset"><code class="docutils literal notranslate"><span class="pre">LifelongDPOExaminee.reset()</span></code></a></li>
+<li><a class="reference internal" href="#algorithms.lifelong_dpo.LifelongDPOExaminee.run"><code class="docutils literal notranslate"><span class="pre">LifelongDPOExaminee.run()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=4db9c54d"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="_static/scripts/furo.js?v=4e2eecee"></script>
+    </body>
+</html>
