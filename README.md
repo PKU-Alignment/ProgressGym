@@ -2,6 +2,7 @@
 
 ## Links
 
+- **[Codebase Documentation]** [PKU-Alignment/ProgressGym Documentation](https://pku-alignment.github.io/ProgressGym/)
 - **[Paper Preprint]**  [ProgressGym: Alignment with a Millennium of Moral Progress](https://arxiv.org/abs/2406.20087)
 - **[Leaderboard & Interactive Playground]** [PKU-Alignment/ProgressGym-LeaderBoard](https://huggingface.co/spaces/PKU-Alignment/ProgressGym-LeaderBoard)
 - **[Huggingface Data & Model Collection]** [PKU-Alignment/ProgressGym](https://huggingface.co/collections/PKU-Alignment/progressgym-666735fcf3e4efa276226eaa)
@@ -28,11 +29,11 @@ For detailed information about progress alignment and the ProgressGym framework,
 
 We are in the process of wrapping the codebase into a PyPI package - [stay tuned](https://forms.gle/1TWFLL4ZCLeYTD5N6) to know when we finish! 
 
-In the meantime, you could explore and run our codebase directly to use ProgressGym. It comes with a full documentation (see below), so should be easy to try out!
+In the meantime, you could explore and run our codebase directly to use ProgressGym. It comes with a [full documentation](https://pku-alignment.github.io/ProgressGym/) (see below), so should be easy to try out!
 
 ### Codebase
 
-This Github repository is the primary codebase of the ProgressGym framework, with its structure shown below. **Please see the documentation page for instructions on how to use this codebase.**
+This Github repository is the primary codebase of the ProgressGym framework, with its structure shown below. **Please see the [documentation page](https://pku-alignment.github.io/ProgressGym/) for instructions on how to use this codebase.**
 
 ![UML Diagram](./readme-assets/UML.jpg)
 
