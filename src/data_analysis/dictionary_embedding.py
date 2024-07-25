@@ -38,7 +38,7 @@ def sentence_embedding(lines, i):
 
 
 if __name__ == "__main__":
-    corpus_path = "/mnt/models-pku/progressalign/shared_storage/our_datasets/HisText_Apr9_Guten_EEBO_PoL_IA10_Mistral7B_refined/C021/Y02021.json"  # 语料文件夹路径
+    corpus_path = "/mnt/models-pku/progressgym/shared_storage/our_datasets/HisText_Apr9_Guten_EEBO_PoL_IA10_Mistral7B_refined/C021/Y02021.json"  # 语料文件夹路径
     # file_list = readfile(corpus_path)
     # file_list.sort()
     # print(file_list)
@@ -57,7 +57,7 @@ if __name__ == "__main__":
     print(corpus_path[-11:-5])
     df = pd.DataFrame(dict_vec_list, index=index_list)
     df.to_csv(
-        "/mnt/models-pku/progressalign/xuchuan/ProgressAlign/text embedding/dict_vec_list/"
+        "/mnt/models-pku/progressgym/xuchuan/ProgressGym/text embedding/dict_vec_list/"
         + corpus_path[-11:-5]
         + ".csv",
         sep=",",

@@ -1,13 +1,13 @@
 <!doctype html>
-<html class="no-js" lang="cn" data-content_root="">
+<html class="no-js" lang="en" data-content_root="">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Implementing Your Own Experiment" href="usage.html" /><link rel="prev" title="ProgressGym: Dataset &amp; Experimental Framework for Progress-Aware Alignment" href="index.html" />
 
-    <!-- Generated with Sphinx 7.1.2 and Furo 2024.05.06 -->
-        <title>Running the benchmark - Progress-Gym 1.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=362ab14a" />
+    <!-- Generated with Sphinx 7.1.2 and Furo 2024.07.18 -->
+        <title>Running the benchmark - ProgressGym 0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=dc19f415" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=387cc868" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=36a5483c" />
     
@@ -88,19 +88,6 @@
       <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
     </svg>
   </symbol>
-  <symbol id="svg-sun-half" viewBox="0 0 24 24">
-    <title>Auto light/dark mode</title>
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
-      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-      <circle cx="12" cy="12" r="9" />
-      <path d="M13 12h5" />
-      <path d="M13 15h4" />
-      <path d="M13 18h1" />
-      <path d="M13 9h4" />
-      <path d="M13 6h1" />
-    </svg>
-  </symbol>
   <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
     <title>Auto light/dark, in light mode</title>
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -141,7 +128,7 @@
       <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
       <path d="M13.5 6.5l4 4" />
       <path d="M20 21l2 -2l-2 -2" />
-      <path d="M17 17l-2 2l2 2" /
+      <path d="M17 17l-2 2l2 2" />
     </svg>
   </symbol>
   <symbol id="svg-eye" viewBox="0 0 24 24">
@@ -179,7 +166,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="index.html"><div class="brand">Progress-Gym 1.0 documentation</div></a>
+      <a href="index.html"><div class="brand">ProgressGym 0.1 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -203,7 +190,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
   
   
-  <span class="sidebar-brand-text">Progress-Gym 1.0 documentation</span>
+  <span class="sidebar-brand-text">ProgressGym 0.1 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -222,7 +209,6 @@
 <li class="toctree-l2"><a class="reference internal" href="Examinee.html">Examinee</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="documentation.html#indices-and-tables">Indices and tables</a></li>
 </ul>
 
 </div>
@@ -267,33 +253,42 @@
 <h1>Running the benchmark<a class="headerlink" href="#running-the-benchmark" title="Permalink to this heading">¶</a></h1>
 <section id="requirements">
 <h2>Requirements<a class="headerlink" href="#requirements" title="Permalink to this heading">¶</a></h2>
-<p>Strictly <strong>python3.8</strong>, on <strong>Linux</strong></p>
+<p>ProgressGym is developed and tested with Python 3.8 on Linux. Please also make sure you have <a class="reference external" href="https://docs.anaconda.com/miniconda/">conda</a> installed on your machine.</p>
+<dl class="simple">
+<dt>We thank the authors of the following libraries that ProgressGym is built upon:</dt><dd><ul class="simple">
+<li><p><a class="reference external" href="https://github.com/hiyouga/LLaMA-Factory">LLaMA-Factory</a></p></li>
+<li><p><a class="reference external" href="https://github.com/ninodimontalcino/moralchoice">moralchoice</a></p></li>
+<li><p><a class="reference external" href="https://github.com/PKU-Alignment/safe-rlhf">Safe RLHF</a></p></li>
+</ul>
+</dd>
+</dl>
 </section>
 <section id="installation">
 <h2>Installation<a class="headerlink" href="#installation" title="Permalink to this heading">¶</a></h2>
-<p>First install Progress-Gym using pip. Notice that, in order to perform accelerated inference using <em>vllm</em> and resolve resulting conflicts,
-we strictly require <em>python</em> version of <code class="docutils literal notranslate"><span class="pre">3.8</span></code> and <em>vllm</em> version of <code class="docutils literal notranslate"><span class="pre">0.4.0.post1</span></code>. Therefore, make sure you have <code class="docutils literal notranslate"><span class="pre">python3.8</span></code> installed, and run:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python3.8<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>.venv
-<span class="gp gp-VirtualEnv">(.venv)</span> <span class="gp">$ </span>pip<span class="w"> </span>install<span class="w"> </span>progressgym
+<p>You could install ProgressGym by cloning the codebase:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/PKU-Alignment/ProgressGym.git
+<span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>./ProgressGym
+<span class="gp">$ </span>.<span class="w"> </span>./initialize.sh
 </pre></div>
 </div>
-<p>Or install by cloning the github repository:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/ProgressAlign/ProgressAlign.git
-<span class="gp">$ </span>python3.8<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>.venv
-<span class="gp gp-VirtualEnv">(.venv)</span> <span class="gp">$ </span>pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>src/config/requirements-pip.txt
+<p>This will create two new conda environments <code class="docutils literal notranslate"><span class="pre">pa38</span></code> and <code class="docutils literal notranslate"><span class="pre">pa38-lf</span></code>, where the former is for the normal operations of ProgressGym, and the latter is used by ProgressGym when calling LLaMA-Factory internally.</p>
+<p>When calling entry-point scripts of ProgressGym (e.g., <code class="docutils literal notranslate"><span class="pre">run_benchmark.py</span></code> and <code class="docutils literal notranslate"><span class="pre">build_dataset.py</span></code>), please make sure you are in the <code class="docutils literal notranslate"><span class="pre">pa38</span></code> environment, and ProgressGym will automatically handle any further environment switching.</p>
+<p>Alternatively, when the construction of the ProgressGym PyPI package is completed, you could install ProgressGym via pip:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pip<span class="w"> </span>install<span class="w"> </span>progressgym
 </pre></div>
 </div>
+<p>Currently, the PyPI package is not yet available, and is expected to be released soon.</p>
 </section>
 <section id="basic-usage">
 <h2>Basic Usage<a class="headerlink" href="#basic-usage" title="Permalink to this heading">¶</a></h2>
-<p><strong>Building Dataset</strong></p>
-<p><em>Notice that you don't have to run this part yourself unless you want to re-create our findings in the paper, as the HisText dataset has already been utilized to train the Human Proxy Model sequence.</em></p>
+<p><strong>Building Dataset and Training Models</strong></p>
+<p><em>Notice that you don’t have to run this part yourself unless you want to re-create our findings in the paper, as the HisText dataset has already been utilized to train the Human Proxy Model sequence.</em></p>
 <p>Running</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="o">./</span><span class="n">build_dataset</span><span class="o">.</span><span class="n">py</span>
 </pre></div>
 </div>
 <dl class="simple">
-<dt>will automatically download the relevant files and then compile them into the desired dataset. Specifically, it will...</dt><dd><ul class="simple">
+<dt>will automatically download the relevant files and then compile them into the desired dataset. Specifically, it will…</dt><dd><ul class="simple">
 <li><p>Download and decompress raw data files from multiple sources, placing them in <code class="docutils literal notranslate"><span class="pre">./dataset/raw_downloads</span></code></p></li>
 <li><p>Organize downloaded data into an unified format, and the resulting historical text dataset is saved as a series of files <code class="docutils literal notranslate"><span class="pre">./dataset/dataset_textseq/[century_num]/[year_num].json</span></code></p></li>
 <li><p>Train a series of historical language models  <code class="docutils literal notranslate"><span class="pre">./dataset/dataset_modelseq/[century_num]</span></code> using the historical text dataset.</p></li>
@@ -302,23 +297,32 @@ we strictly require <em>python</em> version of <code class="docutils literal not
 </dl>
 <p><strong>Running The Benchmarks</strong></p>
 <p>Running</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>python<span class="w"> </span>run_benchmark.py<span class="w"> </span><span class="se">\\</span>
-<span class="w">     </span>--algorithms<span class="o">=</span>ALGO1<span class="o">[</span>,ALGO2<span class="o">[</span>,ALGO3<span class="o">[</span>,...<span class="o">]]]</span><span class="w"> </span><span class="se">\\</span>
-<span class="w">     </span>--challenges<span class="o">=</span>SUBTASK1<span class="o">[</span>,SUBTASK2<span class="o">[</span>,SUBTASK3<span class="o">[</span>,...<span class="o">]]]</span><span class="w"> </span><span class="se">\\</span>
-<span class="w">     </span>--output_filename<span class="o">=</span>OUTPUT_FILENAME<span class="w"> </span><span class="se">\\</span>
-<span class="w">     </span><span class="o">[</span>--output_dir<span class="o">=</span>OUTPUT_DIR<span class="o">]</span><span class="w"> </span><span class="o">(</span>default<span class="w"> </span>to<span class="w"> </span>./output/benchmark_results<span class="o">)</span><span class="w"> </span><span class="se">\\</span>
-<span class="w">     </span><span class="o">[</span>-h<span class="w"> </span><span class="p">|</span><span class="w"> </span>--help<span class="o">]</span>
-<span class="w">     </span><span class="o">[</span>...<span class="o">]</span><span class="w"> </span><span class="o">(</span>additional<span class="w"> </span>arguments<span class="w"> </span>will<span class="w"> </span>be<span class="w"> </span>supplied<span class="w"> </span>to<span class="w"> </span>the<span class="w"> </span>algorithms<span class="w"> </span>when<span class="w"> </span>they<span class="w"> </span>are<span class="w"> </span>instantiated<span class="p">;</span><span class="w"> </span>only<span class="w"> </span>string<span class="w"> </span>values<span class="w"> </span>are<span class="w"> </span>supported<span class="o">)</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python<span class="w"> </span>run_benchmark.py
+<span class="go">     --algorithms=ALGO1[,ALGO2[,ALGO3[,...]]]</span>
+<span class="go">     --challenges=SUBTASK1[,SUBTASK2[,SUBTASK3[,...]]]</span>
+<span class="go">     --output_filename=OUTPUT_FILENAME</span>
+<span class="go">     [--output_dir=OUTPUT_DIR] (default to ./output/benchmark_results)</span>
+<span class="go">     [-h | --help]</span>
+<span class="go">     [...] (additional arguments will be supplied to the algorithms when they are instantiated; only string values are supported)</span>
 </pre></div>
 </div>
 <p>will produce the benchmark results. Omitting</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">--</span><span class="n">challenge</span> <span class="p">[</span><span class="n">challenge_name</span><span class="p">]</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">--challenge [challenge_name]</span>
 </pre></div>
 </div>
-<p>will default to testing all challenges. Results will be saved to <code class="docutils literal notranslate"><span class="pre">[output_directory]/[test_name].json</span></code>, with
-<code class="docutils literal notranslate"><span class="pre">[output_directory]</span></code> set to default as <code class="docutils literal notranslate"><span class="pre">./output/benchmark_results</span></code>. For each test, results are saved as a dictionary. See item
-<code class="docutils literal notranslate"><span class="pre">score</span></code> for a comprehensive score for each examinee's performance in one subtask.</p>
-<p>See comments at the beginning of 'run_benchmark.py' for a detailed usage of the command line arguments.</p>
+<p>will default to testing all challenges. Results will be saved to <code class="docutils literal notranslate"><span class="pre">[output_directory]/[test_name].json</span></code>, with <code class="docutils literal notranslate"><span class="pre">[output_directory]</span></code> set to default as <code class="docutils literal notranslate"><span class="pre">./output/benchmark_results</span></code>. For each test, results are saved as a dictionary. See item <code class="docutils literal notranslate"><span class="pre">score</span></code> for a comprehensive score for each examinee’s performance in one subtask.</p>
+<p>See comments at the beginning of <code class="docutils literal notranslate"><span class="pre">run_benchmark.py</span></code> for a detailed usage of the command line arguments.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python<span class="w"> </span>run_benchmark.py
+<span class="go">     --algorithms=ALGO1[,ALGO2[,ALGO3[,...]]]</span>
+<span class="go">     --challenges=SUBTASK1[,SUBTASK2[,SUBTASK3[,...]]]</span>
+<span class="go">     --output_filename=OUTPUT_FILENAME</span>
+<span class="go">     [--output_dir=OUTPUT_DIR] (default to ./output/benchmark_results)</span>
+<span class="go">     [--judge_model_size=JUDGE_MODEL_SIZE] (70B/8B, default to 8B)</span>
+<span class="go">     [--examinee_model_size=EXAMINEE_MODEL_SIZE] (70B/8B, default to 8B)</span>
+<span class="go">     [-h | --help]</span>
+<span class="go">     [...] #additional arguments will be supplied to the algorithms and the challenges when they are instantiated; only string values are supported</span>
+</pre></div>
+</div>
 </section>
 </section>
 
@@ -351,7 +355,7 @@ we strictly require <em>python</em> version of <code class="docutils literal not
         <div class="bottom-of-page">
           <div class="left-details">
             <div class="copyright">
-                Copyright &#169; 2024, Tianyi Qiu, Yang Zhang, Xuchuan Huang, Xinze Li
+                Copyright &#169; 2024 PKU Alignment, Tianyi Qiu, Yang Zhang, Xuchuan Huang, Xinze Li
             </div>
             Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
             

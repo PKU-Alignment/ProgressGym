@@ -1,4 +1,4 @@
-# for run2A, on progressalign2
+# for run2A, on progressgym2
 git restore .
 git pull
 python run_benchmark.py \

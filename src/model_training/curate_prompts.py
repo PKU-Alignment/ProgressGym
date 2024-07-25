@@ -2,7 +2,7 @@
 We now have access to the following instruction datasets in ../../shared_storage/downloaded_datasets/:
 
 ```
-root@gpu01:/mnt/models-pku/progressalign/shared_storage/downloaded_datasets# ls
+root@gpu01:/mnt/models-pku/progressgym/shared_storage/downloaded_datasets# ls
 alpaca_gpt4_data_en.json  databricks-dolly-15k.jsonl  hh-rlhf  lima.json  natural-instructions  stanford-SHP
 ```
 

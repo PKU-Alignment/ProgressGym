@@ -35,7 +35,7 @@ def stat_words(file_list):
         word_list = [[word:count],...]
     """
     with open(
-        "/mnt/models-pku/progressalign/xuchuan/stop_word_list_English.txt", "r"
+        "/mnt/models-pku/progressgym/xuchuan/stop_word_list_English.txt", "r"
     ) as f:
         stopWords = [line.strip() for line in f.readlines()]
     word_count = collections.Counter()
@@ -107,7 +107,7 @@ def pca(year_vec_list):
 
 
 if __name__ == "__main__":
-    corpus_path = "/mnt/models-pku/progressalign/shared_storage/our_datasets/histext_19AD_collection_G"  # 语料文件夹路径
+    corpus_path = "/mnt/models-pku/progressgym/shared_storage/our_datasets/histext_19AD_collection_G"  # 语料文件夹路径
     file_list = readfile(corpus_path)
     year_vec_list = []
     for i in range(10):

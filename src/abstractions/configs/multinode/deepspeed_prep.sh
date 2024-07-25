@@ -1,6 +1,6 @@
 export SHELL=/bin/bash
 export CONDA_EXE=/mnt/fl/projects/pro-align/miniconda3/bin/conda
-export PWD=/mnt/fl/projects/pro-align/progressalign/tianyi/ProgressAlign
+export PWD=/mnt/fl/projects/pro-align/progressgym/tianyi/ProgressGym
 export LOGNAME=tianyi
 export CONDA_PREFIX=/mnt/fl/projects/pro-align/miniconda3
 export HOME=/home/tianyi

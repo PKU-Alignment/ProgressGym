@@ -16,12 +16,12 @@ for reference for your own implementation.
 
 After implementation, use our pre-implemented *dummy* challenge to verify and debug your implementation.
  
-.. code-block:: python
+.. code-block:: console
 
-    $ python run_benchmark.py \\
-      --algorithms=your_algorithm \\
-      --challenges=Dummy \\
-      --output_filename=dummy_debugging_run \\
+    $ python run_benchmark.py
+      --algorithms=your_algorithm
+      --challenges=Dummy
+      --output_filename=dummy_debugging_run
 
 After that, use ``run_benchmark.py`` as described in :doc:`index` to start your experiment.
 
@@ -35,9 +35,9 @@ Our implementations of the three major tasks are in ``./challenges``, for your r
 
 Similarly, use *dummy_examinee* to verify your implementation.
 
-.. code-block:: python
+.. code-block:: console
 
-    $ python run_benchmark.py \\
-      --algorithms=Dummy \\
-      --challenges=your_task \\
-      --output_filename=dummy_debugging_run \\
+    $ python run_benchmark.py
+      --algorithms=Dummy
+      --challenges=your_task
+      --output_filename=dummy_debugging_run

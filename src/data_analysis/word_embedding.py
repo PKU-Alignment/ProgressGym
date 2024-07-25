@@ -27,7 +27,7 @@ def clean_data(file_list):
             lines = json.load(fr)
             linelist.append(lines)
     words = []
-    with open ('/mnt/models-pku/progressalign/xuchuan/stop_word_list_English.txt','r',encoding='utf-8') as f:
+    with open ('/mnt/models-pku/progressgym/xuchuan/stop_word_list_English.txt','r',encoding='utf-8') as f:
         stopWords = f.readlines()
     for lines in linelist:
         for line in lines:
@@ -58,7 +58,7 @@ def stat_words(file_list, freq_path):
         word_list = [[word:count],...]
     """
     with open(
-        "/mnt/models-pku/progressalign/xuchuan/stop_word_list_English.txt", "r"
+        "/mnt/models-pku/progressgym/xuchuan/stop_word_list_English.txt", "r"
     ) as f:
         stopWords = [line.strip() for line in f.readlines()]
     word_count = collections.Counter()
@@ -118,13 +118,13 @@ def get_word_embedding(words, model_path):
 
 
 if __name__ == "__main__":
-    corpus_path = "/mnt/models-pku/progressalign/xuchuan/temp_1json"  # 语料文件夹路径
+    corpus_path = "/mnt/models-pku/progressgym/xuchuan/temp_1json"  # 语料文件夹路径
     file_list = readfile(corpus_path)
     freq_path = (
-        "/mnt/models-pku/progressalign/xuchuan/words_freq_info.txt"  # 词频文件保存路径
+        "/mnt/models-pku/progressgym/xuchuan/words_freq_info.txt"  # 词频文件保存路径
     )
     words, word_freq_list = stat_words(
         file_list, freq_path
     )  # 统计保存预料中词频信息并保存
-    model_path = "/mnt/models-pku/progressalign/xuchuan/word_embedding.bin"  # 训练词向量文件保存路径
+    model_path = "/mnt/models-pku/progressgym/xuchuan/word_embedding.bin"  # 训练词向量文件保存路径
     get_word_embedding(words, model_path)  # 训练得到预料的词向量
