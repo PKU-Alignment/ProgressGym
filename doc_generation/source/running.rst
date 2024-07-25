@@ -39,13 +39,13 @@ Basic Usage
 
 **Building Dataset and Training Models**
 
-*Notice that you don't have to run this part yourself unless you want to re-create our findings in the paper, as the HisText dataset has already been utilized to train the Human Proxy Model sequence.*
+*Note that you do not need to run this part yourself unless you want to replicate our findings, as the HisText dataset has already been utilized to train the HistLlama model sequence, and is available on* `Huggingface <https://huggingface.co/collections/PKU-Alignment/progressgym-666735fcf3e4efa276226eaa>`_.
 
 Running 
 
-.. code-block:: python
+.. code-block:: console
 
-   python ./build_dataset.py 
+   $ python build_dataset.py 
 
 will automatically download the relevant files and then compile them into the desired dataset. Specifically, it will...
   - Download and decompress raw data files from multiple sources, placing them in ``./dataset/raw_downloads``

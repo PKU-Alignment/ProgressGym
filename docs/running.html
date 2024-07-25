@@ -3,7 +3,7 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Implementing Your Own Experiment" href="usage.html" /><link rel="prev" title="ProgressGym: Dataset &amp; Experimental Framework for Progress-Aware Alignment" href="index.html" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Implementing Your Own Experiment" href="usage.html" /><link rel="prev" title="ProgressGym: Dataset &amp; Experimental Framework for Progress Alignment" href="index.html" />
 
     <!-- Generated with Sphinx 7.1.2 and Furo 2024.07.18 -->
         <title>Running the benchmark - ProgressGym 0.1 documentation</title>
@@ -198,8 +198,7 @@
   <input type="hidden" name="area" value="default">
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
-  <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul class="current">
+  <ul class="current">
 <li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Running the benchmark</a></li>
 <li class="toctree-l1"><a class="reference internal" href="usage.html">Implementing Your Own Experiment</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="documentation.html">Documentation</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of Documentation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -209,6 +208,7 @@
 <li class="toctree-l2"><a class="reference internal" href="Examinee.html">Examinee</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="genindex.html">Index</a></li>
 </ul>
 
 </div>
@@ -282,9 +282,9 @@
 <section id="basic-usage">
 <h2>Basic Usage<a class="headerlink" href="#basic-usage" title="Permalink to this heading">¶</a></h2>
 <p><strong>Building Dataset and Training Models</strong></p>
-<p><em>Notice that you don’t have to run this part yourself unless you want to re-create our findings in the paper, as the HisText dataset has already been utilized to train the Human Proxy Model sequence.</em></p>
+<p><em>Note that you do not need to run this part yourself unless you want to replicate our findings, as the HisText dataset has already been utilized to train the HistLlama model sequence, and is available on</em> <a class="reference external" href="https://huggingface.co/collections/PKU-Alignment/progressgym-666735fcf3e4efa276226eaa">Huggingface</a>.</p>
 <p>Running</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="o">./</span><span class="n">build_dataset</span><span class="o">.</span><span class="n">py</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python<span class="w"> </span>build_dataset.py
 </pre></div>
 </div>
 <dl class="simple">

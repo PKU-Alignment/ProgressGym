@@ -198,8 +198,7 @@
   <input type="hidden" name="area" value="default">
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
-  <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul class="current">
+  <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="running.html">Running the benchmark</a></li>
 <li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Implementing Your Own Experiment</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="documentation.html">Documentation</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of Documentation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -209,6 +208,7 @@
 <li class="toctree-l2"><a class="reference internal" href="Examinee.html">Examinee</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="genindex.html">Index</a></li>
 </ul>
 
 </div>
@@ -321,7 +321,7 @@ At every iteration:</p>
 
 </dd></dl>
 
-<p>We have implemented the four baseline examinees as described in <a class="reference internal" href="index.html"><span class="doc">ProgressGym: Dataset &amp; Experimental Framework for Progress-Aware Alignment</span></a> in <code class="docutils literal notranslate"><span class="pre">./algorithm</span></code>. You can turn to those implementations
+<p>We have implemented the four baseline examinees as described in <a class="reference internal" href="index.html"><span class="doc">ProgressGym: Dataset &amp; Experimental Framework for Progress Alignment</span></a> in <code class="docutils literal notranslate"><span class="pre">./algorithm</span></code>. You can turn to those implementations
 for reference for your own implementation.</p>
 <p>After implementation, use our pre-implemented <em>dummy</em> challenge to verify and debug your implementation.</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python<span class="w"> </span>run_benchmark.py
@@ -330,7 +330,7 @@ for reference for your own implementation.</p>
 <span class="go">  --output_filename=dummy_debugging_run</span>
 </pre></div>
 </div>
-<p>After that, use <code class="docutils literal notranslate"><span class="pre">run_benchmark.py</span></code> as described in <a class="reference internal" href="index.html"><span class="doc">ProgressGym: Dataset &amp; Experimental Framework for Progress-Aware Alignment</span></a> to start your experiment.</p>
+<p>After that, use <code class="docutils literal notranslate"><span class="pre">run_benchmark.py</span></code> as described in <a class="reference internal" href="index.html"><span class="doc">ProgressGym: Dataset &amp; Experimental Framework for Progress Alignment</span></a> to start your experiment.</p>
 <p>The <a class="reference internal" href="Judge.html#benchmark.framework.JudgeBase" title="benchmark.framework.JudgeBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">benchmark.framework.JudgeBase</span></code></a> class is the base class for all <em>Judges</em> (i.e. benchmark tasks). You can refer to documentations
 for this class to better understand the workings between <em>Judge</em> and <em>Examinee</em> . Of course, you can implemente your own <em>Judge</em> class as well.
 Our implementations of the three major tasks are in <code class="docutils literal notranslate"><span class="pre">./challenges</span></code>, for your reference.</p>
@@ -425,7 +425,7 @@ logic that you need.</p>
 
 </dd></dl>
 
-<p>Similarly, use <em>dummy_examinee</em> to verify your implementation.</p>
+<p>Similarly, use the dummy examinee to verify your implementation.</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python<span class="w"> </span>run_benchmark.py
 <span class="go">  --algorithms=Dummy</span>
 <span class="go">  --challenges=your_task</span>
