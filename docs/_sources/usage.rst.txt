@@ -33,7 +33,7 @@ Our implementations of the three major tasks are in ``./challenges``, for your r
     :members:
     :noindex:
 
-Similarly, use *dummy_examinee* to verify your implementation.
+Similarly, use the dummy examinee to verify your implementation.
 
 .. code-block:: console
 
