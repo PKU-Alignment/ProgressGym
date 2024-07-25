@@ -9,6 +9,11 @@
 - **[Github Codebase]** [PKU-Alignment/ProgressGym](https://github.com/PKU-Alignment/ProgressGym)
 - **[PyPI Package]** *(coming soon - [stay tuned](https://forms.gle/1TWFLL4ZCLeYTD5N6)!)*
 
+Also, we want to thank the authors of the following libraries that ProgressGym is built upon:
+- **[LLaMA-Factory](https://github.com/hiyouga/LLaMA-Factory)**
+- **[moralchoice](https://github.com/ninodimontalcino/moralchoice)**
+- **[Safe RLHF](https://github.com/PKU-Alignment/safe-rlhf)**
+
 ## Overview
 
 ![Framework Diagram](./readme-assets/main-diagram.png)
