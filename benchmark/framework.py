@@ -8,9 +8,11 @@ import traceback
 
 
 class JudgeBase(ABC):
-    """JudgeBase is the base class for all judges.
+    """
+    JudgeBase is the base class for all judges.
     A judge is the benchmarking algorithm that evaluates the performance of an examinee.
-    Each judge class corresponds to a challenge."""
+    Each judge class corresponds to a challenge.
+    """
 
     """Evaluation results"""
     examinee_model_history: List[Model]
@@ -38,11 +40,12 @@ class JudgeBase(ABC):
 
     @abstractmethod
     def reset(self, **kwargs) -> None:
-        """Reset the internal state of the judge to start a new evaluation. This method is called before each test.
-
+        """
+        Reset the internal state of the judge to start a new evaluation. This method is called before each test.
         The base class implementation resets the internal state of the judge to the initial state.
         Normally, you should optionally call the base class implementation in your subclass's implementation, and then add
-        any additional reset logic that you need."""
+        any additional reset logic that you need.
+        """
 
         """Find the list of all models, sorted by timestep."""
         self.template_type = (
@@ -106,10 +109,11 @@ class JudgeBase(ABC):
 
     @abstractmethod
     def eval_snapshot(self, examinee: "ExamineeBase") -> None:
-        """Evaluate the examinee's performance at the current snapshot. This method is called by the judge at every iteration.
-
+        """
+        Evaluate the examinee's performance at the current snapshot. This method is called by the judge at every iteration.
         The base class implementation only does logging. It is recommended to does your own eval and then call the base class
-        implementation to perform logging."""
+        implementation to perform logging.
+        """
 
         self.eval_times += 1
         self.examinee_model_history.append(examinee.get_current_model())
@@ -117,11 +121,12 @@ class JudgeBase(ABC):
 
     @abstractmethod
     def tick(self) -> None:
-        """Move the internal state of the judge to the next timestep. This method is called by the judge at every iteration.
-
+        """
+        Move the internal state of the judge to the next timestep. This method is called by the judge at every iteration.
         The base class implementation moves the judge to the next timestep by incrementing `current_timestep` by 1 (or more if necessary).
         You should optionally call the base class implementation in your subclass's implementation, and then add any additional
-        logic that you need."""
+        logic that you need.
+        """
 
         self.current_timestep += 1
         if self.current_timestep >= len(self.model_list):
@@ -135,12 +140,13 @@ class JudgeBase(ABC):
     def query_from_examinee(
         self, prompt: Union[str, Data, List[Dict]], model: Model = None
     ) -> Union[str, Data, List[Dict]]:
-        """This method is called by the examinee to query the judge, which the judge will answer according to human preferences at the current timestep.
+        """
+        This method is called by the examinee to query the judge, which the judge will answer according to human preferences at the current timestep.
         The examinee will use this information to learn about the latest human preference, and update its language model accordingly.
-
         The base class implementation answers the prompt by directly querying `self.current_model``
         You could either call the base class implementation in your subclass's implementation (possibly supplying a different `model`),
-        or override it if necessary."""
+        or override it if necessary.
+        """
 
         model = model or self.current_model
 
@@ -209,9 +215,9 @@ class JudgeBase(ABC):
 
     @abstractmethod
     def produce_final_result(self) -> Dict[str, Any]:
-        """Return the final result of the evaluation. This method is called at the end of `test()` to get the final evaluation metrics.
+        """
+        Return the final result of the evaluation. This method is called at the end of `test()` to get the final evaluation metrics.
         A reference score may be calculated here, but it will not be used by the leaderboard, in order to prevent manual score manipulation.
-
         The base class implementation only performs logging. You should override this method in your subclass to fill in the evaluation metrics, while preserving logging-purposed dict fields returned by the base class implementation.
         """
 
@@ -234,11 +240,11 @@ class JudgeBase(ABC):
         raise NotImplementedError
 
     def test(self, examinee: "ExamineeBase", **kwargs) -> Dict[str, Any]:
-        """Run the examinee and evaluate its performance. This method is called by the user to evaluate the examinee.
+        """
+        Run the examinee and evaluate its performance. This method is called by the user to evaluate the examinee.
         The method returns a dictionary of evaluation metrics. The keys of the dictionary are the names of the metrics, and the values are the corresponding values of the metrics.
         The method operates by moving the examinee and the judge through a series of timesteps, where the judge evaluates the examinee at every timestep.
         Every iteration of examinee_iter corresponds to the passing of a timestep.
-
         Normally, you should not override this method in your subclass. Instead, you should implement the `reset`, `eval_snapshot`, `tick`, `query_from_examinee`, and `produce_final_result` methods in your subclass.
         """
 
@@ -270,7 +276,8 @@ class JudgeBase(ABC):
 
 
 class ExamineeBase(ABC):
-    """ExamineeBase is the base class for all examinees.
+    """
+    ExamineeBase is the base class for all examinees.
     An examinee is the an alignment algorithm (in combination with a language model operated upon by the algorithm) that is benchmarked by a judge.
     You are free to implement the benchmarked examinee in any way you like, as long as it follows the ExamineeBase interface.
     In most cases, you need to re-implement most or all all the methods in your subclass. Base implementations are only provided as an example.
@@ -293,11 +300,12 @@ class ExamineeBase(ABC):
 
     @abstractmethod
     def reset(self, **kwargs) -> None:
-        """Initialize the examinee, including endowing it with a language model.
-
+        """
+        Initialize the examinee, including endowing it with a language model.
         When `examinee_model_size` is not specified, the model will be initialized as a copy of the Judge's initial model. In that case, the examinee will be able to start from the same initial state as the judge.
         Normally, you should implement this method in your subclass to initialize the examinee as needed, after calling the base class implementation for basic setup.
         """
+        
         if "model_name" not in kwargs:
             self.model_size = (
                 int(kwargs["examinee_model_size"].lower().replace("b", "").strip())
@@ -344,8 +352,8 @@ class ExamineeBase(ABC):
     def query_from_judge(
         self, prompt: Union[str, Data, List[Dict]], model: Model = None
     ) -> Union[str, Data, List[Dict]]:
-        """This method is called by the judge to query the examinee for a response to a prompt.
-
+        """
+        This method is called by the judge to query the examinee for a response to a prompt.
         In most cases, you only need to call the base class implementation in your subclass's implementation.
         """
 
@@ -407,8 +415,8 @@ class ExamineeBase(ABC):
 
     @abstractmethod
     def get_current_model(self) -> Model:
-        """Return the current model that the examinee is using at this timestep.
-
+        """
+        Return the current model that the examinee is using at this timestep.
         The base class implementation returns the `current_model` attribute.
         You should not need to override this method in your subclass unless the model is not stored in the `current_model` attribute.
         """
@@ -417,7 +425,8 @@ class ExamineeBase(ABC):
 
     @abstractmethod
     def run(self, judge: JudgeBase) -> Iterable:
-        """This method is called by the judge to start the examinee.
+        """
+        This method is called by the judge to start the examinee.
         It will return an iterable that the judge will iterate over to run the examinee.
         Every iteration corresponds to the passing of a timestep.
         In this way, the examinee can control the pause and resume of the examinee.

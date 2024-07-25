@@ -68,7 +68,7 @@ model_histext_alpaca = model_histext.finetune(
 )
 print(model_histext_alpaca.is_instruct_finetuned)  # True
 model_histext_alpaca.save_permanent()
-# alpaca_data_G.save_permanent_and_register() # saved to /mnt/models-pku/progressalign/shared_storage/our_datasets/alpaca_gpt4_en_G.json & added to llama-factory dataset registry
+# alpaca_data_G.save_permanent_and_register() # saved to /mnt/models-pku/progressgym/shared_storage/our_datasets/alpaca_gpt4_en_G.json & added to llama-factory dataset registry
 
 # gemma7b_histext_alpaca = Model('gemma-2b',True)
 # start inference

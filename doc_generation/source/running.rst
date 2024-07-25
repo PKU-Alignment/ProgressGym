@@ -3,31 +3,41 @@ Running the benchmark
 
 Requirements
 ------------
-Strictly **python3.8**, on **Linux**
+
+ProgressGym is developed and tested with Python 3.8 on Linux. Please also make sure you have `conda <https://docs.anaconda.com/miniconda/>`_ installed on your machine.
+
+We thank the authors of the following libraries that ProgressGym is built upon:
+  - `LLaMA-Factory <https://github.com/hiyouga/LLaMA-Factory>`_
+  - `moralchoice <https://github.com/ninodimontalcino/moralchoice>`_
+  - `Safe RLHF <https://github.com/PKU-Alignment/safe-rlhf>`_
 
 Installation
 ------------
 
-First install Progress-Gym using pip. Notice that, in order to perform accelerated inference using *vllm* and resolve resulting conflicts, 
-we strictly require *python* version of ``3.8`` and *vllm* version of ``0.4.0.post1``. Therefore, make sure you have ``python3.8`` installed, and run:
+You could install ProgressGym by cloning the codebase:
 
 .. code-block:: console
 
-   $ python3.8 -m venv .venv
-   (.venv) $ pip install progressgym
+   $ git clone https://github.com/PKU-Alignment/ProgressGym.git
+   $ cd ./ProgressGym
+   $ . ./initialize.sh
 
-Or install by cloning the github repository:
+This will create two new conda environments ``pa38`` and ``pa38-lf``, where the former is for the normal operations of ProgressGym, and the latter is used by ProgressGym when calling LLaMA-Factory internally. 
+
+When calling entry-point scripts of ProgressGym (e.g., ``run_benchmark.py`` and ``build_dataset.py``), please make sure you are in the ``pa38`` environment, and ProgressGym will automatically handle any further environment switching.
+
+Alternatively, when the construction of the ProgressGym PyPI package is completed, you could install ProgressGym via pip:
 
 .. code-block:: console
 
-   $ git clone https://github.com/ProgressAlign/ProgressAlign.git
-   $ python3.8 -m venv .venv
-   (.venv) $ pip install -r src/config/requirements-pip.txt
+   $ pip install progressgym
 
+Currently, the PyPI package is not yet available, and is expected to be released soon.
 
 Basic Usage
 -----------
-**Building Dataset**
+
+**Building Dataset and Training Models**
 
 *Notice that you don't have to run this part yourself unless you want to re-create our findings in the paper, as the HisText dataset has already been utilized to train the Human Proxy Model sequence.*
 
@@ -46,37 +56,36 @@ will automatically download the relevant files and then compile them into the de
 
 Running 
 
-.. code-block:: shell
+.. code-block:: console
 
-   $ python run_benchmark.py \\
-        --algorithms=ALGO1[,ALGO2[,ALGO3[,...]]] \\
-        --challenges=SUBTASK1[,SUBTASK2[,SUBTASK3[,...]]] \\
-        --output_filename=OUTPUT_FILENAME \\
-        [--output_dir=OUTPUT_DIR] (default to ./output/benchmark_results) \\
+   $ python run_benchmark.py
+        --algorithms=ALGO1[,ALGO2[,ALGO3[,...]]]
+        --challenges=SUBTASK1[,SUBTASK2[,SUBTASK3[,...]]]
+        --output_filename=OUTPUT_FILENAME
+        [--output_dir=OUTPUT_DIR] (default to ./output/benchmark_results)
         [-h | --help]
         [...] (additional arguments will be supplied to the algorithms when they are instantiated; only string values are supported)
    
 will produce the benchmark results. Omitting 
  
-.. code-block:: python
+.. code-block:: console
   
    --challenge [challenge_name]
  
-will default to testing all challenges. Results will be saved to ``[output_directory]/[test_name].json``, with
-``[output_directory]`` set to default as ``./output/benchmark_results``. For each test, results are saved as a dictionary. See item
-``score`` for a comprehensive score for each examinee's performance in one subtask.
+will default to testing all challenges. Results will be saved to ``[output_directory]/[test_name].json``, with ``[output_directory]`` set to default as ``./output/benchmark_results``. For each test, results are saved as a dictionary. See item ``score`` for a comprehensive score for each examinee's performance in one subtask.
 
-See comments at the beginning of 'run_benchmark.py' for a detailed usage of the command line arguments.
+See comments at the beginning of ``run_benchmark.py`` for a detailed usage of the command line arguments.
 
-.. code-block:: shell
-   $ python run_benchmark.py \\
-        --algorithms=ALGO1[,ALGO2[,ALGO3[,...]]] \\
-        --challenges=SUBTASK1[,SUBTASK2[,SUBTASK3[,...]]] \\
-        --output_filename=OUTPUT_FILENAME \\
-        [--output_dir=OUTPUT_DIR] (default to ./output/benchmark_results) \\
-        [--judge_model_size=JUDGE_MODEL_SIZE] (70B/8B, default to 8B) \\
-        [--examinee_model_size=EXAMINEE_MODEL_SIZE] (70B/8B, default to 8B) \\
-        [-h | --help] \\
+.. code-block:: console
+
+   $ python run_benchmark.py
+        --algorithms=ALGO1[,ALGO2[,ALGO3[,...]]]
+        --challenges=SUBTASK1[,SUBTASK2[,SUBTASK3[,...]]]
+        --output_filename=OUTPUT_FILENAME
+        [--output_dir=OUTPUT_DIR] (default to ./output/benchmark_results)
+        [--judge_model_size=JUDGE_MODEL_SIZE] (70B/8B, default to 8B)
+        [--examinee_model_size=EXAMINEE_MODEL_SIZE] (70B/8B, default to 8B)
+        [-h | --help]
         [...] #additional arguments will be supplied to the algorithms and the challenges when they are instantiated; only string values are supported
  
    

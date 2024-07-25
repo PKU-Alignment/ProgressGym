@@ -10,10 +10,10 @@ import sys
 
 sys.path.insert(0, os.path.abspath("../.."))
 
-project = "Progress-Gym"
-copyright = "2024, Tianyi Qiu, Yang Zhang, Xuchuan Huang, Xinze Li"
+project = "ProgressGym"
+copyright = "2024 PKU Alignment, Tianyi Qiu, Yang Zhang, Xuchuan Huang, Xinze Li"
 author = "Tianyi Qiu, Yang Zhang, Xuchuan Huang, Xinze Li"
-release = "1.0"
+release = "0.1"
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
@@ -29,7 +29,7 @@ autodoc_default_options = {
 templates_path = ["_templates"]
 exclude_patterns = []
 
-language = "cn"
+language = "en"
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output

@@ -17,14 +17,14 @@ gemma2b_c4_alpaca = gemma2b_c4.finetune(
     alpaca_data, stage="sft", algo="full_param", result_model_name="gemma-2b_c4_alpaca"
 )
 print(gemma2b_c4_alpaca.is_instruct_finetuned)  # True
-gemma2b_c4_alpaca.save_permanent()  # saved to /mnt/models-pku/progressalign/shared_storage/our_models/gemma-2b_c4_alpaca
+gemma2b_c4_alpaca.save_permanent()  # saved to /mnt/models-pku/progressgym/shared_storage/our_models/gemma-2b_c4_alpaca
 
 # ============== Then do DPO using ORCA data ==============
 hh_data = Data("orca_rlhf", data_type="preference")
 gemma2b_c4_alpaca_orca = gemma2b_c4_alpaca.finetune(
     hh_data, stage="dpo", algo="full_param", result_model_name="gemma-2b_c4_alpaca_orca"
 )
-gemma2b_c4_alpaca_orca.save_permanent()  # saved to /mnt/models-pku/progressalign/shared_storage/our_models/gemma-2b_c4_alpaca_orca
+gemma2b_c4_alpaca_orca.save_permanent()  # saved to /mnt/models-pku/progressgym/shared_storage/our_models/gemma-2b_c4_alpaca_orca
 
 
 # ============== Or maybe, we should censor curse words before SFT ==============
@@ -43,8 +43,8 @@ alpaca_data_G = alpaca_data.transform(
 gemma2b_c4_alpaca_G = gemma2b_c4.finetune(
     alpaca_data_G, stage="sft", algo="lora", result_model_name="gemma-2b_c4_alpaca_G"
 )
-gemma2b_c4_alpaca_G.save_permanent()  # saved to /mnt/models-pku/progressalign/shared_storage/our_models/gemma-2b_c4_alpaca_G
-alpaca_data_G.save_permanent_and_register()  # saved to /mnt/models-pku/progressalign/shared_storage/our_datasets/alpaca_gpt4_en_G.json & added to llama-factory dataset registry
+gemma2b_c4_alpaca_G.save_permanent()  # saved to /mnt/models-pku/progressgym/shared_storage/our_models/gemma-2b_c4_alpaca_G
+alpaca_data_G.save_permanent_and_register()  # saved to /mnt/models-pku/progressgym/shared_storage/our_datasets/alpaca_gpt4_en_G.json & added to llama-factory dataset registry
 
 # ============== What about using our own data (scattered across multiple files in multiple directories) for finetuning? ==============
 histext_collection = DataFileCollection(  # build a collection holding json files of year 1826 to 2018
