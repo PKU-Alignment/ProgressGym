@@ -5,6 +5,7 @@ conda activate pa38-lf
 conda run --no-capture-output -n pa38-lf pip3 install -r ./libs/llama_factory/requirements.txt
 conda run --no-capture-output -n pa38-lf pip3 install "transformers>=4.40.2" "triton>=2.0.0"
 conda activate pa38
+conda install yajl -y
 conda run --no-capture-output -n pa38 pip3 install -r ./src/config/requirements-pip.txt
 conda run --no-capture-output -n pa38 pip3 install -r ./libs/moralchoice/requirements.txt
 conda remove --force -y pyarrow

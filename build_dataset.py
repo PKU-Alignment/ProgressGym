@@ -54,6 +54,12 @@ def build_pile_of_law():
 
 if __name__ == "__main__":
     tw.write_log(f"\n\n\n\n\n\n=========== NEW RUN ============\n\n")
+    print('This script is NOT meant to be run as part of the benchmarking process. Unless you would like to replicate the dataset building & model training process, you could directly run `run_benchmark.py` instead, which will automatically download the pre-built dataset and/or models on demand.')
+    
+    # Checking if the user wants to proceed
+    if "y" not in input("Start running this script? (y/n)").lower():
+        print("Exiting.")
+        exit()
 
     try:
         proceed = False
