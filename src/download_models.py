@@ -18,7 +18,3 @@ def download_all_models(download_8B = True, download_70B = False):
     if download_70B:
         for i in range(13, 22):
             download_model(f"PKU-Alignment/ProgressGym-HistLlama3-70B-C0{i}-instruct", f"./dataset/dataset_model_sequence/70B-C0{i}-instruct")
-    
-        
-# TODO: Allow choice of using 8B/70B models for benchmarking
-# TODO: Update & recompile documentation

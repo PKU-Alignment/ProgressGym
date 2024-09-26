@@ -1,4 +1,4 @@
-Implementing Your Own Experiment
+Implementing your own experiment
 ================================
 
 To run the benchmark for your own alignment algorithm and assess its temporal alignment
