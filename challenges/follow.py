@@ -41,7 +41,6 @@ class FollowJudge(JudgeBase):
         super().eval_snapshot(examinee)
 
     def tick(self) -> None:
-        """move one timestep forward, without changing the examinee."""
         super().tick()
 
     def query_from_examinee(

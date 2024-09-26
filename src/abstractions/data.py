@@ -100,9 +100,12 @@ class Data:
         :param data_content: Optional. Content of data. When data_content is provided, the given content will be written to a data_path to create a new dataset, unless data_path is not provided in which case the dataset will be saved to './output/datasets/{data_name}.json'.
         :type data_content: List[Dict] = None
 
-        Example: Data('c4_demo', data_type = 'sft', data_path = './libs/llama_factory/data/c4_demo.json')
+        Examples:
+        .. code-block:: python
         
-        Example: Data('c4_demo', data_type = 'sft')
+            Data('c4_demo', data_type = 'sft', data_path = './libs/llama_factory/data/c4_demo.json')
+            Data('c4_demo', data_type = 'sft')
+        
         """
         # if data_name in Data.name2data:
         #     warnings.warn(f'The data name {data_name} is already in use.')
@@ -358,11 +361,12 @@ class Data:
         :param suppress_registration_update: Whether to suppress the update of the registration
         :type suppress_registration_update: bool = False
 
-        Examples:
+        Example:
+        .. code-block:: python
 
-        (for pretraining dataset stored in content field) data.set_key_fields(prompt_field_name='content')
-
-        (for QA dataset with system prompt) data.set_key_fields(prompt_field_name='instruction', query_field_name='input', response_field_name='output')
+            data.set_key_fields(prompt_field_name='content') # for pretraining dataset stored in content field
+            data.set_key_fields(prompt_field_name='instruction', query_field_name='input', response_field_name='output') # for QA dataset with system prompt
+        
         """
         if not suppress_registration_update:
             original_registration_status = self.manage_llama_factory_registration(
@@ -404,9 +408,9 @@ class Data:
         self, saved_name: Optional[str] = None, forced_rewrite: bool = False
     ):
         """
-        Data will be saved to data_save_path from abstractions_config.json.
-        Without save_permanent, it will still be present in ./output/ and can still be directly used next time without specifying the full path.
-        Do not include path and suffix in saved_name.
+        Data will be saved to :code:`data_save_path` from :code:`abstractions_config.json`.
+        Without save_permanent, it will still be present in :code:`./output/` and can still be directly used next time without specifying the full path.
+        Do not include path and suffix in the :code:`saved_name` argument.
         """
         saved_name = (saved_name or self.data_name).strip()
         if self.data_name not in saved_name.replace("/", ".").split("."):
@@ -496,10 +500,13 @@ class DataFileCollection:
         When file_selection_func is supplied, files will be captured real-time, instead of only when initializing. Only json files will be captured.
         You may want to exclude undated.json using file_selection_func. That file is huge.
 
-        Example: DataFileCollection(collection_name='histext_1826_to_2018',
-                                    data_type='pretrain',
-                                    collection_path = '../../shared_storage/our_datasets/HisText_Mar8_Guten_EEBO_PoL_IA10_unrefined/',
-                                    file_selection_func = (lambda path: 1826 <= int(path.split('/')[-1][1:6]) <= 2018))
+        Example:
+        .. code-block:: python
+            
+            DataFileCollection(collection_name='histtext_1826_to_2018',
+                               data_type='pretrain',
+                               collection_path = './dataset/dataset_text_sequence/',
+                               file_selection_func = (lambda path: 1826 <= int(path.split('/')[-1][1:6]) <= 2018))
         """
         # if collection_name in DataFileCollection.name2collection:
         #     warnings.warn(f'The collection name {collection_name} is already in use.')
@@ -658,9 +665,9 @@ class DataFileCollection:
         self, saved_name: Optional[str] = None, forced_rewrite: bool = False
     ):
         """
-        DataFileCollection will be saved to data_save_path from abstractions_config.json.
-        Without save_permanent, it will still be present in ./output/ and can still be directly used next time without specifying the full path.
-        Normally, you should not include full path and/or suffix in saved_name. If you do, it will be seen as a path. In this case, the collection may not be autodiscovered by abstractions for future use.
+        DataFileCollection will be saved to :code:`data_save_path` from :code:`abstractions_config.json`.
+        Without save_permanent, it will still be present in :code:`./output/` and can still be directly used next time without specifying the full path.
+        Normally, you should not include full path and/or suffix in :code:`saved_name`. If you do, it will be seen as a path. In this case, the collection may not be autodiscovered by abstractions for future use.
         """
         saved_name = (saved_name or self.collection_name).strip()
         if self.collection_name not in saved_name.replace("/", ".").split("."):

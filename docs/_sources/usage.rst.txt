@@ -1,5 +1,5 @@
-Implementing your own experiment
-================================
+Quickstart: Implementing your own experiment
+============================================
 
 To run the benchmark for your own alignment algorithm and assess its temporal alignment
 abilities, you have to implement your own algorithm as a subclass of :class:`benchmark.framework.ExamineeBase`. Implement it

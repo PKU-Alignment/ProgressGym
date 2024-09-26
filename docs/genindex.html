@@ -197,8 +197,8 @@
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="running.html">Running the benchmark</a></li>
-<li class="toctree-l1"><a class="reference internal" href="usage.html">Implementing your own experiment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="running.html">Quickstart: Running the benchmark</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Quickstart: Implementing your own experiment</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="documentation.html">API reference</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of API reference</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="Model.html">Model</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Data.html">Data</a></li>
@@ -290,8 +290,6 @@
   <h2>C</h2>
   <table style="width: 100%" class="indextable genindextable"><tr>
     <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="Examinee.html#benchmark.framework.ExamineeBase.checkpoint_id">checkpoint_id (benchmark.framework.ExamineeBase attribute)</a>
-</li>
         <li><a href="Judge.html#challenges.coevolve.CoevolveJudge">CoevolveJudge (class in challenges.coevolve)</a>
 </li>
         <li><a href="Data.html#src.abstractions.data.DataFileCollection.convert_to_Data">convert_to_Data() (src.abstractions.data.DataFileCollection method)</a>
@@ -340,16 +338,6 @@
           <li><a href="Judge.html#challenges.predict.PredictJudge.eval_snapshot">(challenges.predict.PredictJudge method)</a>
 </li>
         </ul></li>
-        <li><a href="Judge.html#benchmark.framework.JudgeBase.eval_times">eval_times (benchmark.framework.JudgeBase attribute)</a>
-
-        <ul>
-          <li><a href="Judge.html#challenges.coevolve.CoevolveJudge.eval_times">(challenges.coevolve.CoevolveJudge attribute)</a>
-</li>
-          <li><a href="Judge.html#challenges.follow.FollowJudge.eval_times">(challenges.follow.FollowJudge attribute)</a>
-</li>
-          <li><a href="Judge.html#challenges.predict.PredictJudge.eval_times">(challenges.predict.PredictJudge attribute)</a>
-</li>
-        </ul></li>
     </ul></td>
     <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="Model.html#src.abstractions.model.Model.evaluate">evaluate() (src.abstractions.model.Model method)</a>
@@ -370,11 +358,9 @@
     <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="Model.html#src.abstractions.model.Model.finetune">finetune() (src.abstractions.model.Model method)</a>
 </li>
-        <li><a href="Judge.html#challenges.follow.FollowJudge">FollowJudge (class in challenges.follow)</a>
-</li>
     </ul></td>
     <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="Model.html#src.abstractions.model.Model.format_dataset">format_dataset() (src.abstractions.model.Model method)</a>
+        <li><a href="Judge.html#challenges.follow.FollowJudge">FollowJudge (class in challenges.follow)</a>
 </li>
         <li><a href="Model.html#src.abstractions.model.Model.free_gpu_memory">free_gpu_memory() (src.abstractions.model.Model method)</a>
 </li>
@@ -450,18 +436,10 @@
     <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="Data.html#src.abstractions.data.Data.manage_llama_factory_registration">manage_llama_factory_registration() (src.abstractions.data.Data method)</a>
 </li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="Model.html#src.abstractions.model.Model">Model (class in src.abstractions.model)</a>
 </li>
-        <li><a href="Judge.html#benchmark.framework.JudgeBase.model_size">model_size (benchmark.framework.JudgeBase attribute)</a>
-
-        <ul>
-          <li><a href="Judge.html#challenges.coevolve.CoevolveJudge.model_size">(challenges.coevolve.CoevolveJudge attribute)</a>
-</li>
-          <li><a href="Judge.html#challenges.follow.FollowJudge.model_size">(challenges.follow.FollowJudge attribute)</a>
-</li>
-          <li><a href="Judge.html#challenges.predict.PredictJudge.model_size">(challenges.predict.PredictJudge attribute)</a>
-</li>
-        </ul></li>
     </ul></td>
   </tr></table>
 </section>
@@ -498,6 +476,8 @@
           <li><a href="Judge.html#challenges.predict.PredictJudge.query_from_examinee">(challenges.predict.PredictJudge method)</a>
 </li>
         </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="Examinee.html#algorithms.extrapolative_dpo.ExtrapolativeDPOExaminee.query_from_judge">query_from_judge() (algorithms.extrapolative_dpo.ExtrapolativeDPOExaminee method)</a>
 
         <ul>
@@ -508,18 +488,6 @@
           <li><a href="Examinee.html#algorithms.lifelong_rlhf.LifelongRLHFExaminee.query_from_judge">(algorithms.lifelong_rlhf.LifelongRLHFExaminee method)</a>
 </li>
           <li><a href="Examinee.html#benchmark.framework.ExamineeBase.query_from_judge">(benchmark.framework.ExamineeBase method)</a>
-</li>
-        </ul></li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="Judge.html#benchmark.framework.JudgeBase.query_total_length">query_total_length (benchmark.framework.JudgeBase attribute)</a>
-
-        <ul>
-          <li><a href="Judge.html#challenges.coevolve.CoevolveJudge.query_total_length">(challenges.coevolve.CoevolveJudge attribute)</a>
-</li>
-          <li><a href="Judge.html#challenges.follow.FollowJudge.query_total_length">(challenges.follow.FollowJudge attribute)</a>
-</li>
-          <li><a href="Judge.html#challenges.predict.PredictJudge.query_total_length">(challenges.predict.PredictJudge attribute)</a>
 </li>
         </ul></li>
     </ul></td>
@@ -592,8 +560,6 @@
   <h2>T</h2>
   <table style="width: 100%" class="indextable genindextable"><tr>
     <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="Examinee.html#benchmark.framework.ExamineeBase.template_type">template_type (benchmark.framework.ExamineeBase attribute)</a>
-</li>
         <li><a href="Judge.html#benchmark.framework.JudgeBase.test">test() (benchmark.framework.JudgeBase method)</a>
 </li>
         <li><a href="Judge.html#benchmark.framework.JudgeBase.tick">tick() (benchmark.framework.JudgeBase method)</a>

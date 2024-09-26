@@ -3,10 +3,10 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="API reference" href="documentation.html" /><link rel="prev" title="Running the benchmark" href="running.html" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="API reference" href="documentation.html" /><link rel="prev" title="Quickstart: Running the benchmark" href="running.html" />
 
     <!-- Generated with Sphinx 7.1.2 and Furo 2024.08.06 -->
-        <title>Implementing your own experiment - ProgressGym v0.1 documentation</title>
+        <title>Quickstart: Implementing your own experiment - ProgressGym v0.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=dc19f415" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=387cc868" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=36a5483c" />
@@ -199,8 +199,8 @@
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="running.html">Running the benchmark</a></li>
-<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Implementing your own experiment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="running.html">Quickstart: Running the benchmark</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Quickstart: Implementing your own experiment</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="documentation.html">API reference</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of API reference</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="Model.html">Model</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Data.html">Data</a></li>
@@ -249,11 +249,11 @@
           </label>
         </div>
         <article role="main" id="furo-main-content">
-          <section id="implementing-your-own-experiment">
-<h1>Implementing your own experiment<a class="headerlink" href="#implementing-your-own-experiment" title="Permalink to this heading">¶</a></h1>
+          <section id="quickstart-implementing-your-own-experiment">
+<h1>Quickstart: Implementing your own experiment<a class="headerlink" href="#quickstart-implementing-your-own-experiment" title="Permalink to this heading">¶</a></h1>
 <p>To run the benchmark for your own alignment algorithm and assess its temporal alignment
 abilities, you have to implement your own algorithm as a subclass of <a class="reference internal" href="Examinee.html#benchmark.framework.ExamineeBase" title="benchmark.framework.ExamineeBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">benchmark.framework.ExamineeBase</span></code></a>. Implement it
-in a new <code class="docutils literal notranslate"><span class="pre">.py</span></code> file in <code class="docutils literal notranslate"><span class="pre">algorithm</span></code>, then refer to <a class="reference internal" href="running.html"><span class="doc">Running the benchmark</span></a> for guidance on how to run the benchmark on the examinee you implemented.</p>
+in a new <code class="docutils literal notranslate"><span class="pre">.py</span></code> file in <code class="docutils literal notranslate"><span class="pre">algorithm</span></code>, then refer to <a class="reference internal" href="running.html"><span class="doc">Quickstart: Running the benchmark</span></a> for guidance on how to run the benchmark on the examinee you implemented.</p>
 <p>Feeling daunted? Dom’t worry. Read through the following descriptions of <a class="reference internal" href="Examinee.html#benchmark.framework.ExamineeBase" title="benchmark.framework.ExamineeBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">benchmark.framework.ExamineeBase</span></code></a>, and you’ll understand the overall workings of the examinee class in our framework.</p>
 <dl class="py class">
 <dt class="sig sig-object py">
@@ -266,12 +266,6 @@ In most cases, you need to re-implement most or all all the methods in your subc
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span></dt>
 <dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">checkpoint_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em></dt>
-<dd><p>Query statistics</p>
-</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py">
@@ -303,20 +297,10 @@ Normally, you should implement this method in your subclass to initialize the ex
 It will return an iterable that the judge will iterate over to run the examinee.
 Every iteration corresponds to the passing of a timestep.
 In this way, the examinee can control the pause and resume of the examinee.
-At every iteration:</p>
-<blockquote>
-<div><ol class="arabic simple">
-<li><p>The examinee learns about the latest human preference by calling the judge’s query_from_examinee method.</p></li>
-<li><p>After it has updated its language model, it yields control back to the judge and allow it to evaluate it (by calling query_from_judge).</p></li>
-</ol>
-</div></blockquote>
+At every iteration:
+1. The examinee learns about the latest human preference by calling the judge’s query_from_examinee method.
+2. After it has updated its language model, it yields control back to the judge and allow it to evaluate it (by calling query_from_judge).</p>
 <p>Unless you are sure that you need to completely override this method, you should not do so. Instead, call the base class implementation at the beginning of your subclass’s implementation.</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">template_type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'alpaca'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'mistral'</span></span><span class="p"><span class="pre">]</span></span></em></dt>
-<dd><p>Information determined at initialization</p>
 </dd></dl>
 
 </dd></dl>
@@ -353,22 +337,10 @@ The base class implementation only does logging. It is recommended to does your 
 implementation to perform logging.</p>
 </dd></dl>
 
-<dl class="py attribute">
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">eval_times</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em></dt>
-<dd><p>Query statistics</p>
-</dd></dl>
-
 <dl class="py method">
 <dt class="sig sig-object py">
 <em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">interpret_result</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">result</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span></dt>
 <dd><p>Given an benchmark result dictionary, calculate a single score that represents the overall performance of the examinee. HIGHER scores must mean better performance. This method is called by the leaderboard to rank the examinees.</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">model_size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em></dt>
-<dd><p>Information determined at initialization</p>
 </dd></dl>
 
 <dl class="py method">
@@ -384,15 +356,9 @@ The base class implementation only performs logging. You should override this me
 <em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">query_from_examinee</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prompt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="Data.html#src.abstractions.data.Data" title="src.abstractions.data.Data"><span class="pre">Data</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="Model.html#src.abstractions.model.Model" title="src.abstractions.model.Model"><span class="pre">Model</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="Data.html#src.abstractions.data.Data" title="src.abstractions.data.Data"><span class="pre">Data</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span></span></dt>
 <dd><p>This method is called by the examinee to query the judge, which the judge will answer according to human preferences at the current timestep.
 The examinee will use this information to learn about the latest human preference, and update its language model accordingly.
-The base class implementation answers the prompt by directly querying <cite>self.current_model`</cite>
+The base class implementation answers the prompt by directly querying <cite>self.current_model</cite>.
 You could either call the base class implementation in your subclass’s implementation (possibly supplying a different <cite>model</cite>),
 or override it if necessary.</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">query_total_length</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em></dt>
-<dd><p>Current model</p>
 </dd></dl>
 
 <dl class="py method">
@@ -455,7 +421,7 @@ logic that you need.</p>
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">Running the benchmark</div>
+                <div class="title">Quickstart: Running the benchmark</div>
                 
               </div>
             </a>

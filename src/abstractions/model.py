@@ -278,9 +278,12 @@ class Model:
 
         :param template_type: The type of template to use
         :type template_type: str = "alpaca"
-
-        Example: Model(model_name = 'gemma-2B_sft_19century', is_instruct_finetuned = True, model_path = './output/training_results/Gemma-2B_sft_19century/')
-        Example: Model(model_name = 'gemma-2B_sft_19century', is_instruct_finetuned = True)
+        
+        Examples:
+        .. code-block:: python
+        
+            Model(model_name = 'Gemma-2B_sft', is_instruct_finetuned = True, model_path = './output/training_results/Gemma-2B_sft/')
+            Model(model_name = 'Gemma-2B_sft', is_instruct_finetuned = True)
         """
         if not num_gpus:
             num_gpus = torch.cuda.device_count()
@@ -373,17 +376,17 @@ class Model:
             self.template_type,
         )
 
-    def format_dataset(self, raw_data: dict, tokenizer):
-        """
-        rw:
-            {"chosen":[x1, x2, ...], "rejected":[y1, y2, ...]}
-        map to:
-            {"input_ids_chosen":[...],
-             "attention_mask_chosen":[...],
-             "input_ids_rejected":[...],
-             "input_ids_rejected":[...]}
+    def __format_dataset(self, raw_data: dict, tokenizer):
+        # Deprecated. Helper function to format the dataset for preference learning.
+        #
+        # rw:
+        #     {"chosen":[x1, x2, ...], "rejected":[y1, y2, ...]}
+        # map to:
+        #     {"input_ids_chosen":[...],
+        #      "attention_mask_chosen":[...],
+        #      "input_ids_rejected":[...],
+        #      "input_ids_rejected":[...]}
 
-        """
         kwargs = {
             "padding": "max_length",
             "truncation": True,
@@ -978,11 +981,11 @@ class Model:
 
         *backend*: Which backend to use for inference. Options listed below, in descreasing order of speed.
 
-             'vllm' - Recommended. Faster than the rest by >= an order of magnitude. Parallel inference using `self.num_gpus` GPUs.
+             :code:`vllm` - Recommended. Faster than the rest by >= an order of magnitude. Parallel inference using `self.num_gpus` GPUs.
 
-             'deepspeed' - Parallel inference using `self.num_gpus` GPUs. The only backend supporting pretrain-style inference.
+             :code:`deepspeed` - Parallel inference using `self.num_gpus` GPUs. The only backend supporting pretrain-style inference.
 
-             'serial' - Serial inference.
+             :code:`serial` - Serial inference.
         """
 
         tw.write_log(
@@ -1437,8 +1440,8 @@ class Model:
         self, saved_name: Optional[str] = None, forced_rewrite: bool = False
     ):
         """
-        Model will be saved to model_save_path from abstractions_config.json.
-        Without save_permanent, the model will still be present in ./output/ and can still be directly used next time without specifying the full path.
+        Model will be saved to :code:`model_save_path` from :code:`abstractions_config.json`.
+        Without save_permanent, the model will still be present in :code:`./output/` and can still be directly used next time without specifying the full path.
         """
         saved_name = saved_name or self.model_name
         if saved_name != self.model_name:

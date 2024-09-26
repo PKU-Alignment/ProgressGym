@@ -199,8 +199,8 @@
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="running.html">Running the benchmark</a></li>
-<li class="toctree-l1"><a class="reference internal" href="usage.html">Implementing your own experiment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="running.html">Quickstart: Running the benchmark</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Quickstart: Implementing your own experiment</a></li>
 <li class="toctree-l1 current has-children"><a class="reference internal" href="documentation.html">API reference</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of API reference</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="Model.html">Model</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Data.html">Data</a></li>
@@ -267,12 +267,6 @@ In most cases, you need to re-implement most or all all the methods in your subc
 <span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#benchmark.framework.ExamineeBase.__init__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="py attribute">
-<dt class="sig sig-object py" id="benchmark.framework.ExamineeBase.checkpoint_id">
-<span class="sig-name descname"><span class="pre">checkpoint_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#benchmark.framework.ExamineeBase.checkpoint_id" title="Permalink to this definition">¶</a></dt>
-<dd><p>Query statistics</p>
-</dd></dl>
-
 <dl class="py method">
 <dt class="sig sig-object py" id="benchmark.framework.ExamineeBase.get_current_model">
 <em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_current_model</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="Model.html#src.abstractions.model.Model" title="src.abstractions.model.Model"><span class="pre">Model</span></a></span></span><a class="headerlink" href="#benchmark.framework.ExamineeBase.get_current_model" title="Permalink to this definition">¶</a></dt>
@@ -303,20 +297,10 @@ Normally, you should implement this method in your subclass to initialize the ex
 It will return an iterable that the judge will iterate over to run the examinee.
 Every iteration corresponds to the passing of a timestep.
 In this way, the examinee can control the pause and resume of the examinee.
-At every iteration:</p>
-<blockquote>
-<div><ol class="arabic simple">
-<li><p>The examinee learns about the latest human preference by calling the judge’s query_from_examinee method.</p></li>
-<li><p>After it has updated its language model, it yields control back to the judge and allow it to evaluate it (by calling query_from_judge).</p></li>
-</ol>
-</div></blockquote>
+At every iteration:
+1. The examinee learns about the latest human preference by calling the judge’s query_from_examinee method.
+2. After it has updated its language model, it yields control back to the judge and allow it to evaluate it (by calling query_from_judge).</p>
 <p>Unless you are sure that you need to completely override this method, you should not do so. Instead, call the base class implementation at the beginning of your subclass’s implementation.</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="benchmark.framework.ExamineeBase.template_type">
-<span class="sig-name descname"><span class="pre">template_type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'alpaca'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'mistral'</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#benchmark.framework.ExamineeBase.template_type" title="Permalink to this definition">¶</a></dt>
-<dd><p>Information determined at initialization</p>
 </dd></dl>
 
 </dd></dl>
@@ -354,13 +338,9 @@ Normally, you should implement this method in your subclass to initialize the ex
 It will return an iterable that the judge will iterate over to run the examinee.
 Every iteration corresponds to the passing of a timestep.
 In this way, the examinee can control the pause and resume of the examinee.
-At every iteration:</p>
-<blockquote>
-<div><ol class="arabic simple">
-<li><p>The examinee learns about the latest human preference by calling the judge’s query_from_examinee method.</p></li>
-<li><p>After it has updated its language model, it yields control back to the judge and allow it to evaluate it (by calling query_from_judge).</p></li>
-</ol>
-</div></blockquote>
+At every iteration:
+1. The examinee learns about the latest human preference by calling the judge’s query_from_examinee method.
+2. After it has updated its language model, it yields control back to the judge and allow it to evaluate it (by calling query_from_judge).</p>
 <p>Unless you are sure that you need to completely override this method, you should not do so. Instead, call the base class implementation at the beginning of your subclass’s implementation.</p>
 </dd></dl>
 
@@ -399,13 +379,9 @@ Normally, you should implement this method in your subclass to initialize the ex
 It will return an iterable that the judge will iterate over to run the examinee.
 Every iteration corresponds to the passing of a timestep.
 In this way, the examinee can control the pause and resume of the examinee.
-At every iteration:</p>
-<blockquote>
-<div><ol class="arabic simple">
-<li><p>The examinee learns about the latest human preference by calling the judge’s query_from_examinee method.</p></li>
-<li><p>After it has updated its language model, it yields control back to the judge and allow it to evaluate it (by calling query_from_judge).</p></li>
-</ol>
-</div></blockquote>
+At every iteration:
+1. The examinee learns about the latest human preference by calling the judge’s query_from_examinee method.
+2. After it has updated its language model, it yields control back to the judge and allow it to evaluate it (by calling query_from_judge).</p>
 <p>Unless you are sure that you need to completely override this method, you should not do so. Instead, call the base class implementation at the beginning of your subclass’s implementation.</p>
 </dd></dl>
 
@@ -444,13 +420,9 @@ Normally, you should implement this method in your subclass to initialize the ex
 It will return an iterable that the judge will iterate over to run the examinee.
 Every iteration corresponds to the passing of a timestep.
 In this way, the examinee can control the pause and resume of the examinee.
-At every iteration:</p>
-<blockquote>
-<div><ol class="arabic simple">
-<li><p>The examinee learns about the latest human preference by calling the judge’s query_from_examinee method.</p></li>
-<li><p>After it has updated its language model, it yields control back to the judge and allow it to evaluate it (by calling query_from_judge).</p></li>
-</ol>
-</div></blockquote>
+At every iteration:
+1. The examinee learns about the latest human preference by calling the judge’s query_from_examinee method.
+2. After it has updated its language model, it yields control back to the judge and allow it to evaluate it (by calling query_from_judge).</p>
 <p>Unless you are sure that you need to completely override this method, you should not do so. Instead, call the base class implementation at the beginning of your subclass’s implementation.</p>
 </dd></dl>
 
@@ -489,13 +461,9 @@ Normally, you should implement this method in your subclass to initialize the ex
 It will return an iterable that the judge will iterate over to run the examinee.
 Every iteration corresponds to the passing of a timestep.
 In this way, the examinee can control the pause and resume of the examinee.
-At every iteration:</p>
-<blockquote>
-<div><ol class="arabic simple">
-<li><p>The examinee learns about the latest human preference by calling the judge’s query_from_examinee method.</p></li>
-<li><p>After it has updated its language model, it yields control back to the judge and allow it to evaluate it (by calling query_from_judge).</p></li>
-</ol>
-</div></blockquote>
+At every iteration:
+1. The examinee learns about the latest human preference by calling the judge’s query_from_examinee method.
+2. After it has updated its language model, it yields control back to the judge and allow it to evaluate it (by calling query_from_judge).</p>
 <p>Unless you are sure that you need to completely override this method, you should not do so. Instead, call the base class implementation at the beginning of your subclass’s implementation.</p>
 </dd></dl>
 
@@ -553,12 +521,10 @@ At every iteration:</p>
 <li><a class="reference internal" href="#">Examinee</a><ul>
 <li><a class="reference internal" href="#benchmark.framework.ExamineeBase"><code class="docutils literal notranslate"><span class="pre">ExamineeBase</span></code></a><ul>
 <li><a class="reference internal" href="#benchmark.framework.ExamineeBase.__init__"><code class="docutils literal notranslate"><span class="pre">ExamineeBase.__init__()</span></code></a></li>
-<li><a class="reference internal" href="#benchmark.framework.ExamineeBase.checkpoint_id"><code class="docutils literal notranslate"><span class="pre">ExamineeBase.checkpoint_id</span></code></a></li>
 <li><a class="reference internal" href="#benchmark.framework.ExamineeBase.get_current_model"><code class="docutils literal notranslate"><span class="pre">ExamineeBase.get_current_model()</span></code></a></li>
 <li><a class="reference internal" href="#benchmark.framework.ExamineeBase.query_from_judge"><code class="docutils literal notranslate"><span class="pre">ExamineeBase.query_from_judge()</span></code></a></li>
 <li><a class="reference internal" href="#benchmark.framework.ExamineeBase.reset"><code class="docutils literal notranslate"><span class="pre">ExamineeBase.reset()</span></code></a></li>
 <li><a class="reference internal" href="#benchmark.framework.ExamineeBase.run"><code class="docutils literal notranslate"><span class="pre">ExamineeBase.run()</span></code></a></li>
-<li><a class="reference internal" href="#benchmark.framework.ExamineeBase.template_type"><code class="docutils literal notranslate"><span class="pre">ExamineeBase.template_type</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#algorithms.extrapolative_dpo.ExtrapolativeDPOExaminee"><code class="docutils literal notranslate"><span class="pre">ExtrapolativeDPOExaminee</span></code></a><ul>

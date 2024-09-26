@@ -1,5 +1,5 @@
-Running the benchmark
-=====================
+Quickstart: Running the benchmark
+=================================
 
 Requirements
 ------------
