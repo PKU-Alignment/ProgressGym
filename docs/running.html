@@ -295,7 +295,7 @@
 </ul>
 </dd>
 </dl>
-<p><strong>Running The Benchmarks</strong></p>
+<p><strong>Running The Benchmarks on Command Line</strong></p>
 <p>Running</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python<span class="w"> </span>run_benchmark.py
 <span class="go">     --algorithms=ALGO1[,ALGO2[,ALGO3[,...]]]</span>
@@ -323,6 +323,37 @@
 <span class="go">     [...] #additional arguments will be supplied to the algorithms and the challenges when they are instantiated; only string values are supported</span>
 </pre></div>
 </div>
+<p><strong>Running The Benchmarks with Python API</strong></p>
+<p>You can also run the benchmark with the Python API using the <code class="code docutils literal notranslate"><span class="pre">run_benchmark</span></code> function.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="run_benchmark.run_benchmark">
+<span class="sig-prename descclassname"><span class="pre">run_benchmark.</span></span><span class="sig-name descname"><span class="pre">run_benchmark</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ExamineeClass</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="Examinee.html#benchmark.framework.ExamineeBase" title="benchmark.framework.ExamineeBase"><span class="pre">ExamineeBase</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">JudgeClass</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="Judge.html#benchmark.framework.JudgeBase" title="benchmark.framework.JudgeBase"><span class="pre">JudgeBase</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#run_benchmark.run_benchmark" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run a single benchmarking test on a single examinee and a single judge, and return the results.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ExamineeClass</strong> – Necessary, examinee class object representing the algorithm to be evaluated. Can be any subclass of ExamineeBase, including user-implemented ones. Note that this is the class object, not an instance of the class.</p></li>
+<li><p><strong>judge</strong> (<em>Type</em><em>[</em><a class="reference internal" href="Judge.html#benchmark.framework.JudgeBase" title="benchmark.framework.JudgeBase"><em>JudgeBase</em></a><em>]</em>) – Necessary, judge class object representing the challenge to be evaluated. Can be any subclass of JudgeBase, including user-implemented ones. Note that this is the class object, not an instance of the class.</p></li>
+<li><p><strong>kwargs</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>str</em><em>]</em>) – Optional, additional arguments to be passed to the examinee and the judge. Pass the same str-typed arguments as you would in the command line.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A dictionary containing the results of the benchmarking test. The dictionary is in the exact same format as the results of command-line benchmarking.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Dict[str, Any]</p>
+</dd>
+</dl>
+<dl>
+<dt>Example:</dt><dd><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">progressgym</span> <span class="kn">import</span> <span class="n">run_benchmark</span><span class="p">,</span> <span class="n">CoevolveJudge</span><span class="p">,</span> <span class="n">LifelongDPOExaminee</span> <span class="c1"># if using PyPI package</span>
+<span class="n">results</span> <span class="o">=</span> <span class="n">run_benchmark</span><span class="p">(</span><span class="n">LifelongDPOExaminee</span><span class="p">,</span> <span class="n">CoevolveJudge</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<p>It’s worth noting that the Python API is more flexible than the command line interface, as you can implement your own Judge and Examinee classes (inheriting from <code class="code docutils literal notranslate"><span class="pre">JudgeBase</span></code> and <code class="code docutils literal notranslate"><span class="pre">ExamineeBase</span></code> respectively) and pass them to the <code class="code docutils literal notranslate"><span class="pre">run_benchmark</span></code> function.</p>
 </section>
 </section>
 
@@ -384,7 +415,10 @@
 <li><a class="reference internal" href="#">Quickstart: Running the benchmark</a><ul>
 <li><a class="reference internal" href="#requirements">Requirements</a></li>
 <li><a class="reference internal" href="#installation">Installation</a></li>
-<li><a class="reference internal" href="#basic-usage">Basic Usage</a></li>
+<li><a class="reference internal" href="#basic-usage">Basic Usage</a><ul>
+<li><a class="reference internal" href="#run_benchmark.run_benchmark"><code class="docutils literal notranslate"><span class="pre">run_benchmark()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>

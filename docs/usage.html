@@ -178,7 +178,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -243,7 +243,7 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
@@ -251,10 +251,15 @@
         <article role="main" id="furo-main-content">
           <section id="quickstart-implementing-your-own-experiment">
 <h1>Quickstart: Implementing your own experiment<a class="headerlink" href="#quickstart-implementing-your-own-experiment" title="Permalink to this heading">¶</a></h1>
+<section id="general-instructions">
+<h2>General Instructions<a class="headerlink" href="#general-instructions" title="Permalink to this heading">¶</a></h2>
 <p>To run the benchmark for your own alignment algorithm and assess its temporal alignment
-abilities, you have to implement your own algorithm as a subclass of <a class="reference internal" href="Examinee.html#benchmark.framework.ExamineeBase" title="benchmark.framework.ExamineeBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">benchmark.framework.ExamineeBase</span></code></a>. Implement it
-in a new <code class="docutils literal notranslate"><span class="pre">.py</span></code> file in <code class="docutils literal notranslate"><span class="pre">algorithm</span></code>, then refer to <a class="reference internal" href="running.html"><span class="doc">Quickstart: Running the benchmark</span></a> for guidance on how to run the benchmark on the examinee you implemented.</p>
-<p>Feeling daunted? Dom’t worry. Read through the following descriptions of <a class="reference internal" href="Examinee.html#benchmark.framework.ExamineeBase" title="benchmark.framework.ExamineeBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">benchmark.framework.ExamineeBase</span></code></a>, and you’ll understand the overall workings of the examinee class in our framework.</p>
+abilities, you have to implement your own algorithm as a subclass of <a class="reference internal" href="Examinee.html#benchmark.framework.ExamineeBase" title="benchmark.framework.ExamineeBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">benchmark.framework.ExamineeBase</span></code></a>.</p>
+<p>You could either implement it in a new <code class="docutils literal notranslate"><span class="pre">.py</span></code> file in <code class="docutils literal notranslate"><span class="pre">algorithm</span></code> and use the command-line interface for running it, or by directly implementing a subclass of <a class="reference internal" href="Examinee.html#benchmark.framework.ExamineeBase" title="benchmark.framework.ExamineeBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">benchmark.framework.ExamineeBase</span></code></a> in your own script and use the Python API for running it. Refer to <a class="reference internal" href="running.html"><span class="doc">Quickstart: Running the benchmark</span></a> for guidance on how to run the benchmark on the examinee you implemented.</p>
+</section>
+<section id="implementation-instructions">
+<h2>Implementation Instructions<a class="headerlink" href="#implementation-instructions" title="Permalink to this heading">¶</a></h2>
+<p>Feeling daunted? Don’t worry. Read through the following descriptions of <a class="reference internal" href="Examinee.html#benchmark.framework.ExamineeBase" title="benchmark.framework.ExamineeBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">benchmark.framework.ExamineeBase</span></code></a>, and you’ll understand the overall workings of the examinee class in our framework.</p>
 <dl class="py class">
 <dt class="sig sig-object py">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">benchmark.framework.</span></span><span class="sig-name descname"><span class="pre">ExamineeBase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span></dt>
@@ -399,6 +404,7 @@ logic that you need.</p>
 </pre></div>
 </div>
 </section>
+</section>
 
         </article>
       </div>
@@ -443,8 +449,28 @@ logic that you need.</p>
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Quickstart: Implementing your own experiment</a><ul>
+<li><a class="reference internal" href="#general-instructions">General Instructions</a></li>
+<li><a class="reference internal" href="#implementation-instructions">Implementation Instructions</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>

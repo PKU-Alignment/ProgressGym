@@ -274,12 +274,13 @@ this class is designed for efficient manipulation and loading of data.</p>
 <dd class="field-even"><p><strong>FileNotFoundError</strong> – If file is not found in default search path and path is not specified.</p>
 </dd>
 </dl>
-<p>Examples:
-.. code-block:: python</p>
-<blockquote>
-<div><p>Data(‘c4_demo’, data_type = ‘sft’, data_path = ‘./libs/llama_factory/data/c4_demo.json’)
-Data(‘c4_demo’, data_type = ‘sft’)</p>
-</div></blockquote>
+<dl>
+<dt>Examples:</dt><dd><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Data</span><span class="p">(</span><span class="s1">&#39;c4_demo&#39;</span><span class="p">,</span> <span class="n">data_type</span> <span class="o">=</span> <span class="s1">&#39;sft&#39;</span><span class="p">,</span> <span class="n">data_path</span> <span class="o">=</span> <span class="s1">&#39;./libs/llama_factory/data/c4_demo.json&#39;</span><span class="p">)</span>
+<span class="n">Data</span><span class="p">(</span><span class="s1">&#39;c4_demo&#39;</span><span class="p">,</span> <span class="n">data_type</span> <span class="o">=</span> <span class="s1">&#39;sft&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -340,12 +341,13 @@ Do not include path and suffix in the <code class="code docutils literal notrans
 </ul>
 </dd>
 </dl>
-<p>Example:
-.. code-block:: python</p>
-<blockquote>
-<div><p>data.set_key_fields(prompt_field_name=’content’) # for pretraining dataset stored in content field
-data.set_key_fields(prompt_field_name=’instruction’, query_field_name=’input’, response_field_name=’output’) # for QA dataset with system prompt</p>
-</div></blockquote>
+<dl>
+<dt>Example:</dt><dd><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">data</span><span class="o">.</span><span class="n">set_key_fields</span><span class="p">(</span><span class="n">prompt_field_name</span><span class="o">=</span><span class="s1">&#39;content&#39;</span><span class="p">)</span> <span class="c1"># for pretraining dataset stored in content field</span>
+<span class="n">data</span><span class="o">.</span><span class="n">set_key_fields</span><span class="p">(</span><span class="n">prompt_field_name</span><span class="o">=</span><span class="s1">&#39;instruction&#39;</span><span class="p">,</span> <span class="n">query_field_name</span><span class="o">=</span><span class="s1">&#39;input&#39;</span><span class="p">,</span> <span class="n">response_field_name</span><span class="o">=</span><span class="s1">&#39;output&#39;</span><span class="p">)</span> <span class="c1"># for QA dataset with system prompt</span>
+</pre></div>
+</div>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -397,16 +399,15 @@ The data file will be a json file with the type of List[Dict[Hashable, Any]].</p
 <p>If collection_path is omitted, we will search for collection_name in directories specified in abstractions_config.json.
 When file_selection_func is supplied, files will be captured real-time, instead of only when initializing. Only json files will be captured.
 You may want to exclude undated.json using file_selection_func. That file is huge.</p>
-<p>Example:
-.. code-block:: python</p>
-<blockquote>
-<div><dl class="simple">
-<dt>DataFileCollection(collection_name=’histtext_1826_to_2018’,</dt><dd><p>data_type=’pretrain’,
-collection_path = ‘./dataset/dataset_text_sequence/’,
-file_selection_func = (lambda path: 1826 &lt;= int(path.split(‘/’)[-1][1:6]) &lt;= 2018))</p>
+<dl>
+<dt>Example:</dt><dd><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">DataFileCollection</span><span class="p">(</span><span class="n">collection_name</span><span class="o">=</span><span class="s1">&#39;histtext_1826_to_2018&#39;</span><span class="p">,</span>
+                <span class="n">data_type</span><span class="o">=</span><span class="s1">&#39;pretrain&#39;</span><span class="p">,</span>
+                <span class="n">collection_path</span> <span class="o">=</span> <span class="s1">&#39;./dataset/dataset_text_sequence/&#39;</span><span class="p">,</span>
+                <span class="n">file_selection_func</span> <span class="o">=</span> <span class="p">(</span><span class="k">lambda</span> <span class="n">path</span><span class="p">:</span> <span class="mi">1826</span> <span class="o">&lt;=</span> <span class="nb">int</span><span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">:</span><span class="mi">6</span><span class="p">])</span> <span class="o">&lt;=</span> <span class="mi">2018</span><span class="p">))</span>
+</pre></div>
+</div>
 </dd>
 </dl>
-</div></blockquote>
 </dd></dl>
 
 <dl class="py method">
