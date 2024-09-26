@@ -101,10 +101,10 @@ class Data:
         :type data_content: List[Dict] = None
 
         Examples:
-        .. code-block:: python
-        
-            Data('c4_demo', data_type = 'sft', data_path = './libs/llama_factory/data/c4_demo.json')
-            Data('c4_demo', data_type = 'sft')
+            .. code-block:: python
+            
+                Data('c4_demo', data_type = 'sft', data_path = './libs/llama_factory/data/c4_demo.json')
+                Data('c4_demo', data_type = 'sft')
         
         """
         # if data_name in Data.name2data:
@@ -362,10 +362,10 @@ class Data:
         :type suppress_registration_update: bool = False
 
         Example:
-        .. code-block:: python
+            .. code-block:: python
 
-            data.set_key_fields(prompt_field_name='content') # for pretraining dataset stored in content field
-            data.set_key_fields(prompt_field_name='instruction', query_field_name='input', response_field_name='output') # for QA dataset with system prompt
+                data.set_key_fields(prompt_field_name='content') # for pretraining dataset stored in content field
+                data.set_key_fields(prompt_field_name='instruction', query_field_name='input', response_field_name='output') # for QA dataset with system prompt
         
         """
         if not suppress_registration_update:
@@ -501,12 +501,13 @@ class DataFileCollection:
         You may want to exclude undated.json using file_selection_func. That file is huge.
 
         Example:
-        .. code-block:: python
-            
-            DataFileCollection(collection_name='histtext_1826_to_2018',
-                               data_type='pretrain',
-                               collection_path = './dataset/dataset_text_sequence/',
-                               file_selection_func = (lambda path: 1826 <= int(path.split('/')[-1][1:6]) <= 2018))
+            .. code-block:: python
+                
+                DataFileCollection(collection_name='histtext_1826_to_2018',
+                                data_type='pretrain',
+                                collection_path = './dataset/dataset_text_sequence/',
+                                file_selection_func = (lambda path: 1826 <= int(path.split('/')[-1][1:6]) <= 2018))
+        
         """
         # if collection_name in DataFileCollection.name2collection:
         #     warnings.warn(f'The collection name {collection_name} is already in use.')

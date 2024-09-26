@@ -52,7 +52,7 @@ will automatically download the relevant files and then compile them into the de
   - Organize downloaded data into an unified format, and the resulting historical text dataset is saved as a series of files ``./dataset/dataset_textseq/[century_num]/[year_num].json``
   - Train a series of historical language models  ``./dataset/dataset_modelseq/[century_num]`` using the historical text dataset.
 
-**Running The Benchmarks**
+**Running The Benchmarks on Command Line**
 
 Running 
 
@@ -88,7 +88,10 @@ See comments at the beginning of ``run_benchmark.py`` for a detailed usage of th
         [-h | --help]
         [...] #additional arguments will be supplied to the algorithms and the challenges when they are instantiated; only string values are supported
  
-   
+**Running The Benchmarks with Python API**
 
+You can also run the benchmark with the Python API using the :code:`run_benchmark` function.
 
+.. autofunction:: run_benchmark.run_benchmark
 
+It's worth noting that the Python API is more flexible than the command line interface, as you can implement your own Judge and Examinee classes (inheriting from :code:`JudgeBase` and :code:`ExamineeBase` respectively) and pass them to the :code:`run_benchmark` function.

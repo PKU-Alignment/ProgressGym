@@ -1,11 +1,18 @@
 Quickstart: Implementing your own experiment
 ============================================
 
-To run the benchmark for your own alignment algorithm and assess its temporal alignment
-abilities, you have to implement your own algorithm as a subclass of :class:`benchmark.framework.ExamineeBase`. Implement it
-in a new ``.py`` file in ``algorithm``, then refer to :doc:`running` for guidance on how to run the benchmark on the examinee you implemented. 
+General Instructions
+--------------------
 
-Feeling daunted? Dom't worry. Read through the following descriptions of :class:`benchmark.framework.ExamineeBase`, and you'll understand the overall workings of the examinee class in our framework.
+To run the benchmark for your own alignment algorithm and assess its temporal alignment
+abilities, you have to implement your own algorithm as a subclass of :class:`benchmark.framework.ExamineeBase`. 
+
+You could either implement it in a new ``.py`` file in ``algorithm`` and use the command-line interface for running it, or by directly implementing a subclass of :class:`benchmark.framework.ExamineeBase` in your own script and use the Python API for running it. Refer to :doc:`running` for guidance on how to run the benchmark on the examinee you implemented. 
+
+Implementation Instructions
+---------------------------
+
+Feeling daunted? Don't worry. Read through the following descriptions of :class:`benchmark.framework.ExamineeBase`, and you'll understand the overall workings of the examinee class in our framework.
 
 .. autoclass:: benchmark.framework.ExamineeBase
     :members:

@@ -280,10 +280,11 @@ class Model:
         :type template_type: str = "alpaca"
         
         Examples:
-        .. code-block:: python
+            .. code-block:: python
+            
+                Model(model_name = 'Gemma-2B_sft', is_instruct_finetuned = True, model_path = './output/training_results/Gemma-2B_sft/')
+                Model(model_name = 'Gemma-2B_sft', is_instruct_finetuned = True)
         
-            Model(model_name = 'Gemma-2B_sft', is_instruct_finetuned = True, model_path = './output/training_results/Gemma-2B_sft/')
-            Model(model_name = 'Gemma-2B_sft', is_instruct_finetuned = True)
         """
         if not num_gpus:
             num_gpus = torch.cuda.device_count()
