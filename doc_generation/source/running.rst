@@ -39,7 +39,7 @@ Basic Usage
 
 **Building Dataset and Training Models**
 
-*Note that you do not need to run this part yourself unless you want to replicate our findings, as the HisText dataset has already been utilized to train the HistLlama model sequence, and is available on* `Huggingface <https://huggingface.co/collections/PKU-Alignment/progressgym-666735fcf3e4efa276226eaa>`_.
+*Note that you do not need to run this part yourself unless you want to replicate our findings, as the HisText dataset has already been utilized to train the HistLlama model sequence, and is available on* `Huggingface <https://huggingface.co/collections/PKU-Alignment/progressgym-666735fcf3e4efa276226eaa>`_, *and the benchmark script will automatically download the HistLlama models when needed.*
 
 Running 
 

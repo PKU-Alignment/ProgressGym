@@ -284,10 +284,6 @@ class Model:
         """
         if not num_gpus:
             num_gpus = torch.cuda.device_count()
-            # num_gpus = min(num_gpus, 4)
-
-        # if model_name in Model.name2model:
-        #     warnings.warn(f'The model name {model_name} is already in use.')
 
         self.num_gpus = num_gpus
         self.model_name = model_name

@@ -37,6 +37,7 @@ import time
 import json
 from typing import List, Dict, Any
 from multiprocessing import freeze_support
+from src.download_models import download_all_models
 
 if __name__ == "__main__":
     freeze_support()
@@ -68,6 +69,9 @@ if __name__ == "__main__":
         print(
             f"Captured additional arguments: {kwargs}. They will be passed to `__init__()` and `reset()` of both the judges and the examinees, as str-typed arguments."
         )
+        
+        download_70B_models = "70" in kwargs.get("examinee_model_size", "") or "70" in kwargs.get("judge_model_size", "")
+        download_all_models(download_70B=download_70B_models)
 
         from benchmark.framework import JudgeBase, ExamineeBase
 
