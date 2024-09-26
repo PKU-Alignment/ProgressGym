@@ -14,21 +14,21 @@ class JudgeBase(ABC):
     Each judge class corresponds to a challenge.
     """
 
-    """Evaluation results"""
+    # Evaluation results
     examinee_model_history: List[Model]
     judge_model_history: List[Model]
     eval_times: int
 
-    """Query statistics"""
+    # Query statistics
     query_times: int
     query_total_length: int
 
-    """Current model"""
+    # Information about current model
     current_model: Model
     current_timestep: int
     model_size: int
 
-    """Information determined at initialization"""
+    # Information determined at initialization
     instance_id: str
     model_list: List[Model]
     template_type: Literal["alpaca", "mistral"]
@@ -143,7 +143,7 @@ class JudgeBase(ABC):
         """
         This method is called by the examinee to query the judge, which the judge will answer according to human preferences at the current timestep.
         The examinee will use this information to learn about the latest human preference, and update its language model accordingly.
-        The base class implementation answers the prompt by directly querying `self.current_model``
+        The base class implementation answers the prompt by directly querying `self.current_model`.
         You could either call the base class implementation in your subclass's implementation (possibly supplying a different `model`),
         or override it if necessary.
         """
@@ -283,16 +283,16 @@ class ExamineeBase(ABC):
     In most cases, you need to re-implement most or all all the methods in your subclass. Base implementations are only provided as an example.
     """
 
-    """Current model"""
+    # Information about current model
     current_model: Model
     current_timestep: int
     template_type: Literal["alpaca", "mistral"]
 
-    """Information determined at initialization"""
+    # Information determined at initialization
     instance_id: str
     checkpoint_id: str
 
-    """Query statistics"""
+    # Query statistics
     query_times: int
 
     def __init__(self, **kwargs):
@@ -431,8 +431,9 @@ class ExamineeBase(ABC):
         Every iteration corresponds to the passing of a timestep.
         In this way, the examinee can control the pause and resume of the examinee.
         At every iteration:
-          1. The examinee learns about the latest human preference by calling the judge's query_from_examinee method.
-          2. After it has updated its language model, it yields control back to the judge and allow it to evaluate it (by calling query_from_judge).
+        1. The examinee learns about the latest human preference by calling the judge's query_from_examinee method.
+        2. After it has updated its language model, it yields control back to the judge and allow it to evaluate it (by calling query_from_judge).
+        
         Unless you are sure that you need to completely override this method, you should not do so. Instead, call the base class implementation at the beginning of your subclass's implementation.
         """
 

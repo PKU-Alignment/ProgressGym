@@ -199,8 +199,8 @@
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="running.html">Running the benchmark</a></li>
-<li class="toctree-l1"><a class="reference internal" href="usage.html">Implementing your own experiment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="running.html">Quickstart: Running the benchmark</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Quickstart: Implementing your own experiment</a></li>
 <li class="toctree-l1 current has-children"><a class="reference internal" href="documentation.html">API reference</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of API reference</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="Model.html">Model</a></li>
 <li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Data</a></li>
@@ -274,8 +274,12 @@ this class is designed for efficient manipulation and loading of data.</p>
 <dd class="field-even"><p><strong>FileNotFoundError</strong> – If file is not found in default search path and path is not specified.</p>
 </dd>
 </dl>
-<p>Example: Data(‘c4_demo’, data_type = ‘sft’, data_path = ‘./libs/llama_factory/data/c4_demo.json’)</p>
-<p>Example: Data(‘c4_demo’, data_type = ‘sft’)</p>
+<p>Examples:
+.. code-block:: python</p>
+<blockquote>
+<div><p>Data(‘c4_demo’, data_type = ‘sft’, data_path = ‘./libs/llama_factory/data/c4_demo.json’)
+Data(‘c4_demo’, data_type = ‘sft’)</p>
+</div></blockquote>
 </dd></dl>
 
 <dl class="py method">
@@ -314,9 +318,9 @@ No changes are made when adding an already existing dataset, or when removing a 
 <dl class="py method">
 <dt class="sig sig-object py" id="src.abstractions.data.Data.save_permanent_and_register">
 <span class="sig-name descname"><span class="pre">save_permanent_and_register</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">saved_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">forced_rewrite</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.abstractions.data.Data.save_permanent_and_register" title="Permalink to this definition">¶</a></dt>
-<dd><p>Data will be saved to data_save_path from abstractions_config.json.
-Without save_permanent, it will still be present in ./output/ and can still be directly used next time without specifying the full path.
-Do not include path and suffix in saved_name.</p>
+<dd><p>Data will be saved to <code class="code docutils literal notranslate"><span class="pre">data_save_path</span></code> from <code class="code docutils literal notranslate"><span class="pre">abstractions_config.json</span></code>.
+Without save_permanent, it will still be present in <code class="code docutils literal notranslate"><span class="pre">./output/</span></code> and can still be directly used next time without specifying the full path.
+Do not include path and suffix in the <code class="code docutils literal notranslate"><span class="pre">saved_name</span></code> argument.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -336,9 +340,12 @@ Do not include path and suffix in saved_name.</p>
 </ul>
 </dd>
 </dl>
-<p>Examples:</p>
-<p>(for pretraining dataset stored in content field) data.set_key_fields(prompt_field_name=’content’)</p>
-<p>(for QA dataset with system prompt) data.set_key_fields(prompt_field_name=’instruction’, query_field_name=’input’, response_field_name=’output’)</p>
+<p>Example:
+.. code-block:: python</p>
+<blockquote>
+<div><p>data.set_key_fields(prompt_field_name=’content’) # for pretraining dataset stored in content field
+data.set_key_fields(prompt_field_name=’instruction’, query_field_name=’input’, response_field_name=’output’) # for QA dataset with system prompt</p>
+</div></blockquote>
 </dd></dl>
 
 <dl class="py method">
@@ -390,12 +397,16 @@ The data file will be a json file with the type of List[Dict[Hashable, Any]].</p
 <p>If collection_path is omitted, we will search for collection_name in directories specified in abstractions_config.json.
 When file_selection_func is supplied, files will be captured real-time, instead of only when initializing. Only json files will be captured.
 You may want to exclude undated.json using file_selection_func. That file is huge.</p>
-<dl class="simple">
-<dt>Example: DataFileCollection(collection_name=’histext_1826_to_2018’,</dt><dd><p>data_type=’pretrain’,
-collection_path = ‘../../shared_storage/our_datasets/HisText_Mar8_Guten_EEBO_PoL_IA10_unrefined/’,
+<p>Example:
+.. code-block:: python</p>
+<blockquote>
+<div><dl class="simple">
+<dt>DataFileCollection(collection_name=’histtext_1826_to_2018’,</dt><dd><p>data_type=’pretrain’,
+collection_path = ‘./dataset/dataset_text_sequence/’,
 file_selection_func = (lambda path: 1826 &lt;= int(path.split(‘/’)[-1][1:6]) &lt;= 2018))</p>
 </dd>
 </dl>
+</div></blockquote>
 </dd></dl>
 
 <dl class="py method">
@@ -445,9 +456,9 @@ All data files should be json files with the type of List[Dict[Hashable, Any]].<
 <dl class="py method">
 <dt class="sig sig-object py" id="src.abstractions.data.DataFileCollection.save_permanent">
 <span class="sig-name descname"><span class="pre">save_permanent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">saved_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">forced_rewrite</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.abstractions.data.DataFileCollection.save_permanent" title="Permalink to this definition">¶</a></dt>
-<dd><p>DataFileCollection will be saved to data_save_path from abstractions_config.json.
-Without save_permanent, it will still be present in ./output/ and can still be directly used next time without specifying the full path.
-Normally, you should not include full path and/or suffix in saved_name. If you do, it will be seen as a path. In this case, the collection may not be autodiscovered by abstractions for future use.</p>
+<dd><p>DataFileCollection will be saved to <code class="code docutils literal notranslate"><span class="pre">data_save_path</span></code> from <code class="code docutils literal notranslate"><span class="pre">abstractions_config.json</span></code>.
+Without save_permanent, it will still be present in <code class="code docutils literal notranslate"><span class="pre">./output/</span></code> and can still be directly used next time without specifying the full path.
+Normally, you should not include full path and/or suffix in <code class="code docutils literal notranslate"><span class="pre">saved_name</span></code>. If you do, it will be seen as a path. In this case, the collection may not be autodiscovered by abstractions for future use.</p>
 </dd></dl>
 
 <dl class="py method">

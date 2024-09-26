@@ -199,8 +199,8 @@
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="running.html">Running the benchmark</a></li>
-<li class="toctree-l1"><a class="reference internal" href="usage.html">Implementing your own experiment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="running.html">Quickstart: Running the benchmark</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Quickstart: Implementing your own experiment</a></li>
 <li class="toctree-l1 current has-children"><a class="reference internal" href="documentation.html">API reference</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of API reference</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
 <li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Model</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Data.html">Data</a></li>
@@ -271,8 +271,12 @@ this class is designed for efficient manipulation and loading of models. Feel fr
 </ul>
 </dd>
 </dl>
-<p>Example: Model(model_name = ‘gemma-2B_sft_19century’, is_instruct_finetuned = True, model_path = ‘./output/training_results/Gemma-2B_sft_19century/’)
-Example: Model(model_name = ‘gemma-2B_sft_19century’, is_instruct_finetuned = True)</p>
+<p>Examples:
+.. code-block:: python</p>
+<blockquote>
+<div><p>Model(model_name = ‘Gemma-2B_sft’, is_instruct_finetuned = True, model_path = ‘./output/training_results/Gemma-2B_sft/’)
+Model(model_name = ‘Gemma-2B_sft’, is_instruct_finetuned = True)</p>
+</div></blockquote>
 </dd></dl>
 
 <dl class="py method">
@@ -338,22 +342,6 @@ Example: Model(model_name = ‘gemma-2B_sft_19century’, is_instruct_finetuned 
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="src.abstractions.model.Model.format_dataset">
-<span class="sig-name descname"><span class="pre">format_dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">raw_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tokenizer</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.abstractions.model.Model.format_dataset" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="simple">
-<dt>rw:</dt><dd><p>{“chosen”:[x1, x2, …], “rejected”:[y1, y2, …]}</p>
-</dd>
-<dt>map to:</dt><dd><dl class="simple">
-<dt>{“input_ids_chosen”:[…],</dt><dd><p>“attention_mask_chosen”:[…],
-“input_ids_rejected”:[…],
-“input_ids_rejected”:[…]}</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
 <dt class="sig sig-object py" id="src.abstractions.model.Model.free_gpu_memory">
 <span class="sig-name descname"><span class="pre">free_gpu_memory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">destroy_model_parallel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.abstractions.model.Model.free_gpu_memory" title="Permalink to this definition">¶</a></dt>
 <dd><p>Remove the vllm model and free vllm cache. This should wipe out all GPU memory used by self.</p>
@@ -383,17 +371,17 @@ and</p>
 </dl>
 <p><em>backend</em>: Which backend to use for inference. Options listed below, in descreasing order of speed.</p>
 <blockquote>
-<div><p>‘vllm’ - Recommended. Faster than the rest by &gt;= an order of magnitude. Parallel inference using <cite>self.num_gpus</cite> GPUs.</p>
-<p>‘deepspeed’ - Parallel inference using <cite>self.num_gpus</cite> GPUs. The only backend supporting pretrain-style inference.</p>
-<p>‘serial’ - Serial inference.</p>
+<div><p><code class="code docutils literal notranslate"><span class="pre">vllm</span></code> - Recommended. Faster than the rest by &gt;= an order of magnitude. Parallel inference using <cite>self.num_gpus</cite> GPUs.</p>
+<p><code class="code docutils literal notranslate"><span class="pre">deepspeed</span></code> - Parallel inference using <cite>self.num_gpus</cite> GPUs. The only backend supporting pretrain-style inference.</p>
+<p><code class="code docutils literal notranslate"><span class="pre">serial</span></code> - Serial inference.</p>
 </div></blockquote>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="src.abstractions.model.Model.save_permanent">
 <span class="sig-name descname"><span class="pre">save_permanent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">saved_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">forced_rewrite</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.abstractions.model.Model.save_permanent" title="Permalink to this definition">¶</a></dt>
-<dd><p>Model will be saved to model_save_path from abstractions_config.json.
-Without save_permanent, the model will still be present in ./output/ and can still be directly used next time without specifying the full path.</p>
+<dd><p>Model will be saved to <code class="code docutils literal notranslate"><span class="pre">model_save_path</span></code> from <code class="code docutils literal notranslate"><span class="pre">abstractions_config.json</span></code>.
+Without save_permanent, the model will still be present in <code class="code docutils literal notranslate"><span class="pre">./output/</span></code> and can still be directly used next time without specifying the full path.</p>
 </dd></dl>
 
 </dd></dl>
@@ -462,7 +450,6 @@ Without save_permanent, the model will still be present in ./output/ and can sti
 <li><a class="reference internal" href="#src.abstractions.model.Model.deep_copy"><code class="docutils literal notranslate"><span class="pre">Model.deep_copy()</span></code></a></li>
 <li><a class="reference internal" href="#src.abstractions.model.Model.evaluate"><code class="docutils literal notranslate"><span class="pre">Model.evaluate()</span></code></a></li>
 <li><a class="reference internal" href="#src.abstractions.model.Model.finetune"><code class="docutils literal notranslate"><span class="pre">Model.finetune()</span></code></a></li>
-<li><a class="reference internal" href="#src.abstractions.model.Model.format_dataset"><code class="docutils literal notranslate"><span class="pre">Model.format_dataset()</span></code></a></li>
 <li><a class="reference internal" href="#src.abstractions.model.Model.free_gpu_memory"><code class="docutils literal notranslate"><span class="pre">Model.free_gpu_memory()</span></code></a></li>
 <li><a class="reference internal" href="#src.abstractions.model.Model.inference"><code class="docutils literal notranslate"><span class="pre">Model.inference()</span></code></a></li>
 <li><a class="reference internal" href="#src.abstractions.model.Model.save_permanent"><code class="docutils literal notranslate"><span class="pre">Model.save_permanent()</span></code></a></li>
