@@ -1,28 +1,22 @@
-from src.abstractions import Model, Data, DataFileCollection
-import os, sys
+from src.abstractions import Model, Data
+from src.download_models import download_all_models
 
-gemma7b = Model("gemma-7b_histext_20C_alpaca", is_instruct_finetuned=True)
-
-vec = gemma7b.evaluate()
-print("preference vector: ", vec)
-
-default_input = Data(
-    gemma7b.model_name + "_inference_input",
-    is_instruction_data=True,
-    data_path=os.path.join("output", "inference_results", "inf", "input.json"),
-)
-default_input.set_key_fields(
-    prompt_field_name="instruction", query_field_name="input"
-)  # specify which json field the pretraining text will be drawn from
+download_all_models(download_8B=True, download_70B=False)
+histllama = Model(model_name="8B-C021-instruct", is_instruct_finetuned=True)
 
 alpaca_data = Data("alpaca_gpt4_en", is_instruction_data=True)
 
-alpaca_output = gemma7b.inference(
-    alpaca_data, "gemma-7b-20C-infer-alpaca-sglang", backend="sglang"
-)  # saved to output/inference_results/yyy/yyy.json
-default_output = gemma7b.inference(
-    default_input, "gemma-7b-20C-infer-custom-deepspeed", backend="deepspeed"
-)  # saved to output/inference_results/xxx/xxx.json
-default_output2 = gemma7b.inference(
-    default_input, "gemma-7b-20C-infer-custom-serial", backend="serial"
-)  # saved to output/inference_results/xxx/xxx.json
+alpaca_output1 = histllama.inference(
+    alpaca_data, "8B-C021-infer-alpaca-sglang", backend="sglang"
+)  # saved to output/inference_results/
+
+alpaca_output2 = histllama.inference(
+    alpaca_data, "8B-C021-infer-custom-deepspeed", backend="deepspeed"
+)  # saved to output/inference_results/
+
+alpaca_output3 = histllama.inference(
+    alpaca_data, "8B-C021-infer-custom-serial", backend="serial"
+)  # saved to output/inference_results/
+
+vec = histllama.evaluate()
+print("Preference vector: ", vec)
