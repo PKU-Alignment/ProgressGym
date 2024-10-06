@@ -50,7 +50,7 @@ def inference_standalone(
             if hasattr(Model, "always_force_rewrite")
             else False
         ),
-        max_batch_size=16384,
+        max_batch_size=(2048 if backend == "sglang" else 262144),
     )
     print("Job finished.")
     conn.send(result_data.data_path)

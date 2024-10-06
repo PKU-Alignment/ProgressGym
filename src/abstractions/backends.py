@@ -274,7 +274,7 @@ def start_inference_backend(model_repoid_or_path: str,
             raise Exception("Failed to connect to backend after 20 minutes.")
         
         @sgl.function
-        def get_response(s, conversation: List, temperature: float = 0.2, max_tokens: int = 1024) -> str:
+        def get_response(s, conversation: List, temperature: float = 0.2, max_tokens: int = 256) -> str:
             
             for turn in conversation:
                 if turn['role'] == 'assistant':
@@ -289,7 +289,7 @@ def start_inference_backend(model_repoid_or_path: str,
             s += sgl.assistant_begin()
             s += sgl.gen("NA", max_tokens=max_tokens, return_logprob=False, temperature=temperature)
         
-        def sglang_process_batch(sample_dicts: List[dict], temperature: float = 0.2, max_tokens: int = 1024) -> List[dict]:
+        def sglang_process_batch(sample_dicts: List[dict], temperature: float = 0.2, max_tokens: int = 256) -> List[dict]:
             dialogues = dict_to_dialogue_list(sample_dicts)
             output = get_response.run_batch([
                 {
