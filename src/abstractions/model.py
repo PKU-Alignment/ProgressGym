@@ -705,10 +705,12 @@ class Model:
         if backend == "sglang" and os.environ.get("NO_SGLANG"):
             warnings.warn("sglang is disabled. Switching to vllm backend.")
             backend = "vllm"
-        
+
         if backend == "vllm" and os.environ.get("NO_VLLM"):
             if os.environ.get("NO_SGLANG"):
-                warnings.warn("vllm and sglang are disabled. Switching to deepspeed backend.")
+                warnings.warn(
+                    "vllm and sglang are disabled. Switching to deepspeed backend."
+                )
                 backend = "deepspeed"
             else:
                 warnings.warn("vllm is disabled. Switching to sglang backend.")

@@ -3,7 +3,7 @@ CONDA_OVERRIDE_CUDA=12.1 conda env create -y --file ./src/config/conda-recipe.ya
 conda create --name pa38-lf --clone pa38 --solver=classic
 conda activate pa38-lf
 conda run --no-capture-output -n pa38-lf pip3 install -r ./libs/llama_factory/requirements.txt
-conda run --no-capture-output -n pa38-lf pip3 install "transformers>=4.40.2" "triton>=2.0.0"
+conda run --no-capture-output -n pa38-lf pip3 install "transformers==4.40.2" "triton>=2.0.0" "vllm"
 conda activate pa38
 conda install yajl -y --solver=classic
 conda run --no-capture-output -n pa38 pip3 install -r ./src/config/requirements-pip.txt
