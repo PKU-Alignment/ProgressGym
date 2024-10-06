@@ -267,6 +267,15 @@ def start_inference_backend(
             sampling_params = SamplingParams(
                 temperature=temperature, top_p=0.95, max_tokens=max_tokens
             )
+            
+            if not os.environ.get("ALLOW_EMPTY_INPUT") or not eval(os.environ.get("ALLOW_EMPTY_INPUT")):
+                found = 0
+                for dic in sample_dicts:
+                    if not dic.get("input"):
+                        if not found:
+                            warnings.warn('In at least one sample, "input" field is missing or empty. Content from the "instruction" field will be copied to the "input" field. This behavior can be disabled by ALLOW_EMPTY_INPUT=1.')
+                            found = 1
+                        dic["input"] = dic["instruction"]
 
             prompts = [
                 fill_in_QA_template(
@@ -402,6 +411,15 @@ def start_inference_backend(
         def sglang_process_batch(
             sample_dicts: List[dict], temperature: float = 0.2, max_tokens: int = 256
         ) -> List[dict]:
+            if not os.environ.get("ALLOW_EMPTY_INPUT") or not eval(os.environ.get("ALLOW_EMPTY_INPUT")):
+                found = 0
+                for dic in sample_dicts:
+                    if not dic.get("input"):
+                        if not found:
+                            warnings.warn('In at least one sample, "input" field is missing or empty. Content from the "instruction" field will be copied to the "input" field. This behavior can be disabled by ALLOW_EMPTY_INPUT=1.')
+                            found = 1
+                        dic["input"] = dic["instruction"]
+            
             dialogues = dict_to_dialogue_list(sample_dicts)
             output = get_response.run_batch(
                 [
