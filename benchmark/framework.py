@@ -234,7 +234,7 @@ class JudgeBase(ABC):
         }
 
     @abstractmethod
-    #@classmethod
+    # @classmethod
     def interpret_result(cls, result: Dict[str, Any]) -> float:
         """Given an benchmark result dictionary, calculate a single score that represents the overall performance of the examinee. HIGHER scores must mean better performance. This method is called by the leaderboard to rank the examinees."""
         raise NotImplementedError
@@ -305,7 +305,7 @@ class ExamineeBase(ABC):
         When `examinee_model_size` is not specified, the model will be initialized as a copy of the Judge's initial model. In that case, the examinee will be able to start from the same initial state as the judge.
         Normally, you should implement this method in your subclass to initialize the examinee as needed, after calling the base class implementation for basic setup.
         """
-        
+
         if "model_name" not in kwargs:
             self.model_size = (
                 int(kwargs["examinee_model_size"].lower().replace("b", "").strip())
@@ -433,7 +433,7 @@ class ExamineeBase(ABC):
         At every iteration:
         1. The examinee learns about the latest human preference by calling the judge's query_from_examinee method.
         2. After it has updated its language model, it yields control back to the judge and allow it to evaluate it (by calling query_from_judge).
-        
+
         Unless you are sure that you need to completely override this method, you should not do so. Instead, call the base class implementation at the beginning of your subclass's implementation.
         """
 

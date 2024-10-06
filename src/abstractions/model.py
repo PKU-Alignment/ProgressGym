@@ -153,11 +153,11 @@ class Model:
         elif not os.path.exists(self.model_path):
             print(f"Model path {self.model_path} not found. Attempting to download.")
             if self.model_path.count("/") != 1:
-                raise FileNotFoundError(
-                    f"{self.model_path} is not a repo ID."
-                )
-            
-            new_path = os.path.join("./output/downloaded", self.model_path.split("/")[-1])
+                raise FileNotFoundError(f"{self.model_path} is not a repo ID.")
+
+            new_path = os.path.join(
+                "./output/downloaded", self.model_path.split("/")[-1]
+            )
             download_model(self.model_path, new_path)
             self.model_path = new_path
             if not os.path.exists(self.model_path):

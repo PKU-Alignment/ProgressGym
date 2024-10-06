@@ -224,7 +224,7 @@ def elicit_rw_preference(
 
     if backend != "deepspeed":
         raise ValueError("backend not recognized")
-        
+
     query_with_pred = judge.query_from_examinee(query)
     assert len(query_with_pred) == len(query), "Query and response length mismatch"
 

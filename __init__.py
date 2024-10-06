@@ -17,9 +17,9 @@ from src.abstractions.data import Data, DataFileCollection
 
 __all__ = [
     "run_benchmark",
-    "Model", 
-    "Data", 
-    "DataFileCollection", 
+    "Model",
+    "Data",
+    "DataFileCollection",
     "JudgeBase",
     "ExamineeBase",
     "DummyJudge",

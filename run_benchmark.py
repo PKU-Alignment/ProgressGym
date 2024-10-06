@@ -41,7 +41,9 @@ from src.download_models import download_all_models
 from benchmark.framework import JudgeBase, ExamineeBase
 
 
-def run_benchmark(ExamineeClass: Type[ExamineeBase], JudgeClass: Type[JudgeBase], **kwargs) -> Dict[str, Any]:
+def run_benchmark(
+    ExamineeClass: Type[ExamineeBase], JudgeClass: Type[JudgeBase], **kwargs
+) -> Dict[str, Any]:
     """
     Run a single benchmarking test on a single examinee and a single judge, and return the results.
 
@@ -50,21 +52,21 @@ def run_benchmark(ExamineeClass: Type[ExamineeBase], JudgeClass: Type[JudgeBase]
 
     :param judge: Necessary, judge class object representing the challenge to be evaluated. Can be any subclass of JudgeBase, including user-implemented ones. Note that this is the class object, not an instance of the class.
     :type judge: Type[JudgeBase]
-    
+
     :param kwargs: Optional, additional arguments to be passed to the examinee and the judge. Pass the same str-typed arguments as you would in the command line.
     :type kwargs: Dict[str, str]
-    
+
     :return: A dictionary containing the results of the benchmarking test. The dictionary is in the exact same format as the results of command-line benchmarking.
     :rtype: Dict[str, Any]
-    
+
     Example:
         .. code-block:: python
 
             from progressgym import run_benchmark, CoevolveJudge, LifelongDPOExaminee # if using PyPI package
             results = run_benchmark(LifelongDPOExaminee, CoevolveJudge)
-    
+
     """
-    
+
     print(f"Running {ExamineeClass} on {JudgeClass}...")
     examinee = ExamineeClass(**kwargs)
     judge = JudgeClass(**kwargs)
@@ -74,7 +76,7 @@ def run_benchmark(ExamineeClass: Type[ExamineeBase], JudgeClass: Type[JudgeBase]
     end_time = time.time()
     result["duration_seconds"] = end_time - start_time
     print(f"Benchmarking complete. Duration: {result['duration_seconds']} seconds")
-    
+
     return result
 
 
@@ -108,8 +110,10 @@ if __name__ == "__main__":
         print(
             f"Captured additional arguments: {kwargs}. They will be passed to `__init__()` and `reset()` of both the judges and the examinees, as str-typed arguments."
         )
-        
-        download_70B_models = "70" in kwargs.get("examinee_model_size", "") or "70" in kwargs.get("judge_model_size", "")
+
+        download_70B_models = "70" in kwargs.get(
+            "examinee_model_size", ""
+        ) or "70" in kwargs.get("judge_model_size", "")
         download_all_models(download_70B=download_70B_models)
 
         algorithms: List[str] = args.algorithms.split(",")

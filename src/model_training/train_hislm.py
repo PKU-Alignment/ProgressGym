@@ -156,8 +156,8 @@ def hyperparam_tuning(
 
 
 def run_training(dataset_dir: str, models_save_dir: str, num_gpus: int = None):
-    
-    max_dataset_size_MB = 3000 # originally 300
+
+    max_dataset_size_MB = 3000  # originally 300
 
     sub_datasets = sorted(
         [
@@ -176,7 +176,9 @@ def run_training(dataset_dir: str, models_save_dir: str, num_gpus: int = None):
             selected_size_MB = (
                 get_directory_size_bytes(selected_samples.collection_path) / 1024 / 1024
             )
-            print(f"Reusing stored. {selected_size_MB}MB (expected ~{max_dataset_size_MB}MB).")
+            print(
+                f"Reusing stored. {selected_size_MB}MB (expected ~{max_dataset_size_MB}MB)."
+            )
             centuries.append(selected_samples)
             continue
 
@@ -198,7 +200,10 @@ def run_training(dataset_dir: str, models_save_dir: str, num_gpus: int = None):
             print(f"Loading {sub} ({directory_size_MB}MB) with random sampling...")
             selected_samples = full_collection.transform(
                 lambda sample_list: random.sample(
-                    sample_list, int(max_dataset_size_MB / directory_size_MB * len(sample_list) + 0.5)
+                    sample_list,
+                    int(
+                        max_dataset_size_MB / directory_size_MB * len(sample_list) + 0.5
+                    ),
                 ),
                 f"{sub}_random_sample",
                 forced_rewrite=True,
@@ -207,7 +212,9 @@ def run_training(dataset_dir: str, models_save_dir: str, num_gpus: int = None):
             selected_size_MB = (
                 get_directory_size_bytes(selected_samples.collection_path) / 1024 / 1024
             )
-            print(f"Done. Selected {selected_size_MB}MB (expected ~{max_dataset_size_MB}MB).")
+            print(
+                f"Done. Selected {selected_size_MB}MB (expected ~{max_dataset_size_MB}MB)."
+            )
             centuries.append(selected_samples)
 
     # Calculate, store, and display the ratio of different data sources for each century
@@ -260,7 +267,7 @@ def run_training(dataset_dir: str, models_save_dir: str, num_gpus: int = None):
     # Start training
     print("Starting training...")
     base_model_list = [
-        Model('Meta-Llama-3-8B', False, num_gpus=num_gpus),
+        Model("Meta-Llama-3-8B", False, num_gpus=num_gpus),
         # Model('Llama-2-7b-hf', False, num_gpus=num_gpus),
         # Model('Llama-2-13b-hf', False, num_gpus=num_gpus),
         # Model("Meta-Llama-3-70B", False, num_gpus=num_gpus),
@@ -356,7 +363,13 @@ def run_training(dataset_dir: str, models_save_dir: str, num_gpus: int = None):
                 save_checkpoints=True,
                 perform_eval=True,
             )
-            tuned_model.save_permanent(os.path.join(models_save_dir, f'{century.collection_name}_{base_model.model_name}_pretrain'), forced_rewrite=True)
+            tuned_model.save_permanent(
+                os.path.join(
+                    models_save_dir,
+                    f"{century.collection_name}_{base_model.model_name}_pretrain",
+                ),
+                forced_rewrite=True,
+            )
 
             sft_todolist.append((tuned_model, century))
 
@@ -373,5 +386,11 @@ def run_training(dataset_dir: str, models_save_dir: str, num_gpus: int = None):
                 save_checkpoints=False,
                 perform_eval=False,
             )
-            
-            instruct_model.save_permanent(os.path.join(models_save_dir, f'{century.collection_name}_{base_model.model_name}_instruct'), forced_rewrite=True)
+
+            instruct_model.save_permanent(
+                os.path.join(
+                    models_save_dir,
+                    f"{century.collection_name}_{base_model.model_name}_instruct",
+                ),
+                forced_rewrite=True,
+            )
