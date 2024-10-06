@@ -88,7 +88,7 @@ class Model:
         is_instruct_finetuned: bool = True,
         model_path: Optional[str] = None,
         num_gpus: int = None,
-        template_type: str = "alpaca",
+        template_type: Literal["auto", "alpaca", "mistral"] = "alpaca",
     ):
         """
         Initialize. 
@@ -105,8 +105,8 @@ class Model:
         :param num_gpus: Number of GPUs to use for parallel finetuning/inference. Default to the total number of gpus on the machine.
         :type num_gpus: Optional[int] = None
 
-        :param template_type: The type of template to use
-        :type template_type: str = "alpaca"
+        :param template_type: The type of template to use, which can be "auto", "alpaca", or "mistral". If "auto", the template type is inferred from the model's config file.
+        :type template_type: Literal["auto", "alpaca", "mistral"] = "auto"
         
         Examples:
             .. code-block:: python
@@ -311,6 +311,9 @@ class Model:
         :return: Returns a Model instance with name {result_model_name}, which is the result of the finetuning.
         :rtype: Model. 
         """
+        if self.template_type == "auto":
+            raise ValueError("Finetuning is not supported for models with auto template type.")
+        
         if stage == "pretrain":
             assert (
                 data.data_type == "pretrain"
@@ -508,6 +511,9 @@ class Model:
     ):
         if backend != "deepspeed":
             raise NotImplementedError("Only deepspeed backend is supported for RLHF.")
+        
+        if self.template_type == "auto":
+            raise ValueError("RLHF is not supported for models with auto template type.")
 
         rw_results = "./" + os.path.join(
             "output",

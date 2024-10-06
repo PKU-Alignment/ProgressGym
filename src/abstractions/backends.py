@@ -171,6 +171,9 @@ def start_inference_backend(model_repoid_or_path: str,
     if backend_type == 'vllm':
         
         LLM, SamplingParams, destroy_model_parallel = import_from_vllm()
+        
+        if template_type == 'auto':
+            template_type = model_repoid_or_path
 
         parallel_size = num_gpus
         if os.environ.get("CUDA_VISIBLE_DEVICES"):
