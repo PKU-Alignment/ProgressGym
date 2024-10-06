@@ -13,7 +13,7 @@ if __name__ == "__main__":
     #     template_type="mistral",
     # )
 
-    alpaca_data = Data("alpaca_gpt4_en", data_type="sft")
+    alpaca_data = Data("alpaca_gpt4_data_en", data_type="sft")
 
     # For custom datasets (must be local), their data fields need to be registered before used in inference, e.g.:
     # custom_data.set_key_fields(

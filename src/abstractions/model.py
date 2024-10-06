@@ -685,11 +685,11 @@ class Model:
 
         *backend*: Which backend to use for inference. Options listed below, in descreasing order of speed.
 
-             :code:`sglang` - Fastest. Parallel inference using `self.num_gpus` GPUs. Faster than `deepspeed` and `serial` by >= an order of magnitude.
+             :code:`sglang` - Recommended. Parallel inference using `self.num_gpus` GPUs. Faster than `deepspeed` and `serial` by >= an order of magnitude.
 
-             :code:`vllm` - Second to fastest. Parallel inference using `self.num_gpus` GPUs. Faster than `deepspeed` and `serial` by >= an order of magnitude.
+             :code:`vllm` - Recommended. Parallel inference using `self.num_gpus` GPUs. Faster than `deepspeed` and `serial` by >= an order of magnitude.
 
-             :code:`deepspeed` - Parallel inference using `self.num_gpus` GPUs. The only backend supporting pretrain-style inference.
+             :code:`deepspeed` - Slower parallel inference using `self.num_gpus` GPUs. The only backend supporting pretrain-style inference.
 
              :code:`serial` - Serial inference.
         """
@@ -705,6 +705,14 @@ class Model:
         if backend == "sglang" and os.environ.get("NO_SGLANG"):
             warnings.warn("sglang is disabled. Switching to vllm backend.")
             backend = "vllm"
+        
+        if backend == "vllm" and os.environ.get("NO_VLLM"):
+            if os.environ.get("NO_SGLANG"):
+                warnings.warn("vllm and sglang are disabled. Switching to deepspeed backend.")
+                backend = "deepspeed"
+            else:
+                warnings.warn("vllm is disabled. Switching to sglang backend.")
+                backend = "sglang"
 
         if input_is_data:
             assert (
