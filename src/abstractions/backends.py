@@ -1,6 +1,14 @@
+# Edit flashinfer cascade.py to make it compatible with Python 3.8
+import os
+path = os.path.join(os.environ["CONDA_PREFIX"], "lib/python3.8/site-packages/flashinfer/cascade.py")
+with open(path, "r") as f:
+    content = f.read()
+content = content.replace("list[", "List[").replace("import Optional", "import List, Optional")
+with open(path, "w") as f:
+    f.write(content)
+
 import torch
 import time
-import os
 import pwd
 from typing import List, Tuple, Literal, Union, Dict, Callable, Optional
 import multiprocessing
@@ -227,13 +235,13 @@ def start_inference_backend(model_repoid_or_path: str,
             assert model_size is not None
             
             if model_size <= 10:
-                args = ['python', '-m', 'sglang.launch_server', '--port', f'{port}', f'--dp', f'{GPU_COUNT}', '--model', model_repoid_or_path, '--mem-fraction-static', f'{frac_static}', '--chunked-prefill-size', f'{prefill_size}', '--trust-remote-code', '--schedule-conservativeness', '0.3']
+                args = ['python', '-m', 'sglang.launch_server', '--port', f'{port}', f'--dp', f'{num_gpus}', '--model', model_repoid_or_path, '--mem-fraction-static', f'{frac_static}', '--chunked-prefill-size', f'{prefill_size}', '--trust-remote-code', '--schedule-conservativeness', '0.3']
             
             else:
                 min_gpus_per_instance = (2 if model_size <= 30 else 
                                         4 if model_size <= 80 else 8)
-                assert GPU_COUNT % min_gpus_per_instance == 0
-                args = ['python', '-m', 'sglang.launch_server', '--port', f'{port}', f'--tp', f'{min_gpus_per_instance}', f'--dp', f'{GPU_COUNT//min_gpus_per_instance}', '--model', model_repoid_or_path, '--mem-fraction-static', f'{frac_static}', '--chunked-prefill-size', f'{prefill_size}', '--trust-remote-code']
+                assert num_gpus % min_gpus_per_instance == 0
+                args = ['python', '-m', 'sglang.launch_server', '--port', f'{port}', f'--tp', f'{min_gpus_per_instance}', f'--dp', f'{num_gpus//min_gpus_per_instance}', '--model', model_repoid_or_path, '--mem-fraction-static', f'{frac_static}', '--chunked-prefill-size', f'{prefill_size}', '--trust-remote-code']
             
             #if 'int4' not in model_repoid_or_path.lower():
             #    args += ['--quantization', 'fp8']
