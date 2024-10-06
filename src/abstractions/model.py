@@ -19,8 +19,15 @@ import shutil
 import gc
 from src.abstractions.configs.templates_configs import *
 import multiprocessing
+from src.download_models import download_model
 
-from src.abstractions.backends import start_inference_backend, execute, escape, fill_in_QA_template, restart_ray_cluster
+from src.abstractions.backends import (
+    start_inference_backend,
+    execute,
+    escape,
+    fill_in_QA_template,
+    restart_ray_cluster,
+)
 
 
 # inference in a separate process
@@ -36,7 +43,13 @@ def inference_standalone(
     backend_type: Literal["sglang", "vllm"],
     conn: multiprocessing.connection.Connection,
 ):
-    backend, process_batch = start_inference_backend(model_path, backend_type, purpose='responses', num_gpus=num_gpus, template_type=template_type)
+    backend, process_batch = start_inference_backend(
+        model_path,
+        backend_type,
+        purpose="responses",
+        num_gpus=num_gpus,
+        template_type=template_type,
+    )
 
     data = Data(data_name="temporary", data_type="sft", data_path=data_path)
     data.set_key_fields(
@@ -86,13 +99,13 @@ class Model:
         self,
         model_name: str,
         is_instruct_finetuned: bool = True,
-        model_path: Optional[str] = None,
+        model_path_or_repoid: Optional[str] = None,
         num_gpus: int = None,
         template_type: Literal["auto", "alpaca", "mistral"] = "alpaca",
     ):
         """
-        Initialize. 
-        
+        Initialize.
+
         :param model_name: The name of the model
         :type model_name: str
 
@@ -107,25 +120,25 @@ class Model:
 
         :param template_type: The type of template to use, which can be "auto", "alpaca", or "mistral". If "auto", the template type is inferred from the model's config file.
         :type template_type: Literal["auto", "alpaca", "mistral"] = "auto"
-        
+
         Examples:
             .. code-block:: python
-            
+
                 Model(model_name = 'Gemma-2B_sft', is_instruct_finetuned = True, model_path = './output/training_results/Gemma-2B_sft/')
                 Model(model_name = 'Gemma-2B_sft', is_instruct_finetuned = True)
-        
+
         """
         if not num_gpus:
             num_gpus = torch.cuda.device_count()
 
         self.num_gpus = num_gpus
         self.model_name = model_name
-        self.model_path = model_path
+        self.model_path = model_path_or_repoid
         self.is_instruct_finetuned = is_instruct_finetuned
         self.template_type = template_type
 
         # if model_path is not specified, look for it in the paths specified in abstractions_config.json
-        if not model_path:
+        if not self.model_path:
             for search_path in model_search_paths:
                 if os.path.exists(os.path.join(search_path, model_name)):
                     print(
@@ -138,7 +151,17 @@ class Model:
         if self.model_path is None:
             raise FileNotFoundError(f"Model {model_name} not found.")
         elif not os.path.exists(self.model_path):
-            raise FileNotFoundError(f"The model path {self.model_path} doesn't exist.")
+            print(f"Model path {self.model_path} not found. Attempting to download.")
+            if self.model_path.count("/") != 1:
+                raise FileNotFoundError(
+                    f"{self.model_path} is not a repo ID."
+                )
+            
+            new_path = os.path.join("./output/downloaded", self.model_path.split("/")[-1])
+            download_model(self.model_path, new_path)
+            self.model_path = new_path
+            if not os.path.exists(self.model_path):
+                raise FileNotFoundError(f"Download failed for {self.model_path}.")
 
         if model_name in Model.name2model:
             Model.name2model[model_name].append(self)
@@ -154,7 +177,7 @@ class Model:
     ) -> "Model":
         """
         Returns a deep copy of the current Model instance, with either name suffix or full name of the resulting copy supplied.
-        
+
         :param dest_suffix: The suffix for the destination
         :type dest_suffix: Optional[str] = None
 
@@ -309,11 +332,13 @@ class Model:
         :type backend: Literal["deepspeed"] = "deepspeed"
 
         :return: Returns a Model instance with name {result_model_name}, which is the result of the finetuning.
-        :rtype: Model. 
+        :rtype: Model.
         """
         if self.template_type == "auto":
-            raise ValueError("Finetuning is not supported for models with auto template type.")
-        
+            raise ValueError(
+                "Finetuning is not supported for models with auto template type."
+            )
+
         if stage == "pretrain":
             assert (
                 data.data_type == "pretrain"
@@ -511,9 +536,11 @@ class Model:
     ):
         if backend != "deepspeed":
             raise NotImplementedError("Only deepspeed backend is supported for RLHF.")
-        
+
         if self.template_type == "auto":
-            raise ValueError("RLHF is not supported for models with auto template type.")
+            raise ValueError(
+                "RLHF is not supported for models with auto template type."
+            )
 
         rw_results = "./" + os.path.join(
             "output",
@@ -531,7 +558,9 @@ class Model:
         if not os.environ.get("CUDA_VISIBLE_DEVICES"):
             deepspeed_args += f"  --num_gpus={self.num_gpus}"
         else:
-            deepspeed_args += f'  --include=localhost:{os.environ["CUDA_VISIBLE_DEVICES"].strip()}'
+            deepspeed_args += (
+                f'  --include=localhost:{os.environ["CUDA_VISIBLE_DEVICES"].strip()}'
+            )
 
         cmd = bash_command_for_rw % (
             "pa38-lf" if num_nodes == 1 else "multinode",  # conda environment
@@ -542,18 +571,12 @@ class Model:
             rw_data.data_name,
             self.template_type,
             rw_results,
-            2
-            ** max(
-                0, 3 + batch_size_multiplier_log2
-            ),  # per_device_train_batch_size
-            2
-            ** max(0, 4 + batch_size_multiplier_log2),  # per_device_eval_batch_size
+            2 ** max(0, 3 + batch_size_multiplier_log2),  # per_device_train_batch_size
+            2 ** max(0, 4 + batch_size_multiplier_log2),  # per_device_eval_batch_size
             2
             ** max(
                 0,
-                4
-                - max(0, 3 + batch_size_multiplier_log2)
-                + grad_accu_multiplier_log2,
+                4 - max(0, 3 + batch_size_multiplier_log2) + grad_accu_multiplier_log2,
             ),  # gradient_accumulation_steps
             "polynomial",  # lr_scheduler_type
             (
@@ -597,18 +620,12 @@ class Model:
             ppo_data.data_name,
             self.template_type,
             the_path,
-            2
-            ** max(
-                0, 1 + batch_size_multiplier_log2
-            ),  # per_device_train_batch_size
-            2
-            ** max(0, 2 + batch_size_multiplier_log2),  # per_device_eval_batch_size
+            2 ** max(0, 1 + batch_size_multiplier_log2),  # per_device_train_batch_size
+            2 ** max(0, 2 + batch_size_multiplier_log2),  # per_device_eval_batch_size
             2
             ** max(
                 0,
-                2
-                - max(0, 1 + batch_size_multiplier_log2)
-                + grad_accu_multiplier_log2,
+                2 - max(0, 1 + batch_size_multiplier_log2) + grad_accu_multiplier_log2,
             ),  # gradient_accumulation_steps
             epochs / 10,
         )
@@ -646,7 +663,7 @@ class Model:
         temperature=0.0,
     ) -> Union[Data, List[Dict[str, str]]]:
         """Performance inference on a dataset (currently only instruction datasets are tested, with the same format as SFT datasets),
-        and 
+        and
 
         :param data: The data to be used. It can be either a Data object or a list of dictionaries with string keys and values. The data argument can also be a List[Dict[str,str]] where each Dict containing two fields "instruction" and (optionally) "input". In this case, a List[Dict[str, str]] will be returned.
         :type data: Union[Data, List[Dict[str, str]]]
@@ -667,7 +684,7 @@ class Model:
         :rtype: Union[Data, List[Dict[str, str]]].
 
         *backend*: Which backend to use for inference. Options listed below, in descreasing order of speed.
-        
+
              :code:`sglang` - Fastest. Parallel inference using `self.num_gpus` GPUs. Faster than `deepspeed` and `serial` by >= an order of magnitude.
 
              :code:`vllm` - Second to fastest. Parallel inference using `self.num_gpus` GPUs. Faster than `deepspeed` and `serial` by >= an order of magnitude.
@@ -994,7 +1011,9 @@ class Model:
 
         print("evaluation query begins")
         evaluation_output = self.inference(
-            evaluation_input, "evaluation_output_mc_" + self.model_name, backend="sglang"
+            evaluation_input,
+            "evaluation_output_mc_" + self.model_name,
+            backend="sglang",
         )
         print("answers at", evaluation_output.data_path)
         with open(evaluation_output.data_path, "r") as f:
