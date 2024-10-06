@@ -5,174 +5,58 @@ import src.evaluation.utils as eval_utils
 from typing import Dict, Any, Literal, Optional, List, Union, Callable
 import os
 import json
-import re
 import torch
 import warnings
 import src.text_writer as tw
 import random
 import numpy as np
-from tqdm import tqdm
 from transformers import (
     AutoTokenizer,
     AutoModelForCausalLM,
-    AutoModelForSequenceClassification,
-    pipeline,
 )
 import numpy as np
-from string import Template
-
-from datasets import load_dataset, Dataset
-from trl import (
-    RewardTrainer,
-    PPOConfig,
-    PPOTrainer,
-    RewardConfig,
-    AutoModelForCausalLMWithValueHead,
-)
-
 import shutil
 import gc
-import subprocess
-import ray
-
 from src.abstractions.configs.templates_configs import *
-import importlib
-import torch.distributed as dist
-
 import multiprocessing
+from src.download_models import download_model
 
-# create output directories
-os.makedirs("./output/benchmark_results", exist_ok=True)
-os.makedirs("./output/datasets", exist_ok=True)
-os.makedirs("./output/evaluation_results", exist_ok=True)
-os.makedirs("./output/inference_results", exist_ok=True)
-os.makedirs("./output/training_results", exist_ok=True)
-os.makedirs("./output/rlhf_results", exist_ok=True)
-os.makedirs("./output/merged_lora_results", exist_ok=True)
-
-
-# dynamically import vllm
-def import_from_vllm() -> tuple:
-    vllm_lib = importlib.import_module("vllm")
-    importlib.reload(vllm_lib)
-    LLM, SamplingParams = vllm_lib.LLM, vllm_lib.SamplingParams
-
-    try:
-        # For vllm > 0.4.0.post1
-        parallel_state_module = importlib.import_module(
-            "vllm.distributed.parallel_state"
-        )
-    except ModuleNotFoundError:
-        # For vllm == 0.4.0.post1
-        parallel_state_module = importlib.import_module(
-            "vllm.model_executor.parallel_utils.parallel_state"
-        )
-
-    destroy_model_parallel = getattr(parallel_state_module, "destroy_model_parallel")
-    return LLM, SamplingParams, destroy_model_parallel
+from src.abstractions.backends import (
+    start_inference_backend,
+    execute,
+    escape,
+    fill_in_QA_template,
+    restart_ray_cluster,
+)
 
 
-# escape spaces in paths
-def escape(path: str):
-    return path.strip().replace(" ", "\\ ")
-
-
-# executes a command in terminal
-def execute(command: str):
-    # Print the current process ID
-    print(f"Parent process ID: {os.getpid()}")
-    print(f'Parent PATH: {os.environ["PATH"]}')
-    subprocess.run(command, shell=True, check=True)
-    print(f"End subprocess run.")
-
-
-port_num = 6495
-
-
-# Run the ray stop command to restart Ray cluster, in order to free up GPU memory
-def restart_ray_cluster(stop_only: bool = False):
-    try:
-        ray.shutdown()
-        subprocess.run(["ray", "stop"], check=True)
-        print("Successfully stopped all Ray clusters.")
-    except subprocess.CalledProcessError as e:
-        print(f"Error stopping Ray clusters: {e}")
-
-    if not stop_only:
-        global port_num
-        port_num -= 1
-        result = subprocess.run(
-            ["ray", "start", "--head", f"--port={port_num}"],
-            check=True,
-            capture_output=True,
-            text=True,
-        )
-        addr = (
-            [line for line in result.stdout.split("\n") if "Local node IP:" in line][0]
-            .strip()
-            .split(" ")[-1]
-        )
-        os.environ["RAY_ADDRESS"] = f"ray://{addr}:{port_num}"
-        print(f"Ray address set to {os.environ['RAY_ADDRESS']}.")
-        print("Successfully re-started the Ray cluster.")
-
-    dist.init_process_group()
-
-
-# vllm inference in a separate process
-def vllm_inference_standalone(
+# inference in a separate process
+def inference_standalone(
     data_path: str,
     result_data_name: str,
     model_path: str,
-    template_type: str,
+    template_type: Literal["auto", "alpaca", "mistral"],
     num_gpus: int,
     prompt_field_name: str,
     query_field_name: str,
     temperature: float,
+    backend_type: Literal["sglang", "vllm"],
     conn: multiprocessing.connection.Connection,
 ):
-    LLM, SamplingParams, destroy_model_parallel = import_from_vllm()
-
-    parallel_size = num_gpus
-    if os.environ.get("CUDA_VISIBLE_DEVICES"):
-        parallel_size = min(
-            parallel_size, len(os.environ["CUDA_VISIBLE_DEVICES"].split(","))
-        )
-
-    # truncate parallel_size to the nearest power of 2
-    parallel_size = 2 ** int(math.log2(parallel_size) + 1e-7)
-    print(f"vllm tensor_parallel_size = {parallel_size}")
-
-    vllm_model = LLM(
-        model=model_path,
-        tensor_parallel_size=parallel_size,
-        gpu_memory_utilization=0.75,
+    backend, process_batch = start_inference_backend(
+        model_path,
+        backend_type,
+        purpose="responses",
+        num_gpus=num_gpus,
+        template_type=template_type,
     )
-
-    def vllm_process_batch(sample_dicts: List[dict]) -> List[dict]:
-        sampling_params = SamplingParams(temperature=0.2, top_p=0.95, max_tokens=1024)
-        prompts = [
-            fill_in_QA_template(
-                dic["instruction"], dic["input"], template_type=template_type
-            )
-            for dic in sample_dicts
-        ]
-        outputs = vllm_model.generate(prompts, sampling_params)
-        assert len(outputs) == len(sample_dicts)
-
-        for dic, output in zip(sample_dicts, outputs):
-            prompt = output.prompt
-            generated_text = output.outputs[0].text
-            dic["predict"] = generated_text
-
-        return sample_dicts
 
     data = Data(data_name="temporary", data_type="sft", data_path=data_path)
     data.set_key_fields(
         prompt_field_name=prompt_field_name, query_field_name=query_field_name
     )
     result_data = data.transform(
-        transformation=vllm_process_batch,
+        transformation=process_batch,
         result_data_name=result_data_name,
         forced_rewrite=(
             Model.always_force_rewrite
@@ -183,48 +67,6 @@ def vllm_inference_standalone(
     )
     print("Job finished.")
     conn.send(result_data.data_path)
-
-
-def fill_in_QA_template(
-    instruction: str,
-    input: str = "",
-    suffix: str = "",
-    template_type: Literal["alpaca", "mistral"] = "alpaca",
-) -> str:
-    """Provided with a task instruction and (optionally) supplementary input, fill them into a QA template and return the resulting prompt."""
-
-    instruction = instruction.strip()
-    input = input.strip()
-
-    if template_type == "alpaca":
-        if suffix:
-            warnings.warn(f"Suffix not supported in alpaca template. Ignoring suffix.")
-
-        input_ins = "### Instruction:\n" + instruction + "\n\n"
-        if input != "":
-            input_instruction = "Below is an instruction that describes a task, paired with an input that provides further context. Write a response that appropriately completes the request.\n\n"
-            input_in = "### Input:\n" + input + "\n\n"
-            input_full = input_instruction + input_ins + input_in + "### Response:\n"
-        else:
-            input_instruction = "Below is an instruction that describes a task. Write a response that appropriately completes the request.\n\n"
-            input_full = input_instruction + input_ins + "### Response:\n"
-
-    elif template_type == "mistral":
-        input_full = f"""<s>[INST] {instruction}"""
-        if input:
-            input_full += f"""\n\nInput Text: \"\"\"
-{input.strip()}
-\"\"\""""
-        if suffix:
-            input_full += f"""\n\n{suffix}"""
-        input_full += """ [/INST]"""
-
-    else:
-        raise NameError(
-            f'Template type {template_type} not recognized. Options are "alpaca" and "mistral".'
-        )
-
-    return input_full
 
 
 class Model:
@@ -257,13 +99,13 @@ class Model:
         self,
         model_name: str,
         is_instruct_finetuned: bool = True,
-        model_path: Optional[str] = None,
+        model_path_or_repoid: Optional[str] = None,
         num_gpus: int = None,
-        template_type: str = "alpaca",
+        template_type: Literal["auto", "alpaca", "mistral"] = "alpaca",
     ):
         """
-        Initialize. 
-        
+        Initialize.
+
         :param model_name: The name of the model
         :type model_name: str
 
@@ -276,27 +118,27 @@ class Model:
         :param num_gpus: Number of GPUs to use for parallel finetuning/inference. Default to the total number of gpus on the machine.
         :type num_gpus: Optional[int] = None
 
-        :param template_type: The type of template to use
-        :type template_type: str = "alpaca"
-        
+        :param template_type: The type of template to use, which can be "auto", "alpaca", or "mistral". If "auto", the template type is inferred from the model's config file.
+        :type template_type: Literal["auto", "alpaca", "mistral"] = "auto"
+
         Examples:
             .. code-block:: python
-            
+
                 Model(model_name = 'Gemma-2B_sft', is_instruct_finetuned = True, model_path = './output/training_results/Gemma-2B_sft/')
                 Model(model_name = 'Gemma-2B_sft', is_instruct_finetuned = True)
-        
+
         """
         if not num_gpus:
             num_gpus = torch.cuda.device_count()
 
         self.num_gpus = num_gpus
         self.model_name = model_name
-        self.model_path = model_path
+        self.model_path = model_path_or_repoid
         self.is_instruct_finetuned = is_instruct_finetuned
         self.template_type = template_type
 
         # if model_path is not specified, look for it in the paths specified in abstractions_config.json
-        if not model_path:
+        if not self.model_path:
             for search_path in model_search_paths:
                 if os.path.exists(os.path.join(search_path, model_name)):
                     print(
@@ -309,7 +151,17 @@ class Model:
         if self.model_path is None:
             raise FileNotFoundError(f"Model {model_name} not found.")
         elif not os.path.exists(self.model_path):
-            raise FileNotFoundError(f"The model path {self.model_path} doesn't exist.")
+            print(f"Model path {self.model_path} not found. Attempting to download.")
+            if self.model_path.count("/") != 1:
+                raise FileNotFoundError(f"{self.model_path} is not a repo ID.")
+
+            new_path = os.path.join(
+                "./output/downloaded", self.model_path.split("/")[-1]
+            )
+            download_model(self.model_path, new_path)
+            self.model_path = new_path
+            if not os.path.exists(self.model_path):
+                raise FileNotFoundError(f"Download failed for {self.model_path}.")
 
         if model_name in Model.name2model:
             Model.name2model[model_name].append(self)
@@ -325,7 +177,7 @@ class Model:
     ) -> "Model":
         """
         Returns a deep copy of the current Model instance, with either name suffix or full name of the resulting copy supplied.
-        
+
         :param dest_suffix: The suffix for the destination
         :type dest_suffix: Optional[str] = None
 
@@ -426,7 +278,7 @@ class Model:
         save_checkpoints: bool = True,
         perform_eval: bool = True,
         ppo_data: Data = None,
-        backend: Literal["deepspeed", "trl"] = "deepspeed",
+        backend: Literal["deepspeed"] = "deepspeed",
     ) -> "Model":
         """
         Out-of-place finetuning. Doesn't update self.
@@ -476,12 +328,17 @@ class Model:
         :param ppo_data: The data for PPO. `ppo_data` is only used when stage is 'rlhf', and defaults to `data`.
         :type ppo_data: Optional[Data] = None
 
-        :param backend: The backend to use. It can be "deepspeed" or "trl".
-        :type backend: Literal["deepspeed", "trl"] = "deepspeed"
+        :param backend: The backend to use. Currently only "deepspeed" is supported.
+        :type backend: Literal["deepspeed"] = "deepspeed"
 
         :return: Returns a Model instance with name {result_model_name}, which is the result of the finetuning.
-        :rtype: Model. 
+        :rtype: Model.
         """
+        if self.template_type == "auto":
+            raise ValueError(
+                "Finetuning is not supported for models with auto template type."
+            )
+
         if stage == "pretrain":
             assert (
                 data.data_type == "pretrain"
@@ -528,8 +385,6 @@ class Model:
         )
 
         if stage == "rlhf":
-            if backend == "trl":
-                warnings.warn("TRL-based RLHF has not been extensively tested yet.")
             warnings.warn("Fine-grained training parameters are ignored for RLHF.")
 
             ppo_data = ppo_data or data.copy()
@@ -548,7 +403,7 @@ class Model:
             if algo == "lora":
                 raise NotImplementedError("LORA finetuning not implemented yet.")
             if backend == "trl":
-                raise NotImplementedError("TRL finetuning not implemented yet.")
+                raise NotImplementedError("TRL backend is no longer supported.")
 
             batch_size_multiplier_log2 -= (
                 2 if stage == "dpo" else 0
@@ -677,8 +532,15 @@ class Model:
         num_nodes: int = 1,
         train_rw: bool = True,
         use_lora: bool = False,
-        backend: Literal["deepspeed", "trl"] = "deepspeed",
+        backend: Literal["deepspeed"] = "deepspeed",
     ):
+        if backend != "deepspeed":
+            raise NotImplementedError("Only deepspeed backend is supported for RLHF.")
+
+        if self.template_type == "auto":
+            raise ValueError(
+                "RLHF is not supported for models with auto template type."
+            )
 
         rw_results = "./" + os.path.join(
             "output",
@@ -688,260 +550,101 @@ class Model:
         rw_model_copied = self.deep_copy(dest_suffix="_reward_" + code)
         rw_path, rw_name = rw_model_copied.model_path, rw_model_copied.model_name
 
-        if backend == "deepspeed":
-            deepspeed_args = (
-                f"--num_nodes={num_nodes}  --master_addr={multinode_master_addr}  --hostfile=./src/abstractions/configs/multinode/hostfile_{num_nodes}nodes"
-                if num_nodes > 1
-                else ""
-            )  # multinode training settings
-            if not os.environ.get("CUDA_VISIBLE_DEVICES"):
-                deepspeed_args += f"  --num_gpus={self.num_gpus}"
-            else:
-                deepspeed_args += f'  --include=localhost:{os.environ["CUDA_VISIBLE_DEVICES"].strip()}'
-
-            cmd = bash_command_for_rw % (
-                "pa38-lf" if num_nodes == 1 else "multinode",  # conda environment
-                deepspeed_args,  # deepspeed settings
-                # './src/abstractions/configs/LF_examples/deepspeed/ds_z2_config.json',
-                "./src/abstractions/configs/LF_examples/full_multi_gpu/ds_z3_config.json",
-                rw_path,
-                rw_data.data_name,
-                self.template_type,
-                rw_results,
-                2
-                ** max(
-                    0, 3 + batch_size_multiplier_log2
-                ),  # per_device_train_batch_size
-                2
-                ** max(0, 4 + batch_size_multiplier_log2),  # per_device_eval_batch_size
-                2
-                ** max(
-                    0,
-                    4
-                    - max(0, 3 + batch_size_multiplier_log2)
-                    + grad_accu_multiplier_log2,
-                ),  # gradient_accumulation_steps
-                "polynomial",  # lr_scheduler_type
-                (
-                    f'\n    --lr_scheduler_kwargs \'{json.dumps({"lr_end": 1e-8, "power": 3})}\' \\'
-                    if True
-                    else ""
-                ),  # lr_scheduler_kwargs
-                epochs * 1.8,
+        deepspeed_args = (
+            f"--num_nodes={num_nodes}  --master_addr={multinode_master_addr}  --hostfile=./src/abstractions/configs/multinode/hostfile_{num_nodes}nodes"
+            if num_nodes > 1
+            else ""
+        )  # multinode training settings
+        if not os.environ.get("CUDA_VISIBLE_DEVICES"):
+            deepspeed_args += f"  --num_gpus={self.num_gpus}"
+        else:
+            deepspeed_args += (
+                f'  --include=localhost:{os.environ["CUDA_VISIBLE_DEVICES"].strip()}'
             )
-            print(cmd)
-            if os.environ.get("CUDA_VISIBLE_DEVICES"):
-                # if CUDA_VISIBLE_DEVICES is set, we need to unset it before running the command, and restore it afterwards
-                # this is because deepspeed is incompatible with CUDA_VISIBLE_DEVICES, and we have already set the --include flag
-                # to specify the GPUs to use (based on CUDA_VISIBLE_DEVICES)
-                cuda_visible_devices = os.environ["CUDA_VISIBLE_DEVICES"]
-                del os.environ["CUDA_VISIBLE_DEVICES"]
-                try:
-                    execute(cmd)
-                finally:
-                    os.environ["CUDA_VISIBLE_DEVICES"] = cuda_visible_devices
-            else:
+
+        cmd = bash_command_for_rw % (
+            "pa38-lf" if num_nodes == 1 else "multinode",  # conda environment
+            deepspeed_args,  # deepspeed settings
+            # './src/abstractions/configs/LF_examples/deepspeed/ds_z2_config.json',
+            "./src/abstractions/configs/LF_examples/full_multi_gpu/ds_z3_config.json",
+            rw_path,
+            rw_data.data_name,
+            self.template_type,
+            rw_results,
+            2 ** max(0, 3 + batch_size_multiplier_log2),  # per_device_train_batch_size
+            2 ** max(0, 4 + batch_size_multiplier_log2),  # per_device_eval_batch_size
+            2
+            ** max(
+                0,
+                4 - max(0, 3 + batch_size_multiplier_log2) + grad_accu_multiplier_log2,
+            ),  # gradient_accumulation_steps
+            "polynomial",  # lr_scheduler_type
+            (
+                f'\n    --lr_scheduler_kwargs \'{json.dumps({"lr_end": 1e-8, "power": 3})}\' \\'
+                if True
+                else ""
+            ),  # lr_scheduler_kwargs
+            epochs * 1.8,
+        )
+        print(cmd)
+        if os.environ.get("CUDA_VISIBLE_DEVICES"):
+            # if CUDA_VISIBLE_DEVICES is set, we need to unset it before running the command, and restore it afterwards
+            # this is because deepspeed is incompatible with CUDA_VISIBLE_DEVICES, and we have already set the --include flag
+            # to specify the GPUs to use (based on CUDA_VISIBLE_DEVICES)
+            cuda_visible_devices = os.environ["CUDA_VISIBLE_DEVICES"]
+            del os.environ["CUDA_VISIBLE_DEVICES"]
+            try:
                 execute(cmd)
-            print("Reward modeling completed, saving to", rw_results)
-
-        elif backend == "trl":
-            if not train_rw:
-                print("skipped rw_training.")
-                rw_model = AutoModelForSequenceClassification.from_pretrained(rw_path)
-                print("loaded")
-
-            else:
-                rw_model = AutoModelForSequenceClassification.from_pretrained("gpt2")
-                rw_tokenizer = AutoTokenizer.from_pretrained("gpt2")
-
-                if rw_tokenizer.pad_token is None:
-                    rw_tokenizer.pad_token = rw_tokenizer.eos_token
-                    rw_model.config.pad_token_id = rw_model.config.eos_token_id
-
-                def formatting_func_real(examples):
-                    kwargs = {
-                        "padding": "max_length",
-                        "truncation": True,
-                        "max_length": 512,
-                        "return_tensors": "pt",
-                    }
-                    tokens_chosen = rw_tokenizer.encode_plus(
-                        examples["chosen"], **kwargs
-                    )
-                    tokens_rejected = rw_tokenizer.encode_plus(
-                        examples["rejected"], **kwargs
-                    )
-                    return {
-                        "input_ids_chosen": tokens_chosen["input_ids"][0],
-                        "attention_mask_chosen": tokens_chosen["attention_mask"][0],
-                        "input_ids_rejected": tokens_rejected["input_ids"][0],
-                        "attention_mask_rejected": tokens_rejected["attention_mask"][0],
-                    }
-
-                rw_dataset = Dataset.from_dict(rw_data)
-                rw_dataset = rw_dataset.map(formatting_func_real)
-                print("rw dataset done")
-
-                rw_config = RewardConfig(
-                    max_length=1024,
-                    gradient_checkpointing=False,
-                    remove_unused_columns=True,
-                    output_dir=rw_path,
-                )
-                print("rw training initiate")
-
-                rw_trainer = RewardTrainer(
-                    args=rw_config,
-                    model=rw_model,
-                    tokenizer=rw_tokenizer,
-                    train_dataset=rw_dataset,
-                )
-                rw_trainer.train()
-
-                if os.path.exists(rw_path):
-                    shutil.rmtree(rw_path)
-
-                rw_trainer.save_model(rw_path)
-                print("rw training complete")
+            finally:
+                os.environ["CUDA_VISIBLE_DEVICES"] = cuda_visible_devices
+        else:
+            execute(cmd)
+        print("Reward modeling completed, saving to", rw_results)
 
         ppo_model_copied = self.deep_copy(dest_suffix=code)
         the_path, the_name = ppo_model_copied.model_path, ppo_model_copied.model_name
         print("ppo destination", the_path, the_name)
 
-        if backend == "deepspeed":
-            original_registration_status = ppo_data.manage_llama_factory_registration(
-                operation="add"
-            )
+        original_registration_status = ppo_data.manage_llama_factory_registration(
+            operation="add"
+        )
 
-            cmd = bash_command_for_ppo % (
-                "pa38-lf" if num_nodes == 1 else "multinode",  # conda environment
-                deepspeed_args,  # deepspeed settings
-                # './src/abstractions/configs/LF_examples/full_multi_gpu/ds_z3_config.json',
-                "./src/abstractions/configs/LF_examples/deepspeed/ds_z2_config.json",
-                self.model_path,
-                rw_results,
-                "lora" if use_lora else "full",
-                ppo_data.data_name,
-                self.template_type,
-                the_path,
-                2
-                ** max(
-                    0, 1 + batch_size_multiplier_log2
-                ),  # per_device_train_batch_size
-                2
-                ** max(0, 2 + batch_size_multiplier_log2),  # per_device_eval_batch_size
-                2
-                ** max(
-                    0,
-                    2
-                    - max(0, 1 + batch_size_multiplier_log2)
-                    + grad_accu_multiplier_log2,
-                ),  # gradient_accumulation_steps
-                epochs / 10,
-            )
-            print(cmd)
-            if os.environ.get("CUDA_VISIBLE_DEVICES"):
-                # if CUDA_VISIBLE_DEVICES is set, we need to unset it before running the command, and restore it afterwards
-                # this is because deepspeed is incompatible with CUDA_VISIBLE_DEVICES, and we have already set the --include flag
-                # to specify the GPUs to use (based on CUDA_VISIBLE_DEVICES)
-                cuda_visible_devices = os.environ["CUDA_VISIBLE_DEVICES"]
-                del os.environ["CUDA_VISIBLE_DEVICES"]
-                try:
-                    execute(cmd)
-                finally:
-                    os.environ["CUDA_VISIBLE_DEVICES"] = cuda_visible_devices
-            else:
+        cmd = bash_command_for_ppo % (
+            "pa38-lf" if num_nodes == 1 else "multinode",  # conda environment
+            deepspeed_args,  # deepspeed settings
+            # './src/abstractions/configs/LF_examples/full_multi_gpu/ds_z3_config.json',
+            "./src/abstractions/configs/LF_examples/deepspeed/ds_z2_config.json",
+            self.model_path,
+            rw_results,
+            "lora" if use_lora else "full",
+            ppo_data.data_name,
+            self.template_type,
+            the_path,
+            2 ** max(0, 1 + batch_size_multiplier_log2),  # per_device_train_batch_size
+            2 ** max(0, 2 + batch_size_multiplier_log2),  # per_device_eval_batch_size
+            2
+            ** max(
+                0,
+                2 - max(0, 1 + batch_size_multiplier_log2) + grad_accu_multiplier_log2,
+            ),  # gradient_accumulation_steps
+            epochs / 10,
+        )
+        print(cmd)
+        if os.environ.get("CUDA_VISIBLE_DEVICES"):
+            # if CUDA_VISIBLE_DEVICES is set, we need to unset it before running the command, and restore it afterwards
+            # this is because deepspeed is incompatible with CUDA_VISIBLE_DEVICES, and we have already set the --include flag
+            # to specify the GPUs to use (based on CUDA_VISIBLE_DEVICES)
+            cuda_visible_devices = os.environ["CUDA_VISIBLE_DEVICES"]
+            del os.environ["CUDA_VISIBLE_DEVICES"]
+            try:
                 execute(cmd)
+            finally:
+                os.environ["CUDA_VISIBLE_DEVICES"] = cuda_visible_devices
+        else:
+            execute(cmd)
 
-            if not original_registration_status:
-                ppo_data.manage_llama_factory_registration(operation="remove")
-
-        elif backend == "trl":
-
-            def get_query(sample):
-                if "instruction" not in sample or "input" not in sample:
-                    pattern = r"Human:(.*?)Assistant"
-                    matches = re.findall(pattern, sample["chosen"], re.DOTALL)
-                    query_text = matches[0].strip()
-                    sample["input"] = query_text
-                    sample["instruction"] = (
-                        "The following is one or several paragraphs of human query. Generate the most appropriate response."
-                    )
-
-                return sample
-
-            ppo_data = ppo_data.transform(get_query, "ppo_hh")
-            ppo_data.set_key_fields(
-                prompt_field_name="instruction", query_field_name="input"
-            )
-
-            # PPO setting
-            config = PPOConfig(
-                model_name=the_name, learning_rate=1.4e-5, batch_size=128
-            )
-            the_model = AutoModelForCausalLMWithValueHead.from_pretrained(
-                "./" + the_path
-            )
-            tokenizer = AutoTokenizer.from_pretrained(the_path)
-            tokenizer.pad_token = tokenizer.eos_token
-
-            # PPO training
-            rw_model = pipeline("text-classification", model=rw_path)
-            dataset = load_dataset(
-                "Anthropic/hh-rlhf", data_dir="harmless-base", split="train"
-            )
-
-            def tokenize(sample):
-                pattern = r"Human:(.*?)Assistant"
-                matches = re.findall(pattern, sample["chosen"], re.DOTALL)
-                query_text = matches[0].strip()
-                sample["query"] = query_text
-                sample["input_ids"] = tokenizer.encode(sample["query"])
-                return sample
-
-            dataset = dataset.map(tokenize, batched=False)
-            dataset = dataset.remove_columns(["rejected", "chosen"])
-            print("ppo dataset done.")
-
-            ppo_trainer = PPOTrainer(
-                model=the_model,
-                config=config,
-                dataset=dataset,
-                tokenizer=tokenizer,
-            )
-
-            # PPO loop
-            generation_kwargs = {
-                "min_length": -1,
-                "top_k": 0.0,
-                "top_p": 1.0,
-                "do_sample": True,
-                "pad_token_id": tokenizer.eos_token_id,
-            }
-            print(dataset[0], dataset[1])
-
-            for epoch in tqdm(range(epochs), "epoch: "):
-                for batch in tqdm(ppo_trainer.dataloader):
-                    query_tensors = batch["input_ids"]
-
-                    response_tensors = ppo_trainer.generate(
-                        query_tensors, **generation_kwargs
-                    )
-                    batch["response"] = [
-                        tokenizer.decode(r.squeeze()) for r in response_tensors
-                    ]
-
-                    texts = [q + r for q, r in zip(batch["query"], batch["response"])]
-                    pipe_outputs = rw_model(texts)
-                    rewards = [
-                        torch.tensor(output[1]["score"]) for output in pipe_outputs
-                    ]
-
-                    stats = ppo_trainer.step(query_tensors, response_tensors, rewards)
-                    ppo_trainer.log_stats(stats, batch, rewards)
-
-            ppo_trainer.save_pretrained(the_path)
-            print("RLHF complete, saving result to ", the_path)
+        if not original_registration_status:
+            ppo_data.manage_llama_factory_registration(operation="remove")
 
         print("PPO done, saving to ", the_path)
         return Model(
@@ -955,12 +658,12 @@ class Model:
         self,
         data: Union[Data, List[Dict[str, str]]],
         result_data_name: str,
-        backend: Literal["vllm", "deepspeed", "serial"] = "vllm",
+        backend: Literal["sglang", "vllm", "deepspeed", "serial"] = "sglang",
         batch_size_multiplier_log2: int = 0,
         temperature=0.0,
     ) -> Union[Data, List[Dict[str, str]]]:
         """Performance inference on a dataset (currently only instruction datasets are tested, with the same format as SFT datasets),
-        and 
+        and
 
         :param data: The data to be used. It can be either a Data object or a list of dictionaries with string keys and values. The data argument can also be a List[Dict[str,str]] where each Dict containing two fields "instruction" and (optionally) "input". In this case, a List[Dict[str, str]] will be returned.
         :type data: Union[Data, List[Dict[str, str]]]
@@ -968,8 +671,8 @@ class Model:
         :param result_data_name: The name of the resulting data
         :type result_data_name: str
 
-        :param backend: The backend to use. It can be "vllm", "deepspeed", or "serial".
-        :type backend: Literal["vllm", "deepspeed", "serial"] = "vllm"
+        :param backend: The backend to use. It can be "sglang", "vllm", "deepspeed", or "serial".
+        :type backend: Literal["sglang", "vllm", "deepspeed", "serial"] = "sglang"
 
         :param batch_size_multiplier_log2: The log base 2 of the batch size multiplier
         :type batch_size_multiplier_log2: int = 0
@@ -982,9 +685,11 @@ class Model:
 
         *backend*: Which backend to use for inference. Options listed below, in descreasing order of speed.
 
-             :code:`vllm` - Recommended. Faster than the rest by >= an order of magnitude. Parallel inference using `self.num_gpus` GPUs.
+             :code:`sglang` - Recommended. Parallel inference using `self.num_gpus` GPUs. Faster than `deepspeed` and `serial` by >= an order of magnitude.
 
-             :code:`deepspeed` - Parallel inference using `self.num_gpus` GPUs. The only backend supporting pretrain-style inference.
+             :code:`vllm` - Recommended. Parallel inference using `self.num_gpus` GPUs. Faster than `deepspeed` and `serial` by >= an order of magnitude.
+
+             :code:`deepspeed` - Slower parallel inference using `self.num_gpus` GPUs. The only backend supporting pretrain-style inference.
 
              :code:`serial` - Serial inference.
         """
@@ -997,9 +702,19 @@ class Model:
         if os.environ.get("BATCH_SIZE_MULTIPLIER_LOG2"):
             batch_size_multiplier_log2 += int(os.environ["BATCH_SIZE_MULTIPLIER_LOG2"])
 
+        if backend == "sglang" and os.environ.get("NO_SGLANG"):
+            warnings.warn("sglang is disabled. Switching to vllm backend.")
+            backend = "vllm"
+
         if backend == "vllm" and os.environ.get("NO_VLLM"):
-            warnings.warn("vllm is disabled. Switching to deepspeed backend.")
-            backend = "deepspeed"
+            if os.environ.get("NO_SGLANG"):
+                warnings.warn(
+                    "vllm and sglang are disabled. Switching to deepspeed backend."
+                )
+                backend = "deepspeed"
+            else:
+                warnings.warn("vllm is disabled. Switching to sglang backend.")
+                backend = "sglang"
 
         if input_is_data:
             assert (
@@ -1011,7 +726,7 @@ class Model:
                 return data
             assert isinstance(data[0], dict) and "instruction" in data[0]
 
-        if backend in ["vllm", "deepspeed"]:
+        if backend in ["vllm", "deepspeed", "sglang"]:
             if not input_is_data:
                 original_data, data = data, Data(
                     data_name="temporary", data_type="sft", data_content=data
@@ -1021,10 +736,10 @@ class Model:
                 )
 
             result = (
-                self.__inference_parallel_vllm_segregated(
-                    data, result_data_name, temperature
+                self.__inference_parallel_segregated(
+                    data, result_data_name, temperature, backend
                 )
-                if backend == "vllm"
+                if backend in ["vllm", "sglang"]
                 else self.__inference_parallel_deepspeed(
                     data, result_data_name, batch_size_multiplier_log2, temperature
                 )
@@ -1041,7 +756,7 @@ class Model:
 
         else:
             raise NameError(
-                f'Backend {backend} not recognized. Options are "vllm", "deepspeed", and "serial".'
+                f'Backend {backend} not recognized. Options are "sglang", "vllm", "deepspeed", and "serial".'
             )
 
         tw.write_log(
@@ -1054,10 +769,10 @@ class Model:
 
         return result
 
-    def __inference_parallel_vllm_segregated(
-        self, data: Data, result_data_name: str, temperature: float
+    def __inference_parallel_segregated(
+        self, data: Data, result_data_name: str, temperature: float, backend_type: str
     ) -> Data:
-        """vllm implementation for `inference()`, but performed in a separate process to free up GPU memory. This is the recommended implementation, due to its superior speed and robustness."""
+        """sglang/vllm implementation for `inference()`, but performed in a separate process to free up GPU memory. This is the recommended implementation, due to its superior speed and robustness."""
         data_path = data.data_path
         model_path = self.model_path
         template_type = self.template_type
@@ -1069,11 +784,11 @@ class Model:
             data.key_fields["query"] if "query" in data.key_fields else "input"
         )
 
-        # run vllm_inference_standalone in a separate process
+        # run inference_standalone in a separate process
         multiprocessing.set_start_method("spawn", force=True)
         parent_conn, child_conn = multiprocessing.Pipe()
         p = multiprocessing.Process(
-            target=vllm_inference_standalone,
+            target=inference_standalone,
             args=(
                 data_path,
                 result_data_name,
@@ -1083,6 +798,7 @@ class Model:
                 prompt_field_name,
                 query_field_name,
                 temperature,
+                backend_type,
                 child_conn,
             ),
         )
@@ -1094,79 +810,6 @@ class Model:
         return Data(
             data_name=result_data_name, data_type="sft", data_path=result_data_path
         )
-
-    def __inference_parallel_vllm_integrated(
-        self, data: Data, result_data_name: str, temperature: float
-    ) -> Data:
-        """vllm implementation for `inference()`."""
-        warnings.warn(
-            "This implementation is not recommended due to its potential to cause memory leaks and to disrupt Ray. Use `__inference_parallel_vllm_segregated()` instead."
-        )
-
-        restart_ray_cluster(stop_only=True)
-
-        LLM, SamplingParams, destroy_model_parallel = import_from_vllm()
-
-        if not hasattr(self, "vllm_model"):
-            print("vllm model not created yet. creating self.vllm_model ...")
-
-            parallel_size = self.num_gpus
-            if os.environ.get("CUDA_VISIBLE_DEVICES"):
-                parallel_size = min(
-                    parallel_size, len(os.environ["CUDA_VISIBLE_DEVICES"].split(","))
-                )
-
-            # truncate parallel_size to the nearest power of 2
-            parallel_size = 2 ** int(math.log2(parallel_size) + 1e-7)
-            print(f"vllm tensor_parallel_size = {parallel_size}")
-
-            self.vllm_model = LLM(
-                model=self.model_path,
-                tensor_parallel_size=parallel_size,
-                gpu_memory_utilization=0.75,
-            )
-            print("self.vllm_model created.")
-
-        def vllm_process_batch(sample_dicts: List[dict]) -> List[dict]:
-            print(f"Processing a batch of size {len(sample_dicts)}.")
-            sampling_params = SamplingParams(
-                temperature=temperature, top_p=0.95, max_tokens=1024
-            )
-            prompts = [
-                fill_in_QA_template(
-                    dic["instruction"], dic["input"], template_type=self.template_type
-                )
-                for dic in sample_dicts
-            ]
-            outputs = self.vllm_model.generate(prompts, sampling_params)
-            assert len(outputs) == len(sample_dicts)
-
-            for dic, output in zip(sample_dicts, outputs):
-                prompt = output.prompt
-                generated_text = output.outputs[0].text
-                dic["predict"] = generated_text
-
-            # display a random element to showcase results
-            showcase_id = random.randint(0, len(sample_dicts) - 1)
-            tw.write_log(f"Inference sample: {sample_dicts[showcase_id]}")
-
-            return sample_dicts
-
-        result_data = data.transform(
-            transformation=vllm_process_batch,
-            result_data_name=result_data_name,
-            forced_rewrite=(
-                Model.always_force_rewrite
-                if hasattr(Model, "always_force_rewrite")
-                else False
-            ),
-            max_batch_size=262144,
-        )
-
-        print("Job finished. Destructing the model ...")
-        self.free_gpu_memory(destroy_model_parallel)
-
-        return result_data
 
     def __inference_parallel_deepspeed(
         self,
@@ -1378,7 +1021,9 @@ class Model:
 
         print("evaluation query begins")
         evaluation_output = self.inference(
-            evaluation_input, "evaluation_output_mc_" + self.model_name, backend="vllm"
+            evaluation_input,
+            "evaluation_output_mc_" + self.model_name,
+            backend="sglang",
         )
         print("answers at", evaluation_output.data_path)
         with open(evaluation_output.data_path, "r") as f:
@@ -1462,29 +1107,3 @@ class Model:
         # copy from model_path to path
         execute(f"cp -r {escape(self.model_path)} {escape(path)}")
         print(f"Successfully saved to {path}.")
-
-    def free_gpu_memory(self, destroy_model_parallel: Callable[[], None] = None):
-        """Remove the vllm model and free vllm cache. This should wipe out all GPU memory used by self."""
-        if destroy_model_parallel is not None:
-            try:
-                destroy_model_parallel()
-            except Exception as e:
-                print(f"destroy_model_parallel fails: {type(e)} {e}")
-
-        try:
-            del self.vllm_model.llm_engine.model_executor.driver_worker
-        except Exception as e:
-            print(f"del model_executor.driver_worker fails: {type(e)} {e}")
-
-        del self.vllm_model.llm_engine
-        del self.vllm_model
-        gc.collect()
-        torch.cuda.empty_cache()
-        try:
-            torch.distributed.destroy_process_group()
-        except:
-            print("No process group to destroy.")
-
-        restart_ray_cluster()
-        gc.collect()
-        print("Successfully deleted the vllm model and freed the GPU memory.")

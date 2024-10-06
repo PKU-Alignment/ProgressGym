@@ -30,9 +30,10 @@
         "/mnt/fl/models/qwen/",
         "/mnt/fl/projects/pro-align/progressgym/shared_storage/our_models/llama3-8b-hislm",
         "/data/projects/pro-align/shared_storage/our_models/",
-        "/data/models/llama3"
+        "/data/models/llama3",
+        "./output/saved/saved_model/"
     ],
-    "model_save_path": "../../shared_storage/our_models/",
+    "model_save_path": "./output/saved/saved_model/",
     "data_search_paths": [
         "../../shared_storage/our_datasets/",
         "../../shared_storage/downloaded_datasets/",
@@ -51,8 +52,9 @@
     	"../ProgressGym/output/",
 	    "../ProgressGym/libs/llama_factory/data/",
         "../ProgressGym/output/inference_results/",
-	    "../ProgressGym/output/datasets/"
+	    "../ProgressGym/output/datasets/",
+        "./output/saved/saved_data/"
     ],
-    "data_save_path": "../../shared_storage/our_datasets/",
+    "data_save_path": "./output/saved/saved_data/",
     "multinode_master_addr": "node59"
 }

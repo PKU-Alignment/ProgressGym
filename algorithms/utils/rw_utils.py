@@ -206,7 +206,7 @@ def get_rw_query(
 def elicit_rw_preference(
     examinee: ExamineeBase,
     judge: JudgeBase,
-    backend: Literal["deepspeed", "trl"] = "deepspeed",
+    backend: Literal["deepspeed"] = "deepspeed",
     aligned: bool = False,
 ) -> Data:
     """Elicit preference from the judge for reward modeling."""
@@ -222,120 +222,89 @@ def elicit_rw_preference(
         examinee
     )
 
-    if backend == "trl":
-        rw_data = {"chosen": [], "rejected": []}
-        for i, dic in tqdm(enumerate(query)):
-            q = fill_in_QA_template(dic["instruction"], dic["input"])
-            try:
-                response = judge.query_from_examinee(q)
-                answer = response["predict"]
-            except Exception as e:
-                print(
-                    f"Skipping sample due to error: {type(e)} {e}. Possibly due to over-sized query."
-                )
-                continue
-
-            if "yes" in answer.lower():
-                rw_data["chosen"].append(choice1[i])
-                rw_data["rejected"].append(choice2[i])
-            elif "no" in answer.lower():
-                rw_data["rejected"].append(choice1[i])
-                rw_data["chosen"].append(choice2[i])
-            else:
-                write_log(
-                    "invalid response from judge, "
-                    + str(response)
-                    + "|| response over",
-                    log_name="rlhf",
-                )
-
-    elif backend == "deepspeed":
-        query_with_pred = judge.query_from_examinee(query)
-        assert len(query_with_pred) == len(query), "Query and response length mismatch"
-
-        # with open(f'./logs/query_with_pred_{examinee.current_timestep}_{examinee.instance_id}_{judge.instance_id}.json', 'w') as f:
-        #     json.dump([query, query_with_pred], f)
-
-        rw_data = []
-        debug_data = []
-
-        for i, dic in tqdm(enumerate(query_with_pred)):
-            assert dic["id"] == i, f"ID mismatch: {dic['id']} != {i}"
-            answer = dic["predict"]
-
-            temp = {
-                "instruction": original_instruction[i],
-                "input": original_input[i],
-                "output": [],
-            }
-
-            def get_status(answer: str) -> int:
-                answer = answer.lower()
-                if "1" in answer and "2" not in answer:
-                    return 1
-                if "2" in answer and "1" not in answer:
-                    return 2
-
-                def filter(s: str) -> str:
-                    return "".join([c for c in s if c.isalnum()]).strip().lower()
-
-                choice1_letter = (
-                    "B" if 'Response 1: """B"""' in original_instruction[i] else "A"
-                )
-                choice2_letter = "B" if choice1_letter == "A" else "A"
-                if filter(answer) == filter(choice1_letter):
-                    return 1
-                if filter(answer) == filter(choice2_letter):
-                    return 2
-
-                if len(choice1[i]) > 5 and len(choice2[i]) > 5:
-                    dist1 = Levenshtein.distance(choice1[i], answer)
-                    dist2 = Levenshtein.distance(choice2[i], answer)
-
-                    if (
-                        dist1 <= len(choice1[i]) // 3
-                        and dist2 >= len(choice2[i]) - len(choice2[i]) // 3
-                        and dist1 + 4 <= dist2
-                        and dist1 * 2 < dist2
-                    ):
-                        return 1
-
-                    if (
-                        dist2 <= len(choice2[i]) // 3
-                        and dist1 >= len(choice1[i]) - len(choice1[i]) // 3
-                        and dist2 + 4 <= dist1
-                        and dist2 * 2 < dist1
-                    ):
-                        return 2
-
-                return None
-
-            status = get_status(answer)
-
-            if status == 1:
-                temp["output"].append(choice1[i])
-                temp["output"].append(choice2[i])
-                rw_data.append(temp)
-            elif status == 2:
-                temp["output"].append(choice2[i])
-                temp["output"].append(choice1[i])
-                rw_data.append(temp)
-            else:
-                assert status is None
-                if aligned:
-                    rw_data.append([])
-                write_log(
-                    "invalid response from judge, " + str(dic) + "|| response over",
-                    log_name="rlhf",
-                )
-
-            debug_data.append([dic, temp])
-
-        with open("./logs/debug_data.json", "w") as f:
-            json.dump(debug_data, f)
-
-    else:
+    if backend != "deepspeed":
         raise ValueError("backend not recognized")
+
+    query_with_pred = judge.query_from_examinee(query)
+    assert len(query_with_pred) == len(query), "Query and response length mismatch"
+
+    rw_data = []
+    debug_data = []
+
+    for i, dic in tqdm(enumerate(query_with_pred)):
+        assert dic["id"] == i, f"ID mismatch: {dic['id']} != {i}"
+        answer = dic["predict"]
+
+        temp = {
+            "instruction": original_instruction[i],
+            "input": original_input[i],
+            "output": [],
+        }
+
+        def get_status(answer: str) -> int:
+            answer = answer.lower()
+            if "1" in answer and "2" not in answer:
+                return 1
+            if "2" in answer and "1" not in answer:
+                return 2
+
+            def filter(s: str) -> str:
+                return "".join([c for c in s if c.isalnum()]).strip().lower()
+
+            choice1_letter = (
+                "B" if 'Response 1: """B"""' in original_instruction[i] else "A"
+            )
+            choice2_letter = "B" if choice1_letter == "A" else "A"
+            if filter(answer) == filter(choice1_letter):
+                return 1
+            if filter(answer) == filter(choice2_letter):
+                return 2
+
+            if len(choice1[i]) > 5 and len(choice2[i]) > 5:
+                dist1 = Levenshtein.distance(choice1[i], answer)
+                dist2 = Levenshtein.distance(choice2[i], answer)
+
+                if (
+                    dist1 <= len(choice1[i]) // 3
+                    and dist2 >= len(choice2[i]) - len(choice2[i]) // 3
+                    and dist1 + 4 <= dist2
+                    and dist1 * 2 < dist2
+                ):
+                    return 1
+
+                if (
+                    dist2 <= len(choice2[i]) // 3
+                    and dist1 >= len(choice1[i]) - len(choice1[i]) // 3
+                    and dist2 + 4 <= dist1
+                    and dist2 * 2 < dist1
+                ):
+                    return 2
+
+            return None
+
+        status = get_status(answer)
+
+        if status == 1:
+            temp["output"].append(choice1[i])
+            temp["output"].append(choice2[i])
+            rw_data.append(temp)
+        elif status == 2:
+            temp["output"].append(choice2[i])
+            temp["output"].append(choice1[i])
+            rw_data.append(temp)
+        else:
+            assert status is None
+            if aligned:
+                rw_data.append([])
+            write_log(
+                "invalid response from judge, " + str(dic) + "|| response over",
+                log_name="rlhf",
+            )
+
+        debug_data.append([dic, temp])
+
+    with open("./logs/debug_data.json", "w") as f:
+        json.dump(debug_data, f)
 
     with open(save_path, "w") as f:
         json.dump(rw_data, f)

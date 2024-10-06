@@ -1,7 +1,7 @@
 python run_benchmark.py \
           --algorithms=ExtrapolativeRLHF \
           --challenges=Follow \
-          --output_filename=batch4_run7A_lev2_independent_new \
+          --output_filename=from_checkpoint_extrap22_independent \
           --model_name=C013-instruct \
           --timesteps_ahead=2 \
           --extrapolation_order=2 \

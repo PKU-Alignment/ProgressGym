@@ -271,6 +271,13 @@
 <span class="gp">$ </span>.<span class="w"> </span>./initialize.sh
 </pre></div>
 </div>
+<p>or</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/PKU-Alignment/ProgressGym.git
+<span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>./ProgressGym
+<span class="gp">$ </span>.<span class="w"> </span>./initialize.sh<span class="w"> </span>--multinode
+</pre></div>
+</div>
+<p>…if you intend to run ProgressGym on a multi-node environment.</p>
 <p>This will create two new conda environments <code class="docutils literal notranslate"><span class="pre">pa38</span></code> and <code class="docutils literal notranslate"><span class="pre">pa38-lf</span></code>, where the former is for the normal operations of ProgressGym, and the latter is used by ProgressGym when calling LLaMA-Factory internally.</p>
 <p>When calling entry-point scripts of ProgressGym (e.g., <code class="docutils literal notranslate"><span class="pre">run_benchmark.py</span></code> and <code class="docutils literal notranslate"><span class="pre">build_dataset.py</span></code>), please make sure you are in the <code class="docutils literal notranslate"><span class="pre">pa38</span></code> environment, and ProgressGym will automatically handle any further environment switching.</p>
 <p>Alternatively, when the construction of the ProgressGym PyPI package is completed, you could install ProgressGym via pip:</p>

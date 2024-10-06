@@ -51,6 +51,7 @@ class Data:
     """
     The Data class stores a body of data's path, format, relevant fields, etc., allowing for memory-efficient manipulation of large bodies of data.
     """
+
     # mapping from data name to Data instance (used Any due to typing constraints), updated on the fly
     name2data: Dict[str, Any] = {}
     always_force_rewrite: bool = True
@@ -85,8 +86,8 @@ class Data:
         **kwargs,
     ):
         """
-        Initialize. 
-    
+        Initialize.
+
         :param data_name: Necessary, name of the data
         :type data_name: str
 
@@ -102,10 +103,10 @@ class Data:
 
         Examples:
             .. code-block:: python
-            
+
                 Data('c4_demo', data_type = 'sft', data_path = './libs/llama_factory/data/c4_demo.json')
                 Data('c4_demo', data_type = 'sft')
-        
+
         """
         # if data_name in Data.name2data:
         #     warnings.warn(f'The data name {data_name} is already in use.')
@@ -182,7 +183,7 @@ class Data:
     ) -> "Data":
         """
         Apply transformation to every element of the current dataset (in the format of a json list of json dicts where the values are of mutable or immutable types), and returns a Data instance containing the resulting dataset.
-        
+
         Out-of-place. Does not modify self.
 
         This function (like all others in abstractions) is memory-efficient for huge json files.
@@ -202,7 +203,7 @@ class Data:
 
         :param keep_key_fields: If keep_key_fields is True, the registered key_fields names will be copied to the new Data instance. Only do so if the transformation doesn't rename the key fields.
         :type keep_key_fields: bool = True
-        
+
         :return: The data after transformation.
         :rtype: Data.
         """
@@ -341,11 +342,11 @@ class Data:
     ) -> None:
         """
         Specify which of the dict fields to use for training. In-place.
-        
+
         Pass empty string to an argument in order to erase that argument.
 
         Will automatically update registration, if already registered.
-        
+
         :param prompt_field_name: The name of the prompt field
         :type prompt_field_name: Optional[str] = None
 
@@ -366,7 +367,7 @@ class Data:
 
                 data.set_key_fields(prompt_field_name='content') # for pretraining dataset stored in content field
                 data.set_key_fields(prompt_field_name='instruction', query_field_name='input', response_field_name='output') # for QA dataset with system prompt
-        
+
         """
         if not suppress_registration_update:
             original_registration_status = self.manage_llama_factory_registration(
@@ -450,6 +451,7 @@ class DataFileCollection:
     The Data File Collection class stores multi-file data, by name, path and type, etc. Before being used for training, the Data File Collection needs to be converted to Data.
     Operations similar to those of Data are available in this class nevertheless.
     """
+
     # check with user before removing a file
     @classmethod
     def ask_and_remove_if_exists(cls, path: str, forced_rewrite: bool):
@@ -502,12 +504,12 @@ class DataFileCollection:
 
         Example:
             .. code-block:: python
-                
+
                 DataFileCollection(collection_name='histtext_1826_to_2018',
                                 data_type='pretrain',
                                 collection_path = './dataset/dataset_text_sequence/',
                                 file_selection_func = (lambda path: 1826 <= int(path.split('/')[-1][1:6]) <= 2018))
-        
+
         """
         # if collection_name in DataFileCollection.name2collection:
         #     warnings.warn(f'The collection name {collection_name} is already in use.')

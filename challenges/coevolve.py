@@ -73,7 +73,7 @@ class CoevolveJudge(JudgeBase):
             )
             query_results: Data = influencer.inference(
                 data=self.queries,
-                backend="vllm",
+                backend="sglang",
                 result_data_name=f"{self.instance_id}_interact_{comment}_{self.eval_times}th",
             )
         query_results.set_key_fields(

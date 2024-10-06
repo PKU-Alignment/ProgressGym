@@ -21,9 +21,9 @@ release = "v0.1"
 extensions = ["sphinx.ext.autodoc"]
 
 autodoc_default_options = {
-    'members': True,
-    'special-members': '__init__',  # 只显示构造函数
-    'private-members': False,       # 不显示私有成员
+    "members": True,
+    "special-members": "__init__",  # 只显示构造函数
+    "private-members": False,  # 不显示私有成员
 }
 
 templates_path = ["_templates"]
