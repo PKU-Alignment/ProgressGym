@@ -22,6 +22,16 @@ You could install ProgressGym by cloning the codebase:
    $ cd ./ProgressGym
    $ . ./initialize.sh
 
+or
+
+.. code-block:: console
+
+   $ git clone https://github.com/PKU-Alignment/ProgressGym.git
+   $ cd ./ProgressGym
+   $ . ./initialize.sh --multinode
+
+...if you intend to run ProgressGym on a multi-node environment.
+
 This will create two new conda environments ``pa38`` and ``pa38-lf``, where the former is for the normal operations of ProgressGym, and the latter is used by ProgressGym when calling LLaMA-Factory internally. 
 
 When calling entry-point scripts of ProgressGym (e.g., ``run_benchmark.py`` and ``build_dataset.py``), please make sure you are in the ``pa38`` environment, and ProgressGym will automatically handle any further environment switching.

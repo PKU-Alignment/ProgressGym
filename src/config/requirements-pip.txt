@@ -18,5 +18,7 @@ Levenshtein
 jsonstreamer
 transformers==4.40.0
 seaborn
+sglang[all]
+
 # -r ./libs/llama_factory/requirements.txt
 # -r ./libs/moralchoice/requirements.txt

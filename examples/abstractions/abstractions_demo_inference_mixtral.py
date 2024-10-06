@@ -24,7 +24,7 @@ for file_name in files_names:
     )
 
     answers = model.inference(
-        data=prompts_unanswered, result_data_name=f"answers_{file_name}", backend="vllm"
+        data=prompts_unanswered, result_data_name=f"answers_{file_name}", backend="sglang"
     )
     answers.save_permanent_and_register()
     print("Success! Results saved to ./output/inference_results/answers_[filename].")

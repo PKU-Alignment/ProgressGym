@@ -25,5 +25,5 @@ default_output2 = gemma7b.inference(
     default_input, "gemma-7b-20C-infer-custom-serial", backend="serial"
 )  # saved to output/inference_results/xxx/xxx.json
 alpaca_output = gemma7b.inference(
-    alpaca_data, "gemma-7b-20C-infer-alpaca-vllm", backend="vllm"
+    alpaca_data, "gemma-7b-20C-infer-alpaca-vllm", backend="sglang"
 )  # saved to output/inference_results/yyy/yyy.json

@@ -163,7 +163,7 @@ class JudgeBase(ABC):
                 results: str = model.inference(
                     data=[{"instruction": prompt}],
                     result_data_name=f"{self.instance_id}_query_from_examinee_{self.query_times}th",
-                    backend="vllm",
+                    backend="sglang",
                 )[0]["predict"]
 
         elif isinstance(prompt, Data):
@@ -184,7 +184,7 @@ class JudgeBase(ABC):
                 results: Data = model.inference(
                     data=prompt,
                     result_data_name=f"{self.instance_id}_query_from_examinee_{self.query_times}th",
-                    backend="vllm",
+                    backend="sglang",
                 )
 
         elif isinstance(prompt, list):
@@ -203,7 +203,7 @@ class JudgeBase(ABC):
                 results: List[Dict] = model.inference(
                     data=prompt,
                     result_data_name=f"{self.instance_id}_query_from_examinee_{self.query_times}th",
-                    backend="vllm",
+                    backend="sglang",
                 )
 
         else:
@@ -389,21 +389,21 @@ class ExamineeBase(ABC):
                 results: str = model.inference(
                     data=[{"instruction": prompt, "input": ""}],
                     result_data_name=f"{self.instance_id}_query_from_judge_{self.query_times}th",
-                    backend="vllm",
+                    backend="sglang",
                 )[0]["predict"]
 
             elif isinstance(prompt, Data):
                 results: Data = model.inference(
                     data=prompt,
                     result_data_name=f"{self.instance_id}_query_from_judge_{self.query_times}th",
-                    backend="vllm",
+                    backend="sglang",
                 )
 
             elif isinstance(prompt, list):
                 results: List[Dict] = model.inference(
                     data=prompt,
                     result_data_name=f"{self.instance_id}_query_from_judge_{self.query_times}th",
-                    backend="vllm",
+                    backend="sglang",
                 )
 
             else:
