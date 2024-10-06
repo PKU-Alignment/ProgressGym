@@ -225,7 +225,7 @@ def start_inference_backend(model_repoid_or_path: str,
     
         sgl = import_from_sglang()
         if template_type != 'auto':
-            warnings.warn(f"SGLang backend only supports auto template type. Ignoring template_type={template_type}.")
+            warnings.warn(f"SGLang backend only supports auto template type. Ignoring template_type={template_type}. This is not an issue if you simply intend to perform inference on HistLlama models, but may be an issue if you are using a custom model, in which case you may use NO_SGLANG=1 to disable sglang backend.")
         
         with open(os.devnull, 'w') as devnull:
             frac_static = (0.8 if purpose == 'responses' else 0.4)
@@ -299,8 +299,9 @@ def start_inference_backend(model_repoid_or_path: str,
                 }
                 for dialogue in dialogues
             ], progress_bar=True)
+            assert len(output) == len(sample_dicts)
             
-            for _ in range(10):
+            for _ in range(20):
                 bad_indices = [k for k in range(len(output)) if output[k].get_meta_info("NA") is None]
                 if len(bad_indices) == 0: break
                 
@@ -312,6 +313,7 @@ def start_inference_backend(model_repoid_or_path: str,
                     }
                     for k in bad_indices
                 ], progress_bar=True)
+                assert len(new_output) == len(bad_indices)
                 
                 count = 0
                 for k, out in zip(bad_indices, new_output):
@@ -321,13 +323,13 @@ def start_inference_backend(model_repoid_or_path: str,
                                 
                 print(f"Re-run {len(bad_indices)} cases, {count} cases still not completed.")
                 if count == len(bad_indices):
-                    warnings.warn("Rerunning did not help. Some cases still not completed.")
+                    warnings.warn(f"Rerunning did not help. {count} cases still not completed. Use NO_SGLANG=1 to disable sglang backend.")
                     break
             else:
-                warnings.warn("Some cases still not completed after 10 retries.")
+                warnings.warn(f"{count} cases still not completed after 10 retries. Use NO_SGLANG=1 to disable sglang backend.")
             
             for dic, out in zip(sample_dicts, output):
-                dic["predict"] = out["NA"]
+                dic["predict"] = (out["NA"] if out.get_meta_info("NA") is not None else None)
             
             return sample_dicts
         
