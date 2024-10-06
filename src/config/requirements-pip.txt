@@ -15,7 +15,7 @@ guidance
 deepspeed
 Levenshtein
 jsonstreamer
-transformers==4.40.0
+transformers>=4.40.0
 seaborn
 sglang[all]
 
