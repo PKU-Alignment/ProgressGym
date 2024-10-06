@@ -1,5 +1,4 @@
 from src.abstractions import Model, Data, DataFileCollection
-from src.moralchoice.moralchoice_quantify import figures_from_seq
 import os, sys
 
 gemma7b = Model("gemma-7b_histext_20C_alpaca", is_instruct_finetuned=True)
@@ -18,12 +17,12 @@ default_input.set_key_fields(
 
 alpaca_data = Data("alpaca_gpt4_en", is_instruction_data=True)
 
+alpaca_output = gemma7b.inference(
+    alpaca_data, "gemma-7b-20C-infer-alpaca-sglang", backend="sglang"
+)  # saved to output/inference_results/yyy/yyy.json
 default_output = gemma7b.inference(
     default_input, "gemma-7b-20C-infer-custom-deepspeed", backend="deepspeed"
 )  # saved to output/inference_results/xxx/xxx.json
 default_output2 = gemma7b.inference(
     default_input, "gemma-7b-20C-infer-custom-serial", backend="serial"
 )  # saved to output/inference_results/xxx/xxx.json
-alpaca_output = gemma7b.inference(
-    alpaca_data, "gemma-7b-20C-infer-alpaca-vllm", backend="sglang"
-)  # saved to output/inference_results/yyy/yyy.json
