@@ -50,7 +50,7 @@ def inference_standalone(
             if hasattr(Model, "always_force_rewrite")
             else False
         ),
-        max_batch_size=262144,
+        max_batch_size=4096,
     )
     print("Job finished.")
     conn.send(result_data.data_path)

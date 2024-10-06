@@ -235,7 +235,7 @@ def start_inference_backend(model_repoid_or_path: str,
             assert model_size is not None
             
             if model_size <= 10:
-                args = ['python', '-m', 'sglang.launch_server', '--port', f'{port}', f'--dp', f'{num_gpus}', '--model', model_repoid_or_path, '--mem-fraction-static', f'{frac_static}', '--chunked-prefill-size', f'{prefill_size}', '--trust-remote-code', '--schedule-conservativeness', '0.3']
+                args = ['python', '-m', 'sglang.launch_server', '--port', f'{port}', f'--dp', f'{num_gpus}', '--model', model_repoid_or_path, '--mem-fraction-static', f'{frac_static}', '--chunked-prefill-size', f'{prefill_size}', '--trust-remote-code']
             
             else:
                 min_gpus_per_instance = (2 if model_size <= 30 else 
