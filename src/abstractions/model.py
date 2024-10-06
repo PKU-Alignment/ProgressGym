@@ -378,7 +378,7 @@ class Model:
             if algo == "lora":
                 raise NotImplementedError("LORA finetuning not implemented yet.")
             if backend == "trl":
-                raise NotImplementedError("TRL finetuning not implemented yet.")
+                raise NotImplementedError("TRL backend is no longer supported.")
 
             batch_size_multiplier_log2 -= (
                 2 if stage == "dpo" else 0

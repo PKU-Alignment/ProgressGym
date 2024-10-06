@@ -1,8 +1,7 @@
 wheel
 tqdm
 bs4
-trl
-#vllm>0.4.0 # strictly required
+# vllm>0.4.0 # strictly required
 ray
 lxml
 nltk
