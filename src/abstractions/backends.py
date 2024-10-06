@@ -213,7 +213,7 @@ def start_inference_backend(model_repoid_or_path: str,
         
         return vllm_model, vllm_process_batch
     
-    elif backend_type != 'sglang':
+    elif backend_type == 'sglang':
     
         sgl = import_from_sglang()
         if template_type != 'auto':
