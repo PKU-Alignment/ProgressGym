@@ -300,21 +300,31 @@ def start_inference_backend(model_repoid_or_path: str,
                 for dialogue in dialogues
             ], progress_bar=True)
             
-            for _ in range(4):
-                count = 0
-                for k in tqdm.tqdm(range(len(output)), position=2):
-                    if output[k].get_meta_info("NA") is None:
-                        output[k] = get_response.run_batch([
-                            {
-                                "conversation": dialogues[k],
-                                "temperature": temperature,
-                                "max_tokens": max_tokens,
-                            }
-                        ])[0]
-                        count += 1
+            for _ in range(10):
+                bad_indices = [k for k in range(len(output)) if output[k].get_meta_info("NA") is None]
+                if len(bad_indices) == 0: break
                 
-                print(f"Re-run {count} cases")
-                if count == 0: break
+                new_output = get_response.run_batch([
+                    {
+                        "conversation": dialogues[k],
+                        "temperature": temperature,
+                        "max_tokens": max_tokens,
+                    }
+                    for k in bad_indices
+                ], progress_bar=True)
+                
+                count = 0
+                for k, out in zip(bad_indices, new_output):
+                    output[k] = out
+                    if out.get_meta_info("NA") is None:
+                        count += 1
+                                
+                print(f"Re-run {len(bad_indices)} cases, {count} cases still not completed.")
+                if count == len(bad_indices):
+                    warnings.warn("Rerunning did not help. Some cases still not completed.")
+                    break
+            else:
+                warnings.warn("Some cases still not completed after 10 retries.")
             
             for dic, out in zip(sample_dicts, output):
                 dic["predict"] = out["NA"]
