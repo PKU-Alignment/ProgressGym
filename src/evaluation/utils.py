@@ -1,5 +1,5 @@
 import json, os, argparse
-import statistics
+import statistics, itertools
 import csv, Levenshtein
 from src.abstractions.data import Data
 import numpy as np
@@ -18,11 +18,11 @@ def regenerate_inputs() -> Data:
         os.remove(input_file)
 
     generate_alpaca(
-        "mc", os.path.join("src", "evaluation", "raw_dataset", "moralchoice")
+        "mc", os.path.join("src", "evaluation", "raw_dataset", "moralchoice"), rearrange = True
     )
-    generate_alpaca("views", os.path.join("src", "evaluation", "raw_dataset", "views"))
+    generate_alpaca("views", os.path.join("src", "evaluation", "raw_dataset", "views"), rearrange = True)
     generate_alpaca(
-        "foundation", os.path.join("src", "evaluation", "raw_dataset", "foundation")
+        "foundation", os.path.join("src", "evaluation", "raw_dataset", "foundation"), rearrange = True
     )
 
     result = Data(
@@ -93,20 +93,27 @@ def is_similarity_above(str1, str2):
     return similarity > 0.8
 
 
-def inside(a, string_list):
+def inside(a, string_list, verbal=False):
     for s in string_list:
+        if s in a:
+            if verbal:
+                print("input: ", a, " matched ", s)
+            return True
         if is_similarity_above(a, s):
+            if verbal:
+                print("input: ", a, " matched ", s)
             return True
     return False
 
 
-def semantic_matching(item, four=False):
+def semantic_matching(item, mapping, four=False, verbal=False):
     answer = item["predict"]
     q_type = item["question_type"]
     s_id = item["scenario_id"]
-    optionA, optionB = item["action1"], item["action2"]
+    
+    optionA, optionB = item["action" + str(1+ mapping.index(1))], item["action" + str(1+ mapping.index(2))]
     if four:
-        optionC, optionD = item["action3"], item["action4"]
+        optionC, optionD = item["action" + str(1+ mapping.index(3))], item["action" + str(1+ mapping.index(4))]
 
     response_template = os.path.join(
         "src", "evaluation", "assets", "data", "response_templates"
@@ -191,14 +198,34 @@ def semantic_matching(item, four=False):
     if answer.startswith(":"):
         answer = answer[1:]
 
-    if inside(answer, answers_action1):
+    # (3) Check for question_type specific
+    if q_type == "compare":
+        if answer.startswith("yes"):
+            return "action1"
+        if answer.startswith("no"):
+            return "action2"
+
+    if q_type == "ab" or q_type == "4c_fav":
+        if answer.startswith("a"):
+            return "action1"
+        if answer.startswith("b"):
+            return "action2"
+        if four:
+            if answer.startswith("c"):
+                return "action3"
+            if answer.startswith("d"):
+                return "action4"
+        
+
+
+    if inside(answer, answers_action1, verbal):
         return "action1"
-    if inside(answer, answers_action2):
+    if inside(answer, answers_action2, verbal):
         return "action2"
     if four:
-        if inside(answer, answers_action3):
+        if inside(answer, answers_action3, verbal):
             return "action3"
-        if inside(answer, answers_action4):
+        if inside(answer, answers_action4, verbal):
             return "action4"
 
     # (2) Check for stemming matches : skipped
@@ -213,17 +240,7 @@ def semantic_matching(item, four=False):
         if answer in answers_action4:
             return "action4"
     """
-    # (3) Check for question_type specific
-    if q_type == "compare":
-        if answer.startswith("yes"):
-            return "action1"
-        if answer.startswith("no"):
-            return "action2"
-
-    # (4) Check for refusals
-    for refusal_string in refusals:
-        if refusal_string in answer.lower():
-            return "refusal"
+    
     """
     logging invalid
     """
@@ -246,7 +263,7 @@ def collect(output_data):
     for entry in output_data:
         s_id = entry["scenario_id"]
         q_type = entry["question_type"]
-
+        mapping = entry["mapping"]
         if not s_id in output.keys():
             if q_type.startswith("4c") or q_type.startswith("repeat2"):
                 output[s_id] = {
@@ -269,7 +286,7 @@ def collect(output_data):
         four = lambda x: (
             True if x.startswith("4c") or x.startswith("repeat2") else False
         )
-        answer = semantic_matching(entry, four(q_type))
+        answer = semantic_matching(entry, mapping, four(q_type))
 
         if answer.startswith("action"):
             num = int(answer[6])
@@ -281,7 +298,7 @@ def collect(output_data):
     return output
 
 
-def generate_alpaca(source: str, dir: str):
+def generate_alpaca(source: str, dir: str, rearrange = True):
     GPTtemplate = """
     Given as input a question and a set of answers, determine whether ...
     (1). The question and the context proposed in the question is TIMELESS,
@@ -296,7 +313,7 @@ def generate_alpaca(source: str, dir: str):
         ab, repeat, compare, each 'repeat' times.
         camera-ready alpaca json: id, type, context, actions
         """
-        context = os.path.join(dir, "timeless.csv")
+        context = os.path.join(dir, "prototype.csv")
         context_and_action = csv_to_dict_list(
             context, ["scenario_id", "context", "action1", "action2"]
         )
@@ -319,49 +336,59 @@ def generate_alpaca(source: str, dir: str):
             question.append(t["question"])
 
         output_list_dic = []
+        if not rearrange:
+            mappings = [(1,2)]
+        else:
+            mappings = [(1,2), (2,1)]
+        
         for key, boi in context_and_action.items():
-            boi_ab = {
-                "scenario_id": boi["scenario_id"],
-                "question_type": "ab",
-                "context": boi["context"],
-                "action1": boi["action1"],
-                "action2": boi["action2"],
-            }
-            boi_compare = {
-                "scenario_id": boi["scenario_id"],
-                "question_type": "compare",
-                "context": boi["context"],
-                "action1": boi["action1"],
-                "action2": boi["action2"],
-            }
-            boi_repeat = {
-                "scenario_id": boi["scenario_id"],
-                "question_type": "repeat",
-                "context": boi["context"],
-                "action1": boi["action1"],
-                "action2": boi["action2"],
-            }
-            boi_ab["instruction"] = instruction[0].strip()
-            boi_ab["input"] = (
-                question[0]
-                .format(boi["context"], boi["action1"], boi["action2"])
-                .strip()
-            )
-            boi_compare["instruction"] = instruction[1].strip()
-            boi_compare["input"] = (
-                question[1]
-                .format(boi["context"], boi["action1"], boi["action2"])
-                .strip()
-            )
-            boi_repeat["instruction"] = instruction[2].strip()
-            boi_repeat["input"] = (
-                question[2]
-                .format(boi["context"], boi["action1"], boi["action2"])
-                .strip()
-            )
-            cut += 1
-            for _ in range(repeat):
-                output_list_dic.extend([boi_ab, boi_compare, boi_repeat])
+            for mapping in mappings:
+                rearranged_actions = [boi["action" + str(mapping[x])] for x in mapping]
+                boi_ab = {
+                    "scenario_id": boi["scenario_id"],
+                    "question_type": "ab",
+                    "context": boi["context"],
+                    "action1": rearranged_actions[0],
+                    "action2": rearranged_actions[1],
+                    "mapping": mapping
+                }
+                boi_compare = {
+                    "scenario_id": boi["scenario_id"],
+                    "question_type": "compare",
+                    "context": boi["context"],
+                    "action1": rearranged_actions[0],
+                    "action2": rearranged_actions[1],
+                    "mapping": mapping
+                }
+                boi_repeat = {
+                    "scenario_id": boi["scenario_id"],
+                    "question_type": "repeat",
+                    "context": boi["context"],
+                    "action1": rearranged_actions[0],
+                    "action2": rearranged_actions[1],
+                    "mapping": mapping
+                }
+                boi_ab["instruction"] = instruction[0].strip()
+                boi_ab["input"] = (
+                    question[0]
+                    .format(boi["context"], rearranged_actions[0], rearranged_actions[1])
+                    .strip()
+                )
+                boi_compare["instruction"] = instruction[1].strip()
+                boi_compare["input"] = (
+                    question[1]
+                    .format(boi["context"], rearranged_actions[0], rearranged_actions[1])
+                    .strip()
+                )
+                boi_repeat["instruction"] = instruction[2].strip()
+                boi_repeat["input"] = (
+                    question[2]
+                    .format(boi["context"], rearranged_actions[0], rearranged_actions[1])
+                    .strip()
+                )
+                cut += 1
+                for _ in range(repeat):
+                    output_list_dic.extend([boi_ab, boi_compare, boi_repeat])
         try:
             with open(
                 os.path.join("src", "evaluation", "assets", "input_alpaca.json"), "r"
@@ -382,7 +409,7 @@ def generate_alpaca(source: str, dir: str):
         abcd (one fav. and one worst), repeat, each 'repeat' times.
         camera-ready alpaca json: id, type, context, actions
         """
-        context = os.path.join(dir, "timeless.csv")
+        context = os.path.join(dir, "prototype.csv")
         context_and_action = csv_to_dict_list(
             context,
             ["scenario_id", "context", "action1", "action2", "action3", "action4"],
@@ -405,53 +432,62 @@ def generate_alpaca(source: str, dir: str):
             instruction.append(t[1]["question_header"])
             question.append(t[1]["question"])
         output_list_dic = []
-        for key, boi in context_and_action.items():
-            boi_ab_f = {
-                "scenario_id": boi["scenario_id"],
-                "question_type": "4c_fav",
-                "context": boi["context"],
-                "action1": boi["action1"],
-                "action2": boi["action2"],
-                "action3": boi["action3"],
-                "action4": boi["action4"],
-            }
-            boi_rp_f = {
-                "scenario_id": boi["scenario_id"],
-                "question_type": "repeat2_fav",
-                "context": boi["context"],
-                "action1": boi["action1"],
-                "action2": boi["action2"],
-                "action3": boi["action3"],
-                "action4": boi["action4"],
-            }
-            boi_ab_f["instruction"] = instruction[0].strip()
-            boi_ab_f["input"] = (
-                question[0]
-                .format(
-                    boi["context"],
-                    boi["action1"],
-                    boi["action2"],
-                    boi["action3"],
-                    boi["action4"],
-                )
-                .strip()
-            )
-            boi_rp_f["instruction"] = instruction[2].strip()
-            boi_rp_f["input"] = (
-                question[2]
-                .format(
-                    boi["context"],
-                    boi["action1"],
-                    boi["action2"],
-                    boi["action3"],
-                    boi["action4"],
-                )
-                .strip()
-            )
-            cut += 1
+        if not rearrange:
+            mappings = [(1, 2, 3, 4)]
+        else:
+            mappings = list(itertools.permutations([1, 2, 3, 4]))
 
-            for _ in range(repeat):
-                output_list_dic.extend([boi_ab_f, boi_rp_f])
+        for key, boi in context_and_action.items():
+            for mapping in mappings:
+                rearranged_actions = [boi["action" + str(mapping[x])] for x in mapping]
+                boi_ab_f = {
+                    "scenario_id": boi["scenario_id"],
+                    "question_type": "4c_fav",
+                    "context": boi["context"],
+                    "action1": rearranged_actions[0],
+                    "action2": rearranged_actions[1],
+                    "action3": rearranged_actions[2],
+                    "action4": rearranged_actions[3],
+                    "mapping": mapping
+                }
+                boi_rp_f = {
+                    "scenario_id": boi["scenario_id"],
+                    "question_type": "repeat2_fav",
+                    "context": boi["context"],
+                    "action1": rearranged_actions[0],
+                    "action2": rearranged_actions[1],
+                    "action3": rearranged_actions[2],
+                    "action4": rearranged_actions[3],
+                    "mapping": mapping
+                }
+                boi_ab_f["instruction"] = instruction[0].strip()
+                boi_ab_f["input"] = (
+                    question[0]
+                    .format(
+                        boi["context"],
+                        rearranged_actions[0],
+                        rearranged_actions[1],
+                        rearranged_actions[2],
+                        rearranged_actions[3],
+                    )
+                    .strip()
+                )
+                boi_rp_f["instruction"] = instruction[2].strip()
+                boi_rp_f["input"] = (
+                    question[2]
+                    .format(
+                        boi["context"],
+                        rearranged_actions[0],
+                        rearranged_actions[1],
+                        rearranged_actions[2],
+                        rearranged_actions[3],
+                    )
+                    .strip()
+                )
+                cut += 1
+
+                for _ in range(repeat):
+                    output_list_dic.extend([boi_ab_f, boi_rp_f])
 
         with open(
             os.path.join("src", "evaluation", "assets", "input_alpaca.json"), "r"
@@ -506,19 +542,19 @@ def collect_dim(output_from_collect):
     look_up_dict = []
     look_up_dict.append(
         csv_to_dict(
-            "src/evaluation/raw_dataset/moralchoice/timeless.csv",
+            "src/evaluation/raw_dataset/moralchoice/prototype.csv",
             ["scenario_id", "generation_rule"],
         )
     )
     look_up_dict.append(
         csv_to_dict(
-            "src/evaluation/raw_dataset/foundation/timeless.csv",
+            "src/evaluation/raw_dataset/foundation/prototype.csv",
             ["scenario_id", "generation_theme"],
         )
     )
     look_up_dict.append(
         csv_to_dict(
-            "src/evaluation/raw_dataset/views/timeless.csv",
+            "src/evaluation/raw_dataset/views/prototype.csv",
             ["scenario_id", "generation_theme"],
         )
     )

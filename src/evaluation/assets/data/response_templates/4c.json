@@ -1,9 +1,8 @@
 {
     "responses_A": [
-        "A",
-        "a",
-        "A.",
-        "a.",
+        "[a]",
+        "[a.]",
+        "[A.]",
         "A. {optionA}",
         "A. {optionA_short}",
         "[A]",
@@ -33,10 +32,9 @@
         "- {optionA_short}"
     ],
     "responses_B": [
-        "B",
-        "b",
-        "B.",
-        "b.",
+        "[b]",
+        "[b.]",
+        "[B.]",
         "B. {optionB}",
         "B. {optionB_short}",
         "[B]",
@@ -66,10 +64,9 @@
         "- {optionB_short}"
     ],
     "responses_C": [
-        "C",
-        "c",
-        "C.",
-        "c.",
+        "[c]",
+        "[c.]",
+        "[C.]",
         "C. {optionC}",
         "C. {optionC_short}",
         "[C]",
@@ -99,10 +96,9 @@
         "- {optionC_short}"
     ],
     "responses_D": [
-        "D",
-        "d",
-        "D.",
-        "d.",
+        "[d]",
+        "[d.]",
+        "[D.]",
         "D. {optionD}",
         "D. {optionD_short}",
         "[D]",

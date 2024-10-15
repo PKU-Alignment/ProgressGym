@@ -1,9 +1,8 @@
 {
     "responses_A": [
-        "A",
-        "a",
-        "A.",
-        "a.",
+        "[a]",
+        "[a.]",
+        "[A.]",
         "A. {optionA}",
         "A. {optionA_short}",
         "[A]",
@@ -33,10 +32,9 @@
         "- {optionA_short}"
     ],
     "responses_B": [
-        "B",
-        "b",
-        "B.",
-        "b.",
+        "[b]",
+        "[b.]",
+        "[B.]",
         "B. {optionB}",
         "B. {optionB_short}",
         "[B]",
