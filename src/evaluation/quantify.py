@@ -303,71 +303,67 @@ def calculate_model(test_dir, model_name):
 
 def normalize_matrix(matrix, ranges):
     """
-    对每行的ai列到bi列的元素，除以该行ai列到bi列所有元素之和。
+    For each row, divide the elements from column ai to column bi by the sum of all elements in that row between columns ai and bi.
 
-    参数:
-    matrix: 输入的 m 行 n 列的矩阵 (numpy 数组)
-    ranges: 包含多个二元组 (ai, bi)，表示每行需要操作的列范围 (0-based index)
-
-    返回:
-    处理后的矩阵 (numpy 数组)
+    Arguments:
+        matrix: An input matrix with m rows and n columns (numpy array).
+        ranges: A list of tuples (ai, bi), where each tuple represents the column range (0-based index) for which the operation will be performed on each row.
+    
+    Returns:
+        The processed matrix (numpy array).
     """
-    matrix = np.array(matrix)  # 确保输入是 numpy 数组
+    matrix = np.array(matrix) 
     m, n = matrix.shape
     
     for row_idx in range(m):
         for (ai, bi) in ranges:
-            # 计算每行 ai 列到 bi 列的元素之和
+            # calculate the sum of columns ai-bi for each row
             sum_elements = np.sum(matrix[row_idx, ai:bi+1])
-            if sum_elements != 0:  # 避免除以 0
+            if sum_elements != 0:  # avoid division by zero
                 matrix[row_idx, ai:bi+1] /= sum_elements
     
     return matrix
 
 def plot_parallel_coordinates(data, title, tuples):
     """
-    使用并行坐标图展示高维数据的变化。
+    Parallel coordinate plot to visualize variations in high dimensional data
 
-    参数:
-    - data: 一个由10维向量组成的列表，例如 [[0.1, 0.2, ..., 0.9], [0.3, 0.4, ..., 1.0], ...]
+    Arguments:
+    - data: list of 10-dimensional vectors, e.g. [[0.1, 0.2, ..., 0.9], [0.3, 0.4, ..., 1.0], ...]
     """
     num_vectors = len(data)
     num_dimensions = len(data[0])
 
     data = normalize_matrix(data, tuples)
     if num_dimensions != 19:
-        raise ValueError("输入的向量必须是10维的")
+        raise ValueError("Input Vector Must Be 10-Dimensional")
 
-    # 构建DataFrame
     columns = ["dim" + str(i + 1) for i in range(num_dimensions)]
     df = pd.DataFrame(data, columns=columns)
     df["time"] = list(range(num_vectors))
 
-    # 绘制并行坐标图
     plt.figure(figsize=(12, 8))
     parallel_coordinates(df, class_column="time", colormap="viridis")
-    plt.xlabel("维度")
-    plt.ylabel("值")
-    plt.title("并行坐标图展示19维向量的变化")
+    plt.xlabel("Dimension")
+    plt.ylabel("Value")
+    plt.title("Parallel coordinate plot of variations in high dimensional data")
     plt.show()
     plt.savefig("output/evaluation_results/figs/" + title + "_parr.png")
 
 def plot_heatmap(vectors, title, tuples):
     """
-    绘制19维向量列表的热图。
+    Heatmap for list of 19-dimensional vector.
 
-    参数:
-    vectors (list of list of floats): 由19维向量构成的列表。
+    Arguments:
+        vectors (list of list of floats): List of 19-dimensional vector
     """
-    # 将向量列表转换为NumPy数组，便于处理
     data = np.array(vectors)
 
     data = normalize_matrix(data, tuples)
-    # 确保输入的向量都是19维的
     if data.shape[1] != 19:
-        raise ValueError("每个向量都应该有19个维度")
+        raise ValueError("All vectors should be 19-dimensional")
 
-    # 创建一个带有适当标签的热图
+    # Heatmap with appropriate labels
     plt.figure(figsize=(12, 8))
     ax = sns.heatmap(
         data,
@@ -384,7 +380,6 @@ def plot_heatmap(vectors, title, tuples):
     plt.savefig("output/evaluation_results/figs/" + title + "_heat.png")
 
 def plot_vectors(vectors, dim_start, name):
-    # 获取向量的数量和向量的维度
     print(vectors)
     num_vectors = len(vectors)
     num_dimensions = len(vectors[0])
@@ -396,18 +391,13 @@ def plot_vectors(vectors, dim_start, name):
         "v": "World View",
     }
     start_mapping = {"b": 0, "s": 5, "f": 10, "v": 15}
-    # 创建一个图形和轴
     fig, ax = plt.subplots()
 
-    # 对每一个维度绘制一条折线
     for dim in range(num_dimensions):
-        # 提取当前维度的所有数值
         values = [vector[dim] for vector in vectors]
-        # 绘制折线
         x_set = ["C" + str(dim_start + i) for i in range(num_vectors)]
         ax.plot(x_set, values, label=f"Dimension {dim + start_mapping[name]}")
 
-    # 添加标题和标签
     ax.set_title(
         "Line Plot Representation Vectors in Sub-Fields of " + name_mapping[name]
     )
@@ -415,7 +405,6 @@ def plot_vectors(vectors, dim_start, name):
     ax.set_ylabel("Value")
     ax.legend()
 
-    # 显示图形
     plt.show()
     plt.savefig(
         "output/evaluation_results/figs/" + name_mapping[name] + "_line_real.png"
