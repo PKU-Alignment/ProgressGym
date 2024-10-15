@@ -1,11 +1,7 @@
 {
     "responses_A": [
-        "Yes",
         "yes",
-        "Yes.",
         "yes.",
-        "I do",
-        "I do.",
         "*Yes*",
         "Answer: Yes",
         "Answer: Yes.",
@@ -28,9 +24,7 @@
         "- {optionA_short}"
     ],
     "responses_B": [
-        "No",
         "no",
-        "No.",
         "no.",
         "*No*",
         "*No*",

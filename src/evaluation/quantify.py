@@ -301,8 +301,30 @@ def calculate_model(test_dir, model_name):
 
     return res
 
+def normalize_matrix(matrix, ranges):
+    """
+    对每行的ai列到bi列的元素，除以该行ai列到bi列所有元素之和。
 
-def plot_parallel_coordinates(data):
+    参数:
+    matrix: 输入的 m 行 n 列的矩阵 (numpy 数组)
+    ranges: 包含多个二元组 (ai, bi)，表示每行需要操作的列范围 (0-based index)
+
+    返回:
+    处理后的矩阵 (numpy 数组)
+    """
+    matrix = np.array(matrix)  # 确保输入是 numpy 数组
+    m, n = matrix.shape
+    
+    for row_idx in range(m):
+        for (ai, bi) in ranges:
+            # 计算每行 ai 列到 bi 列的元素之和
+            sum_elements = np.sum(matrix[row_idx, ai:bi+1])
+            if sum_elements != 0:  # 避免除以 0
+                matrix[row_idx, ai:bi+1] /= sum_elements
+    
+    return matrix
+
+def plot_parallel_coordinates(data, title, tuples):
     """
     使用并行坐标图展示高维数据的变化。
 
@@ -312,6 +334,7 @@ def plot_parallel_coordinates(data):
     num_vectors = len(data)
     num_dimensions = len(data[0])
 
+    data = normalize_matrix(data, tuples)
     if num_dimensions != 19:
         raise ValueError("输入的向量必须是10维的")
 
@@ -327,33 +350,9 @@ def plot_parallel_coordinates(data):
     plt.ylabel("值")
     plt.title("并行坐标图展示19维向量的变化")
     plt.show()
-    plt.savefig("output/evaluation_results/figs/parr.png")
+    plt.savefig("output/evaluation_results/figs/" + title + "_parr.png")
 
-
-def plot_multiple_line(data):
-    """
-    使用多折线图展示19维数据的变化。
-
-    参数:
-    - data: 一个由19维向量组成的列表，例如 [[0.1, 0.2, ..., 0.19], [0.2, 0.3, ..., 0.2], ...]
-    """
-    num_vectors = len(data)
-    num_dimensions = len(data[0])
-
-    plt.figure(figsize=(15, 10))
-
-    for i, vector in enumerate(data):
-        plt.plot(range(1, num_dimensions + 1), vector, label=f"向量 {i+1}")
-
-    plt.xlabel("维度")
-    plt.ylabel("值")
-    plt.title("多折线图展示19维向量的变化")
-    plt.legend(loc="upper right", bbox_to_anchor=(1.1, 1.05))
-    plt.show()
-    plt.savefig("output/evaluation_results/figs/mult.png")
-
-
-def plot_heatmap(vectors):
+def plot_heatmap(vectors, title, tuples):
     """
     绘制19维向量列表的热图。
 
@@ -363,6 +362,7 @@ def plot_heatmap(vectors):
     # 将向量列表转换为NumPy数组，便于处理
     data = np.array(vectors)
 
+    data = normalize_matrix(data, tuples)
     # 确保输入的向量都是19维的
     if data.shape[1] != 19:
         raise ValueError("每个向量都应该有19个维度")
@@ -381,8 +381,7 @@ def plot_heatmap(vectors):
     plt.xlabel("Dimensions")
     plt.ylabel("Vectors")
     plt.show()
-    plt.savefig("output/evaluation_results/figs/heat.png")
-
+    plt.savefig("output/evaluation_results/figs/" + title + "_heat.png")
 
 def plot_vectors(vectors, dim_start, name):
     # 获取向量的数量和向量的维度
