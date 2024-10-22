@@ -233,7 +233,9 @@ def start_inference_backend(
     :return: A tuple containing the backend process and the function to process a batch of samples (type signature: List[dict] -> List[dict], with optional metadata arguments)
     :rtype: Tuple[subprocess.Popen, Callable]
     """
-
+    if eval(os.environ.get("LOUD_BACKEND", "0")):
+        silent = False
+    
     if num_gpus is None:
         num_gpus = torch.cuda.device_count()
 
