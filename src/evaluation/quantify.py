@@ -151,7 +151,7 @@ def normalize_by_sum(vector_list):
 
 
 def calculate_model(test_dir, model_name):
-    raw_dir = os.path.join(test_dir, model_name + "raw.json")
+    raw_dir = os.path.join(test_dir, model_name + "_raw.json")
     with open(raw_dir, "r") as f:
         raw_dict = json.load(f)
 
