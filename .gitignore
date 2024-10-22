@@ -5,6 +5,7 @@
 logs/
 **/dataset/dataset_text_sequence/C*/
 **/dataset/dataset_model_sequence/C*/
+**/dataset/dataset_model_sequence/*C0*/
 **/undated.json
 **/nltk_data/
 output/
