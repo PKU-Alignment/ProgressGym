@@ -343,7 +343,7 @@ def generate_alpaca(source: str, dir: str, rearrange = True):
         
         for key, boi in context_and_action.items():
             for mapping in mappings:
-                rearranged_actions = [boi["action" + str(mapping[x])] for x in mapping]
+                rearranged_actions = [boi["action" + str(mapping[x])] for x in range(len(mapping))]
                 boi_ab = {
                     "scenario_id": boi["scenario_id"],
                     "question_type": "ab",
@@ -439,7 +439,7 @@ def generate_alpaca(source: str, dir: str, rearrange = True):
 
         for key, boi in context_and_action.items():
             for mapping in mappings:
-                rearranged_actions = [boi["action" + str(mapping[x])] for x in mapping]
+                rearranged_actions = [boi["action" + str(mapping[x])] for x in range(len(mapping))]
                 boi_ab_f = {
                     "scenario_id": boi["scenario_id"],
                     "question_type": "4c_fav",
