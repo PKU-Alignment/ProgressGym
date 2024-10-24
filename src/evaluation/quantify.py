@@ -151,14 +151,14 @@ def normalize_by_sum(vector_list):
 
 
 def calculate_model(test_dir, model_name):
-    raw_dir = os.path.join(test_dir, model_name + "raw.json")
+    raw_dir = os.path.join(test_dir, model_name + "_raw.json")
     with open(raw_dir, "r") as f:
         raw_dict = json.load(f)
 
     ref_dir = [
-        "src/evaluation/raw_dataset/moralchoice/timeless.csv",
-        "src/evaluation/raw_dataset/foundation/timeless.csv",
-        "src/evaluation/raw_dataset/views/timeless.csv",
+        "src/evaluation/raw_dataset/moralchoice/final.csv",
+        "src/evaluation/raw_dataset/foundation/final.csv",
+        "src/evaluation/raw_dataset/views/final.csv",
     ]
     # ref_dict = [csv_to_dict_list(t) for t in ref_dir]
 
