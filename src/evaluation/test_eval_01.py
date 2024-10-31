@@ -33,5 +33,6 @@ if __name__ == "__main__":
     with open("output/evaluation_results/" + test_name + ".json", "w") as f:
         lst = [list(boi) for boi in vec]
         json.dump(lst, f)
+    # vec = json.load(open("output/evaluation_results/" + test_name + ".json", "r"))
     # qt.plot_parallel_coordinates(vec)
-    qt.plot_heatmap(vec)
+    qt.plot_heatmap(vec, test_name, [(0,4), (5,9), (10,14), (15,18)])

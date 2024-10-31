@@ -49,7 +49,7 @@ def _calculate_model(test_name, high_or_low, model_name):
         )
     )(high_or_low)
     raw_dir = os.path.join(
-        "output", "evaluation_results", test_name, model_name + "raw.json"
+        "output", "evaluation_results", test_name, model_name + "_raw.json"
     )
     scenario_dir = os.path.join(
         "src", "moralchoice", "assets", "data", "scenarios", scenario + ".csv"
@@ -151,7 +151,7 @@ def normalize_by_sum(vector_list):
 
 
 def calculate_model(test_dir, model_name):
-    raw_dir = os.path.join(test_dir, model_name + "raw.json")
+    raw_dir = os.path.join(test_dir, model_name + "_raw.json")
     with open(raw_dir, "r") as f:
         raw_dict = json.load(f)
 
@@ -236,6 +236,12 @@ def calculate_model(test_dir, model_name):
             )
             mrl_vec[2][key] /= 2
         if num == 1:
+            # ref_dict = csv_to_dict_list(ref_dir[1], ['scenario_id', 'generation_theme'])
+            ref_dict = csv_to_dict(ref_dir[1], ["generation_theme"])
+            if key not in ref_dict.keys():
+                print("key", key, "not found")
+                continue
+            
             """
             registering invalid
             """
@@ -273,8 +279,6 @@ def calculate_model(test_dir, model_name):
                 "Authority_Respect": 3,
                 "Purity_Sancity": 4,
             }
-            # ref_dict = csv_to_dict_list(ref_dir[1], ['scenario_id', 'generation_theme'])
-            ref_dict = csv_to_dict(ref_dir[1], ["generation_theme"])
             theme = ref_dict[key]["generation_theme"].strip()
             mrl_vec[1][key][context_matching[theme]] += mal
     """
@@ -359,7 +363,10 @@ def plot_heatmap(vectors, title, tuples):
     """
     data = np.array(vectors)
 
-    data = normalize_matrix(data, tuples)
+    # data = normalize_matrix(data, tuples)
+    data -= np.mean(data, axis=0, keepdims=True)
+    data /= np.std(data, axis=0, keepdims=True)
+    # data /= np.sum(data, axis=0, keepdims=True)
     if data.shape[1] != 19:
         raise ValueError("All vectors should be 19-dimensional")
 
