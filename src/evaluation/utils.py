@@ -313,7 +313,7 @@ def generate_alpaca(source: str, dir: str, rearrange = True):
         ab, repeat, compare, each 'repeat' times.
         camera-ready alpaca json: id, type, context, actions
         """
-        context = os.path.join(dir, "prototype.csv")
+        context = os.path.join(dir, "final.csv")
         context_and_action = csv_to_dict_list(
             context, ["scenario_id", "context", "action1", "action2"]
         )
@@ -409,7 +409,7 @@ def generate_alpaca(source: str, dir: str, rearrange = True):
         abcd (one fav. and one worst), repeat, each 'repeat' times.
         camera-ready alpaca json: id, type, context, actions
         """
-        context = os.path.join(dir, "prototype.csv")
+        context = os.path.join(dir, "final.csv")
         context_and_action = csv_to_dict_list(
             context,
             ["scenario_id", "context", "action1", "action2", "action3", "action4"],
@@ -542,19 +542,19 @@ def collect_dim(output_from_collect):
     look_up_dict = []
     look_up_dict.append(
         csv_to_dict(
-            "src/evaluation/raw_dataset/moralchoice/prototype.csv",
+            "src/evaluation/raw_dataset/moralchoice/final.csv",
             ["scenario_id", "generation_rule"],
         )
     )
     look_up_dict.append(
         csv_to_dict(
-            "src/evaluation/raw_dataset/foundation/prototype.csv",
+            "src/evaluation/raw_dataset/foundation/final.csv",
             ["scenario_id", "generation_theme"],
         )
     )
     look_up_dict.append(
         csv_to_dict(
-            "src/evaluation/raw_dataset/views/prototype.csv",
+            "src/evaluation/raw_dataset/views/final.csv",
             ["scenario_id", "generation_theme"],
         )
     )
