@@ -214,7 +214,10 @@ def start_inference_backend(
     num_gpus: int = None,
     template_type: Literal["auto", "alpaca", "mistral"] = "auto",
 ) -> Tuple[subprocess.Popen, Callable]:
-    """Start an inference backend for a given model.
+    """Start an inference backend for a given model. 
+    Returns a tuple containing the backend process and the function to process a batch of samples.
+    When purpose is "logprobs", the returned function will return the log probability of the prompt text itself, without generating any text. The probability will be stored in the "logprob" field of the output dictionary, with all other fields staying the same.
+    When purpose is "responses", the returned function will generate a response to the prompt text. The response will be stored in the "predict" field of the output dictionary, with all other fields staying the same.
 
     :param model_repoid_or_path: The model repo ID or path (e.g., "meta-llama/Llama-3.1-8B-Instruct").
     :type model_repoid_or_path: str
@@ -240,6 +243,9 @@ def start_inference_backend(
         num_gpus = torch.cuda.device_count()
 
     if backend_type == "vllm":
+        
+        if purpose == "logprobs":
+            raise ValueError("VLLM backend does not support logprobs purpose.")
 
         LLM, SamplingParams, destroy_model_parallel = import_from_vllm()
 
@@ -399,6 +405,7 @@ def start_inference_backend(
         def get_response(
             s, conversation: List, temperature: float = 0.2, max_tokens: int = 256
         ) -> str:
+            nonlocal purpose
 
             for turn in conversation:
                 if turn["role"] == "assistant":
@@ -410,17 +417,26 @@ def start_inference_backend(
                 else:
                     raise ValueError(f"Unknown role: {turn['role']}")
 
-            s += sgl.assistant_begin()
+            if purpose == "responses":
+                s += sgl.assistant_begin()
+            
             s += sgl.gen(
                 "NA",
-                max_tokens=max_tokens,
-                return_logprob=False,
+                max_tokens=(max_tokens if purpose == "responses" else 0),
+                return_logprob=(purpose == "logprobs"),
+                logprob_start_len=(None if purpose == "responses" else 0),
                 temperature=temperature,
             )
 
         def sglang_process_batch(
             sample_dicts: List[dict], temperature: float = 0.2, max_tokens: int = 256
         ) -> List[dict]:
+            """Process a batch of samples using the sglang backend.
+            When purpose is "logprobs", it will return the log probability of the prompt text itself, without generating any text. The probability will be stored in the "logprob" field of the output dictionary, with all other fields staying the same.
+            When purpose is "responses", it will generate a response to the prompt text. The response will be stored in the "predict" field of the output dictionary, with all other fields staying the same.
+            """
+            nonlocal purpose
+            
             if not os.environ.get("ALLOW_EMPTY_INPUT") or not eval(
                 os.environ.get("ALLOW_EMPTY_INPUT")
             ):
@@ -434,7 +450,7 @@ def start_inference_backend(
                             found = 1
                         dic["input"] = dic["instruction"]
 
-            dialogues = dict_to_dialogue_list(sample_dicts)
+            dialogues = dict_to_dialogue_list(sample_dicts, purpose)
             output = get_response.run_batch(
                 [
                     {
@@ -490,9 +506,14 @@ def start_inference_backend(
                 )
 
             for dic, out in zip(sample_dicts, output):
-                dic["predict"] = (
-                    out["NA"] if out.get_meta_info("NA") is not None else None
-                )
+                if purpose == "logprobs":
+                    dic["logprob"] = sum(
+                        x[0] for x in list(out.get_meta_info("NA")['input_token_logprobs']) if x[0] is not None
+                    )
+                else:
+                    dic["predict"] = (
+                        out["NA"] if out.get_meta_info("NA") is not None else None
+                    )
 
             return sample_dicts
 
@@ -502,7 +523,7 @@ def start_inference_backend(
 
 
 def dict_to_dialogue_list(
-    dic: Union[dict, List[dict]]
+    dic: Union[dict, List[dict]], purpose: Literal["responses", "logprobs"] = "responses"
 ) -> Union[List[Dict[str, str]], List[List[Dict[str, str]]]]:
     """Transform a dictionary into a list of dialogue turns in OpenAI format.
 
@@ -512,10 +533,14 @@ def dict_to_dialogue_list(
     :rtype: Union[List[Dict[str, str]], List[List[Dict[str, str]]]
     """
     if isinstance(dic, dict):
-        return [
+        res = [
             {"role": "system", "content": dic["instruction"]},
             {"role": "user", "content": dic["input"]},
         ]
+        if purpose == "logprobs" and "predict" in dic:
+            res.append({"role": "assistant", "content": dic["predict"]})
+        
+        return res
 
     return [dict_to_dialogue_list(d) for d in dic]
 

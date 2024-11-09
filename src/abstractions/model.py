@@ -41,14 +41,15 @@ def inference_standalone(
     query_field_name: str,
     temperature: float,
     backend_type: Literal["sglang", "vllm"],
+    purpose: Literal["responses", "logprobs"],
     conn: multiprocessing.connection.Connection,
 ):
     backend, process_batch = start_inference_backend(
         model_path,
         backend_type,
-        purpose="responses",
         num_gpus=num_gpus,
         template_type=template_type,
+        purpose=purpose,
     )
 
     data = Data(data_name="temporary", data_type="sft", data_path=data_path)
@@ -661,6 +662,7 @@ class Model:
         backend: Literal["sglang", "vllm", "deepspeed", "serial"] = "sglang",
         batch_size_multiplier_log2: int = 0,
         temperature=0.0,
+        purpose: Literal["responses", "logprobs"] = "responses",
     ) -> Union[Data, List[Dict[str, str]]]:
         """Performance inference on a dataset (currently only instruction datasets are tested, with the same format as SFT datasets),
         and
@@ -679,6 +681,9 @@ class Model:
 
         :param temperature: The temperature parameter
         :type temperature: float = 0.0
+        
+        :param purpose: The purpose of the inference. It can be "responses" or "logprobs". If "logprobs", the log probability of the prompt itself (and the assistant response supplied in the `predict` field, if exists) is returned in the `logprob` field of the resulting dataset, without doing any completion. If "responses", the completion text is saved in the `predict` field of the resulting dataset.
+        :type purpose: Literal["responses", "logprobs"] = "responses"
 
         :return: returns the resulting dataset (completion text saved in the `predict` field of dicts; other fields are preserved).
         :rtype: Union[Data, List[Dict[str, str]]].
@@ -716,6 +721,12 @@ class Model:
                 warnings.warn("vllm is disabled. Switching to sglang backend.")
                 backend = "sglang"
 
+        if purpose == "logprobs" and backend != "sglang":
+            warnings.warn(
+                "Logprobs are only supported with backend=sglang. Switching to sglang backend."
+            )
+            backend = "sglang"
+        
         if input_is_data:
             assert (
                 data.data_type != "pretrain" or backend == "deepspeed"
@@ -737,7 +748,7 @@ class Model:
 
             result = (
                 self.__inference_parallel_segregated(
-                    data, result_data_name, temperature, backend
+                    data, result_data_name, temperature, backend, purpose
                 )
                 if backend in ["vllm", "sglang"]
                 else self.__inference_parallel_deepspeed(
@@ -770,7 +781,7 @@ class Model:
         return result
 
     def __inference_parallel_segregated(
-        self, data: Data, result_data_name: str, temperature: float, backend_type: str
+        self, data: Data, result_data_name: str, temperature: float, backend_type: str, purpose: str
     ) -> Data:
         """sglang/vllm implementation for `inference()`, but performed in a separate process to free up GPU memory. This is the recommended implementation, due to its superior speed and robustness."""
         data_path = data.data_path
@@ -799,6 +810,7 @@ class Model:
                 query_field_name,
                 temperature,
                 backend_type,
+                purpose,
                 child_conn,
             ),
         )
