@@ -417,7 +417,9 @@ def start_inference_backend(
                 else:
                     raise ValueError(f"Unknown role: {turn['role']}")
 
-            s += sgl.assistant_begin()
+            if purpose == "responses":
+                s += sgl.assistant_begin()
+            
             s += sgl.gen(
                 "NA",
                 max_tokens=(max_tokens if purpose == "responses" else 0),
@@ -433,6 +435,7 @@ def start_inference_backend(
             When purpose is "logprobs", it will return the log probability of the prompt text itself, without generating any text. The probability will be stored in the "logprob" field of the output dictionary, with all other fields staying the same.
             When purpose is "responses", it will generate a response to the prompt text. The response will be stored in the "predict" field of the output dictionary, with all other fields staying the same.
             """
+            nonlocal purpose
             
             if not os.environ.get("ALLOW_EMPTY_INPUT") or not eval(
                 os.environ.get("ALLOW_EMPTY_INPUT")
@@ -447,7 +450,7 @@ def start_inference_backend(
                             found = 1
                         dic["input"] = dic["instruction"]
 
-            dialogues = dict_to_dialogue_list(sample_dicts)
+            dialogues = dict_to_dialogue_list(sample_dicts, purpose)
             output = get_response.run_batch(
                 [
                     {
@@ -520,7 +523,7 @@ def start_inference_backend(
 
 
 def dict_to_dialogue_list(
-    dic: Union[dict, List[dict]]
+    dic: Union[dict, List[dict]], purpose: Literal["responses", "logprobs"] = "responses"
 ) -> Union[List[Dict[str, str]], List[List[Dict[str, str]]]]:
     """Transform a dictionary into a list of dialogue turns in OpenAI format.
 
@@ -530,10 +533,14 @@ def dict_to_dialogue_list(
     :rtype: Union[List[Dict[str, str]], List[List[Dict[str, str]]]
     """
     if isinstance(dic, dict):
-        return [
+        res = [
             {"role": "system", "content": dic["instruction"]},
             {"role": "user", "content": dic["input"]},
         ]
+        if purpose == "logprobs" and "predict" in dic:
+            res.append({"role": "assistant", "content": dic["predict"]})
+        
+        return res
 
     return [dict_to_dialogue_list(d) for d in dic]
 
