@@ -322,7 +322,7 @@ def start_inference_backend(
             model_size = get_model_size(model_repoid_or_path)
             assert model_size is not None
 
-            if model_size <= 10:
+            if model_size <= 10 and not os.environ.get("FORCE_TP"):
                 args = [
                     "python",
                     "-m",
