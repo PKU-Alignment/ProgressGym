@@ -3,7 +3,7 @@ from .utils import generate_alpaca
 import os, json
 from multiprocessing import freeze_support
 from . import quantify as qt
-
+import numpy as np
 """
 generate_alpaca('mc', os.path.join('src', 'evaluation', 'raw_dataset', 'moralchoice'))
 generate_alpaca('views', os.path.join('src', 'evaluation', 'raw_dataset', 'views'))
@@ -27,12 +27,16 @@ if __name__ == "__main__":
     for m in set_model:
         boi = Model(m)
         v = boi.evaluate(method="fast")
-        # v = qt.calculate_model('output/evaluation_results/' + m + '_single/', m)
+        #v = qt.calculate_model('output/evaluation_results/' + m + '_single/', m)
         vec.append(v)
     test_name = "8b_13to21"
     with open("output/evaluation_results/" + test_name + ".json", "w") as f:
         lst = [list(boi) for boi in vec]
         json.dump(lst, f)
+    vec = np.array(vec)
+    # qt.analyze_vectors_quadratic(vec)
     # vec = json.load(open("output/evaluation_results/" + test_name + ".json", "r"))
     # qt.plot_parallel_coordinates(vec)
-    qt.plot_heatmap(vec, test_name, [(0,4), (5,9), (10,14), (15,18)])
+    qt.plot_heatmap(vec[:, 10:15], test_name + '_foundation', norm = "group")
+    qt.plot_heatmap(vec[:, 15:19], test_name + '_view', norm = "group")
+    qt.plot_heatmap(vec[:, :10], test_name + '_morality')

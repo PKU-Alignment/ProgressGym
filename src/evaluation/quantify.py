@@ -195,10 +195,13 @@ def calculate_model(test_dir, model_name):
                 if row[7 + i] == row[17 + i]:
                     continue
                 else:
-                    if row[17 + i] == "Yes" or row[7 + i] == "No":
+                    if row[17 + i] == "Yes" and row[7 + i] == "No":
                         template[i] = 1
-                    elif row[17 + i] == "No" or row[7 + i] == "Yes":
+                    elif row[17 + i] == "No" and row[7 + i] == "Yes":
                         template[i] = -1
+                    else:
+                        continue
+                        #print("non-conflicting morality", row[0])
             mrl_vec[0][name] = list(template * (mal))
 
     for key in raw_dict.keys():
@@ -318,7 +321,8 @@ def normalize_matrix(matrix, ranges):
     """
     matrix = np.array(matrix) 
     m, n = matrix.shape
-    
+    if ranges == None:
+        ranges = [(0, n-1)] 
     for row_idx in range(m):
         for (ai, bi) in ranges:
             # calculate the sum of columns ai-bi for each row
@@ -354,21 +358,21 @@ def plot_parallel_coordinates(data, title, tuples):
     plt.show()
     plt.savefig("output/evaluation_results/figs/" + title + "_parr.png")
 
-def plot_heatmap(vectors, title, tuples):
+def plot_heatmap(data, title, tuples = None, norm = "column"):
     """
     Heatmap for list of 19-dimensional vector.
 
     Arguments:
-        vectors (list of list of floats): List of 19-dimensional vector
+        data (np 2d-array): List of 19-dimensional vector
     """
-    data = np.array(vectors)
-
-    # data = normalize_matrix(data, tuples)
-    data -= np.mean(data, axis=0, keepdims=True)
-    data /= np.std(data, axis=0, keepdims=True)
-    # data /= np.sum(data, axis=0, keepdims=True)
-    if data.shape[1] != 19:
-        raise ValueError("All vectors should be 19-dimensional")
+    if norm == "group":
+        data = normalize_matrix(data, tuples)
+        #data -= np.mean(data, axis=0, keepdims=True)
+        #data /= np.std(data, axis=0, keepdims=True)
+    if norm == "column":
+        data -= np.mean(data, axis=0, keepdims=True)
+        data /= np.std(data, axis=0, keepdims=True)
+    #data /= np.sum(data, axis=0, keepdims=True)
 
     # Heatmap with appropriate labels
     plt.figure(figsize=(12, 8))
@@ -377,8 +381,8 @@ def plot_heatmap(vectors, title, tuples):
         annot=True,
         cmap="viridis",
         cbar=True,
-        xticklabels=[f"Dim{i+1}" for i in range(19)],
-        yticklabels=[f"Vector {i+1}" for i in range(len(vectors))],
+        xticklabels=[f"Dim{i+1}" for i in range(data.shape[1])],
+        yticklabels=[f"Vector {i+1}" for i in range(data.shape[0])],
     )
     plt.title("Heatmap of 19-Dimensional Vectors")
     plt.xlabel("Dimensions")
@@ -434,13 +438,13 @@ def analyze_vectors_quadratic(vectors):
     p_values = []
     positive_coefficients = []
     negative_coefficients = []
-
+    np.savetxt("output/evaluation_results/figs/quad.txt", vectors, fmt='%f')
     for dim in range(num_dimensions):
         x = np.arange(len(vectors))
         y = vectors[:, dim]
 
         # Perform quadratic fitting
-        p = Polynomial.fit(x, y, 2)
+        p = Polynomial.fit(x, y, 3)
         coeffs = p.convert().coef
         coefficients.append(coeffs)
 
@@ -460,8 +464,10 @@ def analyze_vectors_quadratic(vectors):
 
     # Print coefficients and p-values
     print("Quadratic coefficients and p-values for each dimension:")
-    for i, (coeffs, p_value) in enumerate(zip(coefficients, p_values)):
-        print(f"Dimension {i + 1}: coefficients = {coeffs}, p-value = {p_value}")
+    with open("output/evaluation_results/figs/quad.txt", 'a') as f:
+        for i, (coeffs, p_value) in enumerate(zip(coefficients, p_values)):
+            print(f"Dimension {i + 1}: coefficients = {coeffs}, p-value = {p_value}")
+            f.write(f"Dimension {i + 1}: coefficients = {coeffs}, p-value = {p_value}\n\n") 
 
     # Plot positive coefficients
     plt.figure(figsize=(14, 7))

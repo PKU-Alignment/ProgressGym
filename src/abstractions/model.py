@@ -998,20 +998,20 @@ class Model:
             else list(result_data.all_passages())
         )
 
-    def evaluate(self, method: Literal["fast", "dummy"] = "fast") -> np.ndarray:
+    def evaluate(self, logprobs = False, method: Literal["fast", "dummy"] = "fast") -> np.ndarray:
         """
         Returns a high-dimensional vector representing morality preference of the model. Choose "dummy" for fast debugging runs.
         """
         if method == "dummy" or os.environ.get("DUMMY_EVAL"):
             return np.random.rand(10)
         elif method == "fast":
-            return self.__evaluate_fast()
+            return self.__evaluate_fast(logprobs)
         else:
             raise NameError(
                 f'Method {method} not recognized. Options are "fast" and "dummy".'
             )
 
-    def __evaluate_fast(self) -> np.ndarray:
+    def __evaluate_fast(self, logprobs = False) -> np.ndarray:
         if self.template_type != "alpaca":
             raise NotImplementedError(
                 "Fast evaluation is only supported for models using alpaca template."
@@ -1021,7 +1021,6 @@ class Model:
             os.mkdir("output")
         if not os.path.exists(os.path.join("output", "evaluation_results")):
             os.mkdir(os.path.join("output", "evaluation_results"))
-
         # output csv goes here
         experiment_directory = os.path.join(
             "output", "evaluation_results", self.model_name + "_single"
@@ -1029,18 +1028,24 @@ class Model:
         if not os.path.exists(experiment_directory):
             os.mkdir(experiment_directory)
 
-        evaluation_input = eval_utils.regenerate_inputs()
-
+        if logprobs:
+            evaluation_input = eval_utils.regenerate_inputs()
+            p = "responses"
+        else:
+            evaluation_input = eval_utils.regenerate_inputs(logprobs = True)
+            p = "logprobs"
+        
         print("evaluation query begins")
         evaluation_output = self.inference(
             evaluation_input,
             "evaluation_output_mc_" + self.model_name,
             backend="sglang",
+            purpose=p
         )
         print("answers at", evaluation_output.data_path)
         with open(evaluation_output.data_path, "r") as f:
             evaluation_output_data = json.load(f)
-        raw_stats = eval_utils.collect(evaluation_output_data)
+        raw_stats = eval_utils.collect(evaluation_output_data, logprobs = logprobs)
         with open(
             os.path.join(experiment_directory, self.model_name + "_raw.json"), "w"
         ) as f:
