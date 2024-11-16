@@ -344,6 +344,10 @@ def start_inference_backend(
                 min_gpus_per_instance = (
                     2 if model_size <= 30 else 4 if model_size <= 80 else 8
                 )
+                
+                if os.environ.get("FORCE_TP"):
+                    min_gpus_per_instance = int(os.environ.get("FORCE_TP"))
+                                
                 assert num_gpus % min_gpus_per_instance == 0
                 args = [
                     "python",
