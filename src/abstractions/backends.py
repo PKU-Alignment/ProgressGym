@@ -316,7 +316,7 @@ def start_inference_backend(
             )
 
         with open(os.devnull, "w") as devnull:
-            frac_static = 0.8 if purpose == "responses" else 0.4
+            frac_static = 0.8 if purpose == "responses" else 0.7
             prefill_size = 8192 if purpose == "responses" else 1024
 
             model_size = get_model_size(model_repoid_or_path)
