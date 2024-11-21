@@ -1029,11 +1029,11 @@ class Model:
             os.mkdir(experiment_directory)
 
         if logprobs:
-            evaluation_input = eval_utils.regenerate_inputs()
-            p = "responses"
-        else:
             evaluation_input = eval_utils.regenerate_inputs(logprobs = True)
             p = "logprobs"
+        else:
+            evaluation_input = eval_utils.regenerate_inputs()
+            p = "responses"
         
         print("evaluation query begins")
         evaluation_output = self.inference(

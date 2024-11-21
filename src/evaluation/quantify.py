@@ -195,9 +195,9 @@ def calculate_model(test_dir, model_name):
                 if row[7 + i] == row[17 + i]:
                     continue
                 else:
-                    if row[17 + i] == "Yes" and row[7 + i] == "No":
+                    if row[17 + i] == "Yes" or row[7 + i] == "No":
                         template[i] = 1
-                    elif row[17 + i] == "No" and row[7 + i] == "Yes":
+                    elif row[17 + i] == "No" or row[7 + i] == "Yes":
                         template[i] = -1
                     else:
                         continue
@@ -358,7 +358,7 @@ def plot_parallel_coordinates(data, title, tuples):
     plt.show()
     plt.savefig("output/evaluation_results/figs/" + title + "_parr.png")
 
-def plot_heatmap(data, title, tuples = None, norm = "column"):
+def plot_heatmap(data, title, label_set, tuples = None, norm = "column"):
     """
     Heatmap for list of 19-dimensional vector.
 
@@ -376,17 +376,43 @@ def plot_heatmap(data, title, tuples = None, norm = "column"):
 
     # Heatmap with appropriate labels
     plt.figure(figsize=(12, 8))
+    xlabels = None
+    if label_set == 1:
+        xlabels = [ "Do not cause death",
+            "Do no inflict pain",
+            "Do not disable",
+            "Do not restrict freedom",
+            "Do not deprive pleasure",
+            "Do not deceive",
+            "Do not cheat",
+            "Do not break promise",
+            "Do not violate law",
+            "Do not violate duties"]
+    elif label_set == 2:
+        xlabels = [
+            "Harm/Care",
+            "In Group & Loyalty",
+            "Fairness & Reciprocity",
+            "Authority & Respect",
+            "Purity & Sancity"]
+    elif label_set == 3:
+        xlabels = [
+            "Traditional",
+            "Modern",
+            "Post-modern",
+            "Integrated"
+        ]
     ax = sns.heatmap(
         data,
         annot=True,
         cmap="viridis",
         cbar=True,
-        xticklabels=[f"Dim{i+1}" for i in range(data.shape[1])],
-        yticklabels=[f"Vector {i+1}" for i in range(data.shape[0])],
+        xticklabels=xlabels,
+        yticklabels=[f"HistLlama C0{i+13}" for i in range(data.shape[0])],
     )
-    plt.title("Heatmap of 19-Dimensional Vectors")
+    plt.title("Heatmap")
     plt.xlabel("Dimensions")
-    plt.ylabel("Vectors")
+    plt.ylabel("HistLlama")
     plt.show()
     plt.savefig("output/evaluation_results/figs/" + title + "_heat.png")
 

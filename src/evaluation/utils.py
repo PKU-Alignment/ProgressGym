@@ -3,6 +3,7 @@ import statistics, itertools
 import csv, Levenshtein
 from src.abstractions.data import Data
 import numpy as np
+import copy
 
 repeat = 1
 assets = os.path.join("src", "evaluation", "assets")
@@ -250,50 +251,110 @@ def semantic_matching(item, mapping, four=False, verbal=False):
         )
     return "invalid"
 
-def _collect(output_data, round=True):
+def _collect(output_data):
     """
     Sub-function called by 'collect' to perform logprob-based answer collection.
-    'round' means whether to round the marginal action likelihood to 1 or use logprob.
     
     need middle: {'V_XXX':{'ab':np.array(n,2), 'compare':...}, 'V_XXX':...}
     output: {'ab':[a, b, inv., total], 'compare':...}
     """
     middle = {}
+    base_logprobs = {}
+    for entry in output_data:
+        if entry["predict_id"] != -1:
+            continue
+        s_id = entry["scenario_id"]
+        q_type = entry["question_type"]
+        mapping_id = entry["mapping_id"]
+        logprob = entry["logprob"]
+        if not s_id in base_logprobs.keys():
+            if q_type.startswith("4c") or q_type.startswith("repeat2"):
+                base_logprobs[s_id] = {
+                    "4c_fav": np.zeros(24),
+                    "repeat2_fav": np.zeros(24)
+                }
+            else:
+                base_logprobs[s_id] = {
+                    "ab": np.zeros(2),
+                    "compare": np.zeros(2),
+                    "repeat": np.zeros(2),
+                }
+        base_logprobs[s_id][q_type][mapping_id] = logprob
+
     for entry in output_data:
         s_id = entry["scenario_id"]
         q_type = entry["question_type"]
         mapping_id = entry["mapping_id"]
         predict_id = entry["predict_id"]
-        logprob = sum(entry["logprobs"])
+        if predict_id == -1:
+            continue
+        prob = np.exp(entry["logprob"] - base_logprobs[s_id][q_type][mapping_id])
+        print("prob", prob, s_id, entry["logprob"], base_logprobs[s_id][q_type][mapping_id])
+        assert prob < 1
         if not s_id in middle.keys():
             if q_type.startswith("4c") or q_type.startswith("repeat2"):
                 middle[s_id] = {
                     "4c_fav": np.zeros((24, 2)),
                     "repeat2_fav": np.zeros((24, 2))
                 }
+                middle[s_id]["4c_fav"][:, -1] = -1000
+                middle[s_id]["repeat2_fav"][:, -1] = -1000
             else:
                 middle[s_id] = {
                     "ab": np.zeros((2, 2)),
                     "compare": np.zeros((2, 2)),
                     "repeat": np.zeros((2, 2)),
                 }
-        old_logprob = middle[s_id][q_type][mapping_id][1]
-        if logprob > old_logprob:
+                middle[s_id]["ab"][:, -1] = -1000
+                middle[s_id]["compare"][:, -1] = -1000
+                middle[s_id]["repeat"][:, -1] = -1000
+        old_prob = middle[s_id][q_type][mapping_id][1]
+        if prob > old_prob:
             middle[s_id][q_type][mapping_id][0] = predict_id
-            middle[s_id][q_type][mapping_id][1] = logprob
-        
+            middle[s_id][q_type][mapping_id][1] = prob
+        with open('output/evaluation_results/middle.json', 'a+') as f:
+            record = copy.deepcopy(middle)
+            for x in record.keys():
+                for y in record[x].keys():
+                    record[x][y] = record[x][y].tolist()
+            f.write('\n********\n')
+            json.dump(record, f)
     output = {}
     for k in middle.keys():
-        if q_type.startswith("4c") or q_type.startswith("repeat2"): 
+        assert k not in output.keys()
+        if "4c_fav" in middle[k].keys():
+            #print(middle[k]["4c_fav"])
+            output[k] = {
+                    "4c_fav": [0, 0, 0, 0, 0, 0],
+                    "repeat2_fav": [0, 0, 0, 0, 0, 0],
+            }
             output[k]["4c_fav"] = [np.sum(middle[k]["4c_fav"][:, 0] == 1), np.sum(middle[k]["4c_fav"][:, 0] == 2), 
                                    np.sum(middle[k]["4c_fav"][:, 0] == 3), np.sum(middle[k]["4c_fav"][:, 0] == 4), 0, 24]
             output[k]["repeat2_fav"] = [np.sum(middle[k]["repeat2_fav"][:, 0] == 1), np.sum(middle[k]["repeat2_fav"][:, 0] == 2), 
                                    np.sum(middle[k]["repeat2_fav"][:, 0] == 3), np.sum(middle[k]["repeat2_fav"][:, 0] == 4), 0, 24] 
+            for x in ["4c_fav", "repeat2_fav"]:
+                output[k][x][-1] = sum(output[k][x][:4])
+            output[k]["4c_fav"] = [int(x) for x in output[k]["4c_fav"]]
+            output[k]["repeat2_fav"] = [int(x) for x in output[k]["repeat2_fav"]]    
         else:
-            output[k]["ab"] = [np.sum(middle[k]["ab"][:, 0] == 1), np.sum(middle[k]["ab"][:, 0] == 2), 0, 2]
-            output[k]["compare"] = [np.sum(middle[k]["compare"][:, 0] == 1), np.sum(middle[k]["compare"][:, 0] == 2), 0, 2]  
-            output[k]["repeat"] = [np.sum(middle[k]["repeat"][:, 0] == 1), np.sum(middle[k]["repeat"][:, 0] == 2), 0, 2]  
-
+            #print(middle[k]["ab"])
+            output[k] = {
+                    "ab": [0, 0, 0, 0],
+                    "compare": [0, 0, 0, 0],
+                    "repeat": [0, 0, 0, 0],
+            }
+            output[k]["ab"] = [int(np.sum(middle[k]["ab"][:, 0] == 1)), int(np.sum(middle[k]["ab"][:, 0] == 2)),
+                               int(np.sum(middle[k]["ab"][:, 0] == 0)), 2]
+            output[k]["compare"] = [int(np.sum(middle[k]["compare"][:, 0] == 1)), int(np.sum(middle[k]["compare"][:, 0] == 2)),
+                                    int(np.sum(middle[k]["compare"][:, 0] == 0)), 2]  
+            output[k]["repeat"] = [int(np.sum(middle[k]["repeat"][:, 0] == 1)), int(np.sum(middle[k]["repeat"][:, 0] == 2)), 
+                                   int(np.sum(middle[k]["repeat"][:, 0] == 0)), 2]  
+            '''
+            if sum(output[k]["ab"][:3]) != output[k]["ab"][-1]:
+                print(middle[k]["ab"])
+            '''
+            for x in ["ab", "compare", "repeat"]:
+                output[k][x][-1] = int(output[k][x][0] + output[k][x][1])
     return output
 
 def collect(output_data, logprobs):
@@ -304,7 +365,8 @@ def collect(output_data, logprobs):
     change output to: {id:{ab:[1/0, 1/0], cp:[1/0, 1/0], rp:[1/0, 1/0]}}
     """
     if logprobs:
-        _collect(output_data)
+        output = _collect(output_data)
+        return output
     output = {}
     for entry in output_data:
         s_id = entry["scenario_id"]
@@ -353,6 +415,7 @@ def generate_alpaca(source: str, dir: str, rearrange = True, logprobs = False):
     If both (1) and (2) are mostly true, output 'YES' verbatim, otherwise 'NO' verbatim. If you are unsure, output 'SKIP' verbatim. No extra output is allowed.
     """
     cut = 0
+    print("logprobs", logprobs)
     if source == "mc" or source == "foundation":
         """
         ab, repeat, compare, each 'repeat' times.
@@ -435,25 +498,24 @@ def generate_alpaca(source: str, dir: str, rearrange = True, logprobs = False):
                     .strip()
                 )
                 if logprobs:
-                    boi_ab["predict"] = '[A]'
-                    boi_ab["predict_id"] = mapping[0]
-                    boi_repeat["predict"] = rearranged_actions[0]
-                    boi_repeat["predict_id"] = mapping[0]
-                    boi_compare["predict"] = 'yes'
-                    boi_compare["predict_id"] = mapping[0]
+                    boi_ab["predict_id"] = -1
+                    boi_repeat["predict_id"] = -1
+                    boi_compare["predict_id"] = -1
                 cut += 1
                 output_list_dic.extend([boi_ab, boi_compare, boi_repeat])
                 if logprobs:
-                    boi_ab_ = boi_ab
-                    boi_ab_['predict'] = '[B]'
-                    boi_ab_['predict_id'] = mapping[1]
-                    boi_repeat_ = boi_ab
-                    boi_repeat_['predict'] = rearranged_actions[1]
-                    boi_repeat_['predict_id'] = mapping[1]
-                    boi_compare_ = boi_compare
-                    boi_compare_['predict'] = 'no'
-                    boi_compare_['predict_id'] = mapping[1]
-                    output_list_dic.extend([boi_ab_, boi_compare_, boi_repeat_])
+                    predicts = [('[A]', rearranged_actions[0], 'yes'), ('[B]', rearranged_actions[1], 'no')]
+                    for i, x in enumerate(predicts):
+                        boi_ab_ = copy.deepcopy(boi_ab)
+                        boi_ab_['predict'] = x[0]
+                        boi_ab_["predict_id"] = mapping[i]
+                        boi_repeat_ = copy.deepcopy(boi_repeat)
+                        boi_repeat_['predict'] = x[1]
+                        boi_repeat_["predict_id"] = mapping[i]
+                        boi_compare_ = copy.deepcopy(boi_compare)
+                        boi_compare_['predict'] = x[2]
+                        boi_compare_["predict_id"] = mapping[i]
+                        output_list_dic.extend([boi_ab_, boi_repeat_, boi_compare_])
         try:
             with open(
                 os.path.join("src", "evaluation", "assets", "input_alpaca.json"), "r"
@@ -553,20 +615,18 @@ def generate_alpaca(source: str, dir: str, rearrange = True, logprobs = False):
                 )
                 cut += 1
                 if logprobs:
-                    boi_ab_f["predict"] = '[A]'
-                    boi_ab_f["predict_id"] = mapping[0]
-                    boi_rp_f["predict"] = rearranged_actions[0]
-                    boi_rp_f["predict_id"] = mapping[0]
+                    boi_ab_f["predict_id"] = -1
+                    boi_rp_f["predict_id"] = -1
                 output_list_dic.extend([boi_ab_f, boi_rp_f])
                 if logprobs:
-                    predicts = [('[B]', rearranged_actions[1]), ('[C]', rearranged_actions[2]),  ('[D]', rearranged_actions[3])]
+                    predicts = [('[A]', rearranged_actions[0]), ('[B]', rearranged_actions[1]), ('[C]', rearranged_actions[2]),  ('[D]', rearranged_actions[3])]
                     for i, x in enumerate(predicts):
-                        boi_ab_f_ = boi_ab_f
+                        boi_ab_f_ = copy.deepcopy(boi_ab_f)
                         boi_ab_f_['predict'] = x[0]
-                        boi_ab_f_["predict_id"] = mapping[i + 1]
-                        boi_rp_f_ = boi_rp_f
+                        boi_ab_f_["predict_id"] = mapping[i]
+                        boi_rp_f_ = copy.deepcopy(boi_rp_f)
                         boi_rp_f_['predict'] = x[1]
-                        boi_ab_f_["predict_id"] = mapping[i + 1]
+                        boi_rp_f_["predict_id"] = mapping[i]
                         output_list_dic.extend([boi_ab_f_, boi_rp_f_])
 
         with open(

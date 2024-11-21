@@ -1,9 +1,9 @@
 from src.abstractions.model import Model
-from src.evaluation.utils import generate_alpaca
+from src.evaluation.utils import generate_alpaca, collect
 import os, json
 from multiprocessing import freeze_support
 import src.evaluation.quantify as qt
-
+import numpy as np
 """
 generate_alpaca('mc', os.path.join('src', 'evaluation', 'raw_dataset', 'moralchoice'))
 generate_alpaca('views', os.path.join('src', 'evaluation', 'raw_dataset', 'views'))
@@ -12,25 +12,25 @@ generate_alpaca('foundation', os.path.join('src', 'evaluation', 'raw_dataset', '
 if __name__ == "__main__":
     os.environ["CUDA_VISIBLE_DEVICE"] = "0"
     freeze_support()
-    """
-    set_model = ['8b-C013-instruct', '8b-C014-instruct','8b-C015-instruct', '8b-C016-instruct', '8b-C017-instruct', '8b-C018-instruct', '8b-C019-instruct', '8b-C020-instruct', '8b-C021-instruct']
+    set_model = [
+        "8B-C013-instruct",
+        "8B-C014-instruct",
+        "8B-C015-instruct"
+    ]
     vec = []
     for m in set_model:
-        boi = Model(m, num_gpus=8)
-        v = boi.evaluate(method = 'fast')
-        #v = qt.calculate_model('output/evaluation_results/' + m + '_single/', m)
+        with open("output/datasets/evaluation_output_mc_" + m + ".json", 'r') as f:
+            d = json.load(f)
+        raw = collect(d, logprobs = True)
+        with open('output/evaluation_results/' + m + '_single/' + m + '_raw.json', 'w') as f:
+            json.dump(raw, f)
+        v = qt.calculate_model('output/evaluation_results/' + m + '_single/', m)
         vec.append(v)
-    test_name = '70b_13to21'
-    with open('output/evaluation_results/' + test_name + '.json', 'w') as f:
+    test_name = "8b_all_fixed"
+    vec = np.array(vec)
+    with open("output/evaluation_results/" + test_name + ".json", "w") as f:
         lst = [list(boi) for boi in vec]
         json.dump(lst, f)
-    #qt.plot_parallel_coordinates(vec)
-    vec = qt.standardize_vectors(vec)
-    qt.analyze_vectors_quadratic(vec)
-    """
-    model = Model(
-        "ExtrapolativeRLHFExaminee_05Jun155653_63908407_3_ExtrapolativeRLHFExaminee_05Jun155653_63908407_4",
-        num_gpus=1,
-    )
-    vec = model.evaluate(method="fast")
-    print(vec)
+    qt.plot_heatmap(vec[:, 10:15], test_name + '_foundation', label_set = 2, norm = "group")
+    qt.plot_heatmap(vec[:, 15:19],  test_name + '_view',label_set = 3, norm = "group")
+    qt.plot_heatmap(vec[:, :10], test_name + '_morality', label_set = 1, norm = "group")
