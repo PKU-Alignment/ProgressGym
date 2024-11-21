@@ -65,6 +65,7 @@ def inference_standalone(
             else False
         ),
         max_batch_size=262144,
+        map_key_fields=True,
     )
     print("Job finished.")
     conn.send(result_data.data_path)

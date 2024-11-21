@@ -42,7 +42,7 @@ os.makedirs("./output/saved/saved_data/", exist_ok=True)
 os.makedirs("./output/downloaded", exist_ok=True)
 
 MY_USERNAME = pwd.getpwuid(os.getuid()).pw_name
-PORT_NUM = 14285
+PORT_NUM = 17785
 
 
 # escape spaces in paths
@@ -407,7 +407,7 @@ def start_inference_backend(
 
         @sgl.function
         def get_response(
-            s, conversation: List, temperature: float = 0.2, max_tokens: int = 256
+            s, conversation: List, temperature: float = 0.2, max_tokens: int = 256, options: list = []
         ) -> str:
             nonlocal purpose
 
@@ -424,13 +424,21 @@ def start_inference_backend(
             if purpose == "responses":
                 s += sgl.assistant_begin()
             
-            s += sgl.gen(
-                "NA",
-                max_tokens=(max_tokens if purpose == "responses" else 0),
-                return_logprob=(purpose == "logprobs"),
-                logprob_start_len=(None if purpose == "responses" else 0),
-                temperature=temperature,
-            )
+            if options:
+                print("Options provided:", options)
+                s += sgl.gen(
+                    "NA",
+                    choices=options,
+                )
+
+            else:
+                s += sgl.gen(
+                    "NA",
+                    max_tokens=(max_tokens if purpose == "responses" else 0),
+                    return_logprob=(purpose == "logprobs"),
+                    logprob_start_len=(None if purpose == "responses" else 0),
+                    temperature=temperature,
+                )
 
         def sglang_process_batch(
             sample_dicts: List[dict], temperature: float = 0.2, max_tokens: int = 256
@@ -455,14 +463,16 @@ def start_inference_backend(
                         dic["input"] = dic["instruction"]
 
             dialogues = dict_to_dialogue_list(sample_dicts, purpose)
+            options_lists = [(dic["predict"] if "predict" in dic and isinstance(dic["predict"], list) else []) for dic in sample_dicts]
             output = get_response.run_batch(
                 [
                     {
                         "conversation": dialogue,
                         "temperature": temperature,
                         "max_tokens": max_tokens,
+                        "options": options,
                     }
-                    for dialogue in dialogues
+                    for dialogue, options in zip(dialogues, options_lists)
                 ],
                 progress_bar=True,
             )
@@ -511,9 +521,16 @@ def start_inference_backend(
 
             for dic, out in zip(sample_dicts, output):
                 if purpose == "logprobs":
-                    dic["logprob"] = sum(
-                        x[0] for x in list(out.get_meta_info("NA")['input_token_logprobs']) if x[0] is not None
-                    )
+                    if "predict" in dic and isinstance(dic["predict"], list):
+                        dic["logprob"] = [
+                            sum(x[0] for x in y if x[0] is not None)
+                            for y in list(out.get_meta_info("NA")['input_token_logprobs'])
+                        ]
+                        assert len(dic["logprob"]) == len(dic["predict"])
+                    else:
+                        dic["logprob"] = sum(
+                            x[0] for x in list(out.get_meta_info("NA")['input_token_logprobs']) if x[0] is not None
+                        )
                 else:
                     dic["predict"] = (
                         out["NA"] if out.get_meta_info("NA") is not None else None
@@ -537,11 +554,10 @@ def dict_to_dialogue_list(
     :rtype: Union[List[Dict[str, str]], List[List[Dict[str, str]]]
     """
     if isinstance(dic, dict):
-        res = [
-            {"role": "system", "content": dic["instruction"]},
-            {"role": "user", "content": dic["input"]},
-        ]
-        if purpose == "logprobs" and "predict" in dic:
+        res = [{"role": "user", "content": dic["input"]}]
+        if "instruction" in dic:
+            res = [{"role": "system", "content": dic["instruction"]}] + res
+        if purpose == "logprobs" and "predict" in dic and isinstance(dic["predict"], str):
             res.append({"role": "assistant", "content": dic["predict"]})
         
         return res

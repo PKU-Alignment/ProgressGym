@@ -180,6 +180,7 @@ class Data:
         forced_rewrite: bool = False,
         max_batch_size: int = 1,
         keep_key_fields: bool = True,
+        map_key_fields: bool = False,
     ) -> "Data":
         """
         Apply transformation to every element of the current dataset (in the format of a json list of json dicts where the values are of mutable or immutable types), and returns a Data instance containing the resulting dataset.
@@ -216,6 +217,34 @@ class Data:
             is_first = False
             out_file.write(json.dumps(sample_dict))
             # out_file.flush()
+        
+        def map_key_fields_fn(sample_dict: Dict) -> Dict:
+            nonlocal self
+            if "prompt" in self.key_fields and self.key_fields["prompt"] != "instruction":
+                sample_dict["instruction"] = sample_dict[self.key_fields["prompt"]]
+                del sample_dict[self.key_fields["prompt"]]
+            if "query" in self.key_fields and self.key_fields["query"] != "input":
+                sample_dict["input"] = sample_dict[self.key_fields["query"]]
+                del sample_dict[self.key_fields["query"]]
+            if "response" in self.key_fields and self.key_fields["response"] != "output":
+                sample_dict["output"] = sample_dict[self.key_fields["response"]]
+                del sample_dict[self.key_fields["response"]]
+            
+            return sample_dict
+        
+        def inv_map_key_fields_fn(sample_dict: Dict) -> Dict:
+            nonlocal self
+            if "instruction" in sample_dict and self.key_fields["prompt"] != "instruction":
+                sample_dict[self.key_fields["prompt"]] = sample_dict["instruction"]
+                del sample_dict["instruction"]
+            if "input" in sample_dict and self.key_fields["query"] != "input":
+                sample_dict[self.key_fields["query"]] = sample_dict["input"]
+                del sample_dict["input"]
+            if "output" in sample_dict and self.key_fields["response"] != "output":
+                sample_dict[self.key_fields["response"]] = sample_dict["output"]
+                del sample_dict["output"]
+            
+            return sample_dict
 
         with open(out_path, "w") as out_file:
             out_file.write("[")
@@ -223,24 +252,30 @@ class Data:
 
             if max_batch_size == 1:
                 for element in tw.read_json_memory_efficient(self.data_path):
+                    if map_key_fields:
+                        element = map_key_fields_fn(element)
+                    
                     transformed = transformation(element)
                     if transformed is not None:
-                        write_dict(transformed)
+                        write_dict(transformed if not map_key_fields else inv_map_key_fields_fn(transformed))
 
             else:
                 buffer = []
 
                 for element in tw.read_json_memory_efficient(self.data_path):
+                    if map_key_fields:
+                        element = map_key_fields_fn(element)
+                    
                     buffer.append(element)
                     if len(buffer) == max_batch_size:
                         for e in transformation(buffer):
-                            write_dict(e)
+                            write_dict(e if not map_key_fields else inv_map_key_fields_fn(e))
                         buffer = []
                         out_file.flush()
 
                 if buffer:
                     for e in transformation(buffer):
-                        write_dict(e)
+                        write_dict(e if not map_key_fields else inv_map_key_fields_fn(e))
 
             out_file.write("\n]")
 
