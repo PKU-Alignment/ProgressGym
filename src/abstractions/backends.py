@@ -28,6 +28,7 @@ import math
 import warnings
 import tqdm
 from transformers import AutoTokenizer
+import random
 
 # create output directories
 os.makedirs("./output/benchmark_results", exist_ok=True)
@@ -41,8 +42,9 @@ os.makedirs("./output/saved/saved_model/", exist_ok=True)
 os.makedirs("./output/saved/saved_data/", exist_ok=True)
 os.makedirs("./output/downloaded", exist_ok=True)
 
+random.seed(time.time())
 MY_USERNAME = pwd.getpwuid(os.getuid()).pw_name
-PORT_NUM = 17785
+PORT_NUM = 17785 + random.randint(0, 2000)
 
 
 # escape spaces in paths
@@ -425,9 +427,9 @@ def start_inference_backend(
                 s += sgl.assistant_begin()
             
             if options:
-                print("Options provided:", options)
                 s += sgl.gen(
                     "NA",
+                    max_tokens=max(len(x) for x in options)+10,
                     choices=options,
                 )
 
@@ -493,6 +495,7 @@ def start_inference_backend(
                             "conversation": dialogues[k],
                             "temperature": temperature,
                             "max_tokens": max_tokens,
+                            "options": options_lists[k],
                         }
                         for k in bad_indices
                     ],
@@ -518,8 +521,16 @@ def start_inference_backend(
                 warnings.warn(
                     f"{count} cases still not completed after 10 retries. Use NO_SGLANG=1 to disable sglang backend."
                 )
+            
+            if count > 100 or count / len(output) > 0.01:
+                raise Exception(f"Too many cases ({count}) still not completed.")
 
+            failure_count = 0
             for dic, out in zip(sample_dicts, output):
+                if out.get_meta_info("NA") is None:
+                    failure_count += 1
+                    continue
+                
                 if purpose == "logprobs":
                     if "predict" in dic and isinstance(dic["predict"], list):
                         dic["logprob"] = [
@@ -535,7 +546,10 @@ def start_inference_backend(
                     dic["predict"] = (
                         out["NA"] if out.get_meta_info("NA") is not None else None
                     )
-
+            
+            if failure_count > count:
+                raise Exception(f"More actual failures ({failure_count}) than cases not completed ({count}), which is unexpected.")
+            
             return sample_dicts
 
         return backend, sglang_process_batch

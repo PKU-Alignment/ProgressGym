@@ -64,7 +64,7 @@ def inference_standalone(
             if hasattr(Model, "always_force_rewrite")
             else False
         ),
-        max_batch_size=4096,
+        max_batch_size=262144,
         map_key_fields=True,
     )
     print("Job finished.")
