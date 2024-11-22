@@ -252,6 +252,32 @@ def semantic_matching(item, mapping, four=False, verbal=False):
     return "invalid"
 
 def _collect(output_data):
+    output = {}
+    for entry in output_data:
+        s_id = entry["scenario_id"]
+        q_type = entry["question_type"]
+        mapping = entry["mapping"]
+        logprob = entry["logprob"]
+        if not s_id in output.keys():
+            if q_type.startswith("4c") or q_type.startswith("repeat2"):
+                output[s_id] = {
+                    "4c_fav": [0, 0, 0, 0, 0],
+                    "repeat2_fav": [0, 0, 0, 0, 0]
+                }
+            else:
+                output[s_id] = {
+                    "ab": [0, 0, 0],
+                    "compare": [0, 0, 0],
+                    "repeat": [0, 0, 0],
+                }
+        for i, x in enumerate(logprob):
+            output[s_id][q_type][mapping[i] - 1] = x
+            output[s_id][q_type][-1] += x
+    return output
+        
+
+
+def __collect(output_data):
     """
     Sub-function called by 'collect' to perform logprob-based answer collection.
     
@@ -497,25 +523,13 @@ def generate_alpaca(source: str, dir: str, rearrange = True, logprobs = False):
                     .format(boi["context"], rearranged_actions[0], rearranged_actions[1])
                     .strip()
                 )
+                mapping_action = [('[A]', rearranged_actions[0], 'yes'), ('[B]', rearranged_actions[1], 'no')]
                 if logprobs:
-                    boi_ab["predict_id"] = -1
-                    boi_repeat["predict_id"] = -1
-                    boi_compare["predict_id"] = -1
+                    boi_ab["predict"] = [mapping_action[i-1][0] for i in mapping]
+                    boi_repeat["predict"] = [mapping_action[i-1][1] for i in mapping]
+                    boi_compare["predict"] = [mapping_action[i-1][2] for i in mapping]
                 cut += 1
                 output_list_dic.extend([boi_ab, boi_compare, boi_repeat])
-                if logprobs:
-                    predicts = [('[A]', rearranged_actions[0], 'yes'), ('[B]', rearranged_actions[1], 'no')]
-                    for i, x in enumerate(predicts):
-                        boi_ab_ = copy.deepcopy(boi_ab)
-                        boi_ab_['predict'] = x[0]
-                        boi_ab_["predict_id"] = mapping[i]
-                        boi_repeat_ = copy.deepcopy(boi_repeat)
-                        boi_repeat_['predict'] = x[1]
-                        boi_repeat_["predict_id"] = mapping[i]
-                        boi_compare_ = copy.deepcopy(boi_compare)
-                        boi_compare_['predict'] = x[2]
-                        boi_compare_["predict_id"] = mapping[i]
-                        output_list_dic.extend([boi_ab_, boi_repeat_, boi_compare_])
         try:
             with open(
                 os.path.join("src", "evaluation", "assets", "input_alpaca.json"), "r"
@@ -614,20 +628,12 @@ def generate_alpaca(source: str, dir: str, rearrange = True, logprobs = False):
                     .strip()
                 )
                 cut += 1
+                mapping_action = [('[A]', rearranged_actions[0]), ('[B]', rearranged_actions[1]), ('[C]', rearranged_actions[2]),  ('[D]', rearranged_actions[3])]
                 if logprobs:
-                    boi_ab_f["predict_id"] = -1
-                    boi_rp_f["predict_id"] = -1
+                    boi_ab_f["predict"] = [mapping_action[i-1][0] for i in mapping]
+                    boi_rp_f["predict"] = [mapping_action[i-1][1] for i in mapping]
                 output_list_dic.extend([boi_ab_f, boi_rp_f])
-                if logprobs:
-                    predicts = [('[A]', rearranged_actions[0]), ('[B]', rearranged_actions[1]), ('[C]', rearranged_actions[2]),  ('[D]', rearranged_actions[3])]
-                    for i, x in enumerate(predicts):
-                        boi_ab_f_ = copy.deepcopy(boi_ab_f)
-                        boi_ab_f_['predict'] = x[0]
-                        boi_ab_f_["predict_id"] = mapping[i]
-                        boi_rp_f_ = copy.deepcopy(boi_rp_f)
-                        boi_rp_f_['predict'] = x[1]
-                        boi_rp_f_["predict_id"] = mapping[i]
-                        output_list_dic.extend([boi_ab_f_, boi_rp_f_])
+                
 
         with open(
             os.path.join("src", "evaluation", "assets", "input_alpaca.json"), "r"
