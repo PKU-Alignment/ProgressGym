@@ -521,8 +521,16 @@ def start_inference_backend(
                 warnings.warn(
                     f"{count} cases still not completed after 10 retries. Use NO_SGLANG=1 to disable sglang backend."
                 )
+            
+            if count > 100 or count / len(output) > 0.01:
+                raise Exception(f"Too many cases ({count}) still not completed.")
 
+            failure_count = 0
             for dic, out in zip(sample_dicts, output):
+                if out.get_meta_info("NA") is None:
+                    failure_count += 1
+                    continue
+                
                 if purpose == "logprobs":
                     if "predict" in dic and isinstance(dic["predict"], list):
                         dic["logprob"] = [
@@ -538,7 +546,10 @@ def start_inference_backend(
                     dic["predict"] = (
                         out["NA"] if out.get_meta_info("NA") is not None else None
                     )
-
+            
+            if failure_count > count:
+                raise Exception(f"More actual failures ({failure_count}) than cases not completed ({count}), which is unexpected.")
+            
             return sample_dicts
 
         return backend, sglang_process_batch
