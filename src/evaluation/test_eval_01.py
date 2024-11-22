@@ -1,5 +1,5 @@
 import os, json
-os.environ["CUDA_VISIBLE_DEVICES"] = "0,1,2,3"
+# os.environ["CUDA_VISIBLE_DEVICES"] = "0,1,2,3"
 
 from ..abstractions import Model
 from .utils import generate_alpaca, _collect
