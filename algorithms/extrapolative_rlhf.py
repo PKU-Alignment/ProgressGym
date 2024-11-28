@@ -6,14 +6,14 @@ import random
 import pandas as pd
 import json
 import datasets
-from src.text_utils import write_log
+from src.utils.text_utils import write_log
 from benchmark import JudgeBase, ExamineeBase, PredictJudge
-from algorithms.utils.rw_utils import (
+from src.utils.data_utils import (
     elicit_rw_preference,
     default_rw_data,
     default_ppo_data,
+    extrapolate,
 )
-from algorithms.utils.extrapolation_utils import extrapolate
 import warnings
 from tqdm import tqdm
 from sympy import binomial

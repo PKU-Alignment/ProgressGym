@@ -1,15 +1,8 @@
 from copy import deepcopy
 from typing import Iterable, Tuple, Dict, List, Literal, Union
-from src.abstractions import Model, Data
-from time import strftime, localtime
-import os, sys
-import random
-import pandas as pd
+# from src.abstractions import Data
 import json
-import datasets
-from src.text_utils import write_log
 import warnings
-from tqdm import tqdm
 from sympy import binomial
 import numpy as np
 
@@ -19,8 +12,8 @@ def extrapolate(
     current_timestep: int,
     timesteps_ahead: int,
     extrapolation_order: int,
-    preference_history: List[Data],
-) -> Data:
+    preference_history: List["Data"],
+) -> "Data":
     """Extrapolate the preference data using the preference history, looking timesteps_ahead timesteps ahead."""
 
     exp_order = min(extrapolation_order, len(preference_history) - 1)

@@ -1,4 +1,5 @@
 # from src.abstractions.model import Model   # Uncommenting will lead to circular import
+from src.path import root
 from typing import (
     Dict,
     Any,
@@ -14,13 +15,9 @@ from typing import (
 import os
 import json
 import warnings
-import src.text_utils as tw
+import src.utils.text_utils as tw
 from tqdm import tqdm
-
-with open("./src/abstractions/configs/abstractions_config.json", "r") as config_file:
-    abstractions_config = json.load(config_file)
-    data_search_paths: List[str] = abstractions_config["data_search_paths"]
-    data_save_path: str = abstractions_config["data_save_path"]
+from src.abstractions.configs.templates_configs import *
 
 
 # helper function, escape spaces in paths
@@ -126,7 +123,7 @@ class Data:
 
         if data_content is not None:
             if data_path is None:
-                data_path = f"./output/datasets/{data_name}.json"
+                data_path = f"{root}/output/datasets/{data_name}.json"
                 Data.ask_and_remove_if_exists(data_path, forced_rewrite=True)
 
             with tw.JsonListWriter(data_path) as json_writer:
@@ -153,11 +150,11 @@ class Data:
             print(
                 f"Data {data_name} not found locally. Searching among Llama-Factory datasets."
             )
-            with open("./libs/llama_factory/data/dataset_info.json", "r") as in_file:
+            with open(f"{root}/libs/llama_factory/data/dataset_info.json", "r") as in_file:
                 registrations = json.load(in_file)
 
             if self.data_name in registrations:
-                self.data_path = f'./libs/llama_factory/data/{registrations[self.data_name]["file_name"]}'
+                self.data_path = f'{root}/libs/llama_factory/data/{registrations[self.data_name]["file_name"]}'
                 print(f'Found {registrations[self.data_name]["file_name"]}.')
             else:
                 raise FileNotFoundError(
@@ -215,7 +212,7 @@ class Data:
         :return: The data after transformation.
         :rtype: Data.
         """
-        out_path = f"./output/datasets/{result_data_name}.json"
+        out_path = f"{root}/output/datasets/{result_data_name}.json"
         Data.ask_and_remove_if_exists(out_path, forced_rewrite)
 
         def write_dict(sample_dict: Dict):
@@ -385,19 +382,19 @@ class Data:
         :return: A boolean meaning the registration status before this operation.
         :rtype: bool.
         """
-        with open("./libs/llama_factory/data/dataset_info.json", "r") as in_file:
+        with open(f"{root}/libs/llama_factory/data/dataset_info.json", "r") as in_file:
             registrations = json.load(in_file)
 
         return_val = self.data_name in registrations
 
         if operation == "add":
-            path = f"./libs/llama_factory/data/{self.data_name}.json"
+            path = f"{root}/libs/llama_factory/data/{self.data_name}.json"
             if "llama_factory/data" not in self.data_path:
                 Data.ask_and_remove_if_exists(path, forced_rewrite=True)
                 os.system(f"cp {escape(self.data_path)} {escape(path)}")
 
         if operation == "add" and (forced_update or not return_val):
-            path = f"./libs/llama_factory/data/{self.data_name}.json"
+            path = f"{root}/libs/llama_factory/data/{self.data_name}.json"
 
             if "llama_factory" not in self.data_path:  # if is not built-in dataset
                 if ("prompt" not in self.key_fields) or (
@@ -423,22 +420,22 @@ class Data:
                 f"Adding registration of data {self.data_name}: {registrations[self.data_name]}."
             )
 
-            with open("./libs/llama_factory/data/dataset_info.json", "w") as out_file:
+            with open(f"{root}/libs/llama_factory/data/dataset_info.json", "w") as out_file:
                 json.dump(registrations, out_file)
 
             print(f"Successfully completed registration of data {self.data_name}.")
 
         elif operation == "remove" and return_val:
             with open(
-                "./libs/llama_factory/data/dataset_info_original.json", "r"
+                f"{root}/libs/llama_factory/data/dataset_info_original.json", "r"
             ) as in_file:
                 registrations_original = json.load(in_file)
 
             assert self.data_name not in registrations_original
-            path = f'./libs/llama_factory/data/{registrations[self.data_name]["file_name"]}'
+            path = f'{root}/libs/llama_factory/data/{registrations[self.data_name]["file_name"]}'
             del registrations[self.data_name]
 
-            with open("./libs/llama_factory/data/dataset_info.json", "w") as out_file:
+            with open(f"{root}/libs/llama_factory/data/dataset_info.json", "w") as out_file:
                 json.dump(registrations, out_file)
 
             if os.path.exists(path):
@@ -636,7 +633,7 @@ class DataFileCollection:
 
                 DataFileCollection(collection_name='histtext_1826_to_2018',
                                 data_type='pretrain',
-                                collection_path = './dataset/dataset_text_sequence/',
+                                collection_path = f'{root}/dataset/dataset_text_sequence/',
                                 file_selection_func = (lambda path: 1826 <= int(path.split('/')[-1][1:6]) <= 2018))
 
         """
@@ -742,7 +739,7 @@ class DataFileCollection:
         :param suppress_tqdm: Whether to suppress the tqdm progress bar
         :type suppress_tqdm: bool = False
         """
-        result_dir = f"./output/datasets/{result_collection_name}/"
+        result_dir = f"{root}/output/datasets/{result_collection_name}/"
         DataFileCollection.ask_and_remove_if_exists(result_dir, forced_rewrite)
         os.makedirs(result_dir, exist_ok=True)
 
@@ -836,7 +833,7 @@ class DataFileCollection:
         :param filter_fields: Fields to filter the data (default is None)
         :type filter_fields: Optional = None
         """
-        path = f"./output/datasets/{result_data_name}.json"
+        path = f"{root}/output/datasets/{result_data_name}.json"
         Data.ask_and_remove_if_exists(path, forced_rewrite)
 
         with open(path, "w") as out_file:

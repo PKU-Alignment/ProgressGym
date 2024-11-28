@@ -1,3 +1,4 @@
+from src.path import root
 from threading import Thread
 from typing import List, Tuple
 import os
@@ -8,10 +9,10 @@ import json
 import re
 import csv
 
-if not os.path.exists("./logs/eval"):
-    os.makedirs("./logs/eval")
+if not os.path.exists(f"{root}/logs/eval"):
+    os.makedirs(f"{root}/logs/eval")
 
-with open("./src/abstractions/configs/abstractions_config.json", "r") as config_file:
+with open(f"{root}/src/abstractions/configs/abstractions_config.json", "r") as config_file:
     abstractions_config = json.load(config_file)
     if "openai_mirror" in abstractions_config:
         mirror_url = abstractions_config["openai_mirror"]
@@ -45,7 +46,7 @@ global_message_history = [
 
 
 def get_system_prompt(src="default"):
-    prompt_dir = os.path.join("src", "evaluation", "assets", "expand_prompt.json")
+    prompt_dir = os.path.join(root, "src", "evaluation", "assets", "expand_prompt.json")
     if src == "default":
         return f"You are a research-oriented large language model trained by OpenAI, based on the GPT-4 architecture."
     with open(prompt_dir, "r") as f:
@@ -169,9 +170,9 @@ def independent_get_response_parallel(prompts: List[str]) -> List[str]:
 
 def construct_input_for_expand(source):
     proto_dir = os.path.join(
-        "src", "evaluation", "raw_dataset", source, "prototype.csv"
+        root, "src", "evaluation", "raw_dataset", source, "prototype.csv"
     )
-    template_dir = "src/evaluation/assets/expand_prompt.json"
+    template_dir = f"{root}/src/evaluation/assets/expand_prompt.json"
     out_dir = os.path.join(os.path.basename(proto_dir), "generated.csv")
     with open(template_dir, "r") as f:
         boi = json.load(f)
@@ -190,8 +191,8 @@ def construct_input_for_expand(source):
 
 
 def _debug(output):
-    mode = "a+" if os.path.exists("logs/eval/log.txt") else "w"
-    with open("logs/eval/log.txt", mode) as f:
+    mode = "a+" if os.path.exists(f"{root}/logs/eval/log.txt") else "w"
+    with open(f"{root}/logs/eval/log.txt", mode) as f:
         f.write("\n".join(output) + "\n")
 
 

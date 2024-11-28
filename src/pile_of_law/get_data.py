@@ -1,8 +1,9 @@
+from src.path import root
 import requests
 from bs4 import BeautifulSoup
 import os, json
 import lzma
-import src.text_utils as tw
+import src.utils.text_utils as tw
 from tqdm import tqdm
 from copy import copy
 
@@ -18,8 +19,8 @@ def get_pile_of_law():
     """
     DOWNLOADING COMPRESSED FILES FROM HUGGINGFACE
     """
-    compressed_dir = "./dataset/raw_downloads/pile_of_law_compressed"
-    decompressed_dir = "./dataset/raw_downloads/pile_of_law_decompressed"
+    compressed_dir = f"{root}/dataset/raw_downloads/pile_of_law_compressed"
+    decompressed_dir = f"{root}/dataset/raw_downloads/pile_of_law_decompressed"
     if not os.path.isdir(compressed_dir):
         os.mkdir(compressed_dir)
     if not os.path.isdir(decompressed_dir):
@@ -106,7 +107,7 @@ def get_pile_of_law():
                         dd["culture"] = "English"
                         dd["source_dataset"] = "Pile_of_Law"
 
-                        with open("./src/pile_of_law/source.json", "r") as f:
+                        with open(f"{root}/src/pile_of_law/source.json", "r") as f:
                             source_dict = json.load(f)
                             dd["source_dataset_detailed"] = "Pile_of_Law_" + name
                             dd["source_dataset_detailed_explanation"] = (

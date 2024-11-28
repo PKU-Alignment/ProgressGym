@@ -1,5 +1,7 @@
+from src.path import root
 from string import Template
 import json
+import os
 from typing import Dict, Any, Literal, Optional, List, Union
 
 bash_command_template = """PYTHONNOUSERSITE=1 MASTER_PORT=9902 conda run --no-capture-output -n %s deepspeed %s --master_port=9902 ./libs/llama_factory/src/train_bash.py \\
@@ -121,8 +123,31 @@ eval_command = Template(
 """
 )
 
-with open("./src/abstractions/configs/abstractions_config.json", "r") as config_file:
+with open(f"{root}/src/abstractions/configs/abstractions_config.json", "r") as config_file:
     abstractions_config = json.load(config_file)
+    
+    data_search_paths: List[str] = abstractions_config["data_search_paths"]
+    data_save_path: str = abstractions_config["data_save_path"]
+    
+    if not os.path.exists(data_save_path):
+        data_save_path = f"{root}/" + data_save_path
+    if not os.path.exists(data_save_path):
+        raise FileNotFoundError(f"Data save path {data_save_path} doesn't exist.")
+    
+    for i, path in enumerate(data_search_paths):
+        if not os.path.exists(path):
+            data_search_paths[i] = f"{root}/" + path 
+    
     model_search_paths: List[str] = abstractions_config["model_search_paths"]
     model_save_path: str = abstractions_config["model_save_path"]
+    
+    if not os.path.exists(model_save_path):
+        model_save_path = f"{root}/" + model_save_path
+    if not os.path.exists(model_save_path):
+        raise FileNotFoundError(f"Model save path {model_save_path} doesn't exist.")
+    
+    for i, path in enumerate(model_search_paths):
+        if not os.path.exists(path):
+            model_search_paths[i] = f"{root}/" + path
+    
     multinode_master_addr: str = abstractions_config["multinode_master_addr"]

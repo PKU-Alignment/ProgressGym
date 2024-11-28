@@ -9,6 +9,7 @@ Query metadata. Get id's of books with given
 
 """
 
+from src.path import root
 import os
 import pandas as pd
 import numpy as np

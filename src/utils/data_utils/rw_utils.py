@@ -1,12 +1,12 @@
+from src.path import root
 from typing import Iterable, Tuple, Dict, List, Literal
-from src.abstractions import Model, Data, fill_in_QA_template
+from src.abstractions import Data
 from time import strftime, localtime
 import os, sys
 import random
 import pandas as pd
 import json
 from datasets import load_dataset
-from src.text_utils import write_log
 import src.evaluation.utils as eval_utils
 from benchmark import JudgeBase, ExamineeBase, PredictJudge
 import warnings
@@ -213,6 +213,7 @@ def elicit_rw_preference(
 
     print("initiate rw dataset construction")
     save_path = os.path.join(
+        root,
         "output",
         "rlhf_results",
         f"preference_{examinee.instance_id}_{judge.instance_id}_{examinee.current_timestep}.json",
@@ -296,14 +297,10 @@ def elicit_rw_preference(
             assert status is None
             if aligned:
                 rw_data.append([])
-            write_log(
-                "invalid response from judge, " + str(dic) + "|| response over",
-                log_name="rlhf",
-            )
 
         debug_data.append([dic, temp])
 
-    with open("./logs/debug_data.json", "w") as f:
+    with open(f"{root}/logs/debug_data.json", "w") as f:
         json.dump(debug_data, f)
 
     with open(save_path, "w") as f:

@@ -2,6 +2,7 @@ import utils as ut
 import quantify as qt
 import json
 import numpy as np
+from src.path import root
 
 
 def get_dim(template_raw, template_out, idx):
@@ -21,10 +22,10 @@ def get_dim(template_raw, template_out, idx):
 
 
 template1 = (
-    "output/evaluation_results/8b-C0{n}-instruct_single/8b-C0{n}-instructraw.json"
+    f"{root}/" + "output/evaluation_results/8b-C0{n}-instruct_single/8b-C0{n}-instructraw.json"
 )
 template2 = (
-    "output/evaluation_results/8b-C0{n}-instruct_single/8b-C0{n}-instructdim.json"
+    f"{root}/" + "output/evaluation_results/8b-C0{n}-instruct_single/8b-C0{n}-instructdim.json"
 )
 idx = [13, 14, 15, 16, 17, 18, 19, 20, 21]
 vecs = get_dim(template1, template2, idx)
