@@ -662,7 +662,7 @@ class Model:
         result_data_name: str,
         backend: Literal["sglang", "vllm", "deepspeed", "serial"] = "sglang",
         batch_size_multiplier_log2: int = 0,
-        temperature=0.0,
+        temperature=0.25,
         purpose: Literal["responses", "logprobs"] = "responses",
     ) -> Union[Data, List[Dict[str, str]]]:
         """Performance inference on a dataset (currently only instruction datasets are tested, with the same format as SFT datasets),
@@ -681,7 +681,7 @@ class Model:
         :type batch_size_multiplier_log2: int = 0
 
         :param temperature: The temperature parameter
-        :type temperature: float = 0.0
+        :type temperature: float = 0.25
         
         :param purpose: The purpose of the inference. It can be "responses" or "logprobs". If "logprobs", the log probability of the prompt itself (and the assistant response supplied in the `predict` field, if exists) is returned in the `logprob` field of the resulting dataset, without doing any completion. If "responses", the completion text is saved in the `predict` field of the resulting dataset.
         :type purpose: Literal["responses", "logprobs"] = "responses"
@@ -829,7 +829,7 @@ class Model:
         data: Data,
         result_data_name: str,
         batch_size_multiplier_log2: int = 0,
-        temperature: float = 0,
+        temperature: float = 0.25,
     ) -> Data:
         """Deepspeed implementation for `inference()`."""
 

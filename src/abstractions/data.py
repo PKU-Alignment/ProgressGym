@@ -56,6 +56,13 @@ class Data:
     name2data: Dict[str, Any] = {}
     always_force_rewrite: bool = True
     data_type: Literal["pretrain", "sft", "preference"]
+    
+    default_key_fields = {
+        "prompt": "instruction",
+        "query": "input",
+        "response": "output",
+        "history": "history",
+    }
 
     # check with user before removing a file
     @classmethod
@@ -196,7 +203,7 @@ class Data:
         :param result_data_name: The name of the resulting data. Do not include path in result_data_name.
         :type result_data_name: str
 
-        :param forced_rewrite: Whether to forcefully rewrite the existing data
+        :param forced_rewrite: Whether to forcefully rewrite the existing file, if there is one.
         :type forced_rewrite: bool = False
 
         :param max_batch_size: If max_batch_size is specified and is >1, the transformation function must take inputs of type List[Dict] and return a List[Dict].
@@ -220,29 +227,19 @@ class Data:
         
         def map_key_fields_fn(sample_dict: Dict) -> Dict:
             nonlocal self
-            if "prompt" in self.key_fields and self.key_fields["prompt"] != "instruction":
-                sample_dict["instruction"] = sample_dict[self.key_fields["prompt"]]
-                del sample_dict[self.key_fields["prompt"]]
-            if "query" in self.key_fields and self.key_fields["query"] != "input":
-                sample_dict["input"] = sample_dict[self.key_fields["query"]]
-                del sample_dict[self.key_fields["query"]]
-            if "response" in self.key_fields and self.key_fields["response"] != "output":
-                sample_dict["output"] = sample_dict[self.key_fields["response"]]
-                del sample_dict[self.key_fields["response"]]
+            for k, v in self.default_key_fields.items():
+                if k in self.key_fields and self.key_fields[k] != v:
+                    sample_dict[v] = sample_dict[self.key_fields[k]]
+                    del sample_dict[self.key_fields[k]]
             
             return sample_dict
         
         def inv_map_key_fields_fn(sample_dict: Dict) -> Dict:
             nonlocal self
-            if "instruction" in sample_dict and self.key_fields["prompt"] != "instruction":
-                sample_dict[self.key_fields["prompt"]] = sample_dict["instruction"]
-                del sample_dict["instruction"]
-            if "input" in sample_dict and self.key_fields["query"] != "input":
-                sample_dict[self.key_fields["query"]] = sample_dict["input"]
-                del sample_dict["input"]
-            if "output" in sample_dict and self.key_fields["response"] != "output":
-                sample_dict[self.key_fields["response"]] = sample_dict["output"]
-                del sample_dict["output"]
+            for k, v in self.default_key_fields.items():
+                if v in sample_dict and self.key_fields[k] != v:
+                    sample_dict[self.key_fields[k]] = sample_dict[v]
+                    del sample_dict[v]
             
             return sample_dict
 
@@ -284,6 +281,94 @@ class Data:
             result.key_fields = self.key_fields.copy()
         return result
 
+    def move_current_to_history(self):
+        """
+        Move the current dialogue turn in the prompt/question field and the response/predict field to the history field.
+        
+        :return: The data after the operation.
+        :rtype: Data.
+        """
+        def move_to_history_fn(sample_dict: Dict) -> Dict:
+            if sample_dict.get("instruction", "") or sample_dict.get("input", "") or sample_dict.get("output", "") or sample_dict.get("predict", ""):
+                assert (sample_dict.get("instruction", "") or sample_dict.get("input", "")) and (sample_dict.get("output", "") or sample_dict.get("predict", ""))
+                sample_dict["history"] = sample_dict.get("history", []) + [
+                    [
+                        sample_dict.get("instruction", "") + 
+                            ("\n\n" if "instruction" in sample_dict and "input" in sample_dict else "") +
+                            sample_dict.get("input", ""),
+                        sample_dict.get("output", "") + sample_dict.get("predict", "")
+                    ]
+                ]
+                sample_dict.pop("instruction", None)
+                sample_dict.pop("input", None)
+                sample_dict.pop("output", None)
+                sample_dict.pop("predict", None)
+            
+            return sample_dict
+        
+        return self.transform(move_to_history_fn, self.data_name, forced_rewrite=True, map_key_fields=True)
+    
+    def switch_role_to_user(self, user_system_prompt: str = None, dialogue_starter: str = None):
+        """
+        Switch the prompt/question field and the response/predict field, thereby shifting the dialogue turn from the assistant to the user.
+        
+        :param user_system_prompt: The system prompt of the user role.
+        :type user_system_prompt: str = None
+        
+        :param dialogue_starter: Placeholder message for the "zeroth" dialogue turn by the assistant that prompts the user to start the conversation.
+        :type dialogue_starter: str = None
+        
+        :return: The data after the operation.
+        :rtype: Data.
+        """
+        if user_system_prompt is None:
+            user_system_prompt = "You are an assistant tasked with questioning the user, aka your partner. Ask informed questions to guide the conversation, follow up on the user's responses, and generally follow a natural conversation flow. Don't be too courteous; be concise."
+        
+        if dialogue_starter is None:
+            dialogue_starter = "I am your partner. Please directly ask your first question."
+        
+        moved_to_history = self.move_current_to_history()
+        
+        def switch_role_to_user_fn(sample_dict: Dict) -> Dict:
+            assert not (sample_dict.get("instruction", "") or sample_dict.get("input", "") or sample_dict.get("output", "") or sample_dict.get("predict", ""))
+            
+            all_histories = [h[i] for h in sample_dict.get("history", []) for i in range(2)]
+            all_histories = [dialogue_starter] + all_histories
+            assert len(all_histories) % 2 == 1
+            sample_dict["history"] = [[all_histories[i], all_histories[i + 1]] for i in range(len(all_histories)-1, 2)]
+            sample_dict["instruction"] = all_histories[-1]
+            sample_dict["system"] = user_system_prompt
+            return sample_dict
+        
+        return moved_to_history.transform(switch_role_to_user_fn, self.data_name, forced_rewrite=True, map_key_fields=True)
+    
+    def switch_role_to_assistant(self, assistant_system_prompt: str = None):
+        """
+        Switch the prompt/question field and the response/predict field, thereby shifting the dialogue turn from the user to the assistant.
+        
+        :param assistant_system_prompt: The system prompt of the assistant role.
+        :type assistant_system_prompt: str = None
+        
+        :return: The data after the operation.
+        :rtype: Data.
+        """
+        if assistant_system_prompt is None:
+            assistant_system_prompt = "Please answer the user's questions. Be concise and not overly courteous, but be informative and provide all necessary details."
+        
+        moved_to_history = self.move_current_to_history()
+        
+        def switch_role_to_assistant_fn(sample_dict: Dict) -> Dict:
+            assert not (sample_dict.get("instruction", "") or sample_dict.get("input", "") or sample_dict.get("output", "") or sample_dict.get("predict", ""))
+            
+            all_histories = [h[i] for h in sample_dict.get("history", []) for i in range(2)]
+            assert len(all_histories) % 2 == 0
+            sample_dict["history"] = [[all_histories[i], all_histories[i + 1]] for i in range(1, len(all_histories)-1, 2)]
+            sample_dict["instruction"] = all_histories[-1]
+            sample_dict["system"] = assistant_system_prompt
+            return sample_dict
+
+        return moved_to_history.transform(switch_role_to_assistant_fn, self.data_name, forced_rewrite=True, map_key_fields=True)
+    
     def manage_llama_factory_registration(
         self, operation: Literal["add", "remove", "query"], forced_update: bool = True
     ) -> bool:
@@ -372,6 +457,7 @@ class Data:
         query_field_name: Optional[str] = None,
         response_field_name: Optional[str] = None,
         system_field_name: Optional[str] = None,
+        history_field_name: Optional[str] = None,
         suppress_registration_update: bool = False,
         **kwargs,
     ) -> None:
@@ -393,6 +479,9 @@ class Data:
 
         :param system_field_name: The name of the system field
         :type system_field_name: Optional[str] = None
+        
+        :param history_field_name: The name of the history field
+        :type history_field_name: Optional[str] = None
 
         :param suppress_registration_update: Whether to suppress the update of the registration
         :type suppress_registration_update: bool = False
@@ -428,6 +517,11 @@ class Data:
             del self.key_fields["system"]
         elif system_field_name:
             self.key_fields["system"] = system_field_name
+        
+        if history_field_name == "" and "history" in self.key_fields:
+            del self.key_fields["history"]
+        elif history_field_name:
+            self.key_fields["history"] = history_field_name
 
         if isinstance(kwargs, dict):
             for k, v in kwargs.items():
