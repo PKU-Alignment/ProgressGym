@@ -568,9 +568,20 @@ def dict_to_dialogue_list(
     :rtype: Union[List[Dict[str, str]], List[List[Dict[str, str]]]
     """
     if isinstance(dic, dict):
-        res = [{"role": "user", "content": dic["input"]}]
-        if "instruction" in dic:
-            res = [{"role": "system", "content": dic["instruction"]}] + res
+        res = []
+        
+        if "system" in dic:
+            res = [{"role": "system", "content": dic["system"]}]
+        
+        if "history" in dic:
+            for turn in dic["history"]:
+                res.append({"role": "user", "content": turn[0]}, {"role": "assistant", "content": turn[1]})
+        
+        if "input" in dic or "instruction" in dic:
+            input = dic.get("input", "")
+            instruction = dic.get("instruction", "")
+            res.append({"role": "user", "content": input + ("\n\n" if input and instruction else "") + instruction})
+        
         if purpose == "logprobs" and "predict" in dic and isinstance(dic["predict"], str):
             res.append({"role": "assistant", "content": dic["predict"]})
         
