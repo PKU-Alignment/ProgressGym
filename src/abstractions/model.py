@@ -216,7 +216,7 @@ class Model:
         return Model(
             model_name=copied_name,
             is_instruct_finetuned=self.is_instruct_finetuned,
-            model_path=copied_path,
+            model_path_or_repoid=copied_path,
             num_gpus=self.num_gpus,
             template_type=self.template_type,
         )
@@ -490,7 +490,7 @@ class Model:
             result = Model(
                 model_name=result_model_name,
                 is_instruct_finetuned=(self.is_instruct_finetuned or stage == "sft"),
-                model_path=f"./output/training_results/{escape(result_model_name)}/",
+                model_path_or_repoid=f"./output/training_results/{escape(result_model_name)}/",
                 num_gpus=self.num_gpus,
             )
 
@@ -516,7 +516,7 @@ class Model:
             result = Model(
                 model_name=result_model_name,
                 is_instruct_finetuned=result.is_instruct_finetuned,
-                model_path=merged_model_path,
+                model_path_or_repoid=merged_model_path,
                 num_gpus=self.num_gpus,
                 template_type=self.template_type,
             )
@@ -652,7 +652,7 @@ class Model:
         return Model(
             model_name=the_name,
             is_instruct_finetuned=self.is_instruct_finetuned,
-            model_path=the_path,
+            model_path_or_repoid=the_path,
             num_gpus=self.num_gpus,
         )
 

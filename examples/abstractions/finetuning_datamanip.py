@@ -2,8 +2,14 @@ from src.abstractions import Model, Data, DataFileCollection
 
 gemma2b_base = Model(
     model_name="gemma-2b",
-    model_path="google/gemma-2-2b",  # or specify a local path if you have downloaded the model
+    model_path_or_repoid="google/gemma-2-2b",  # or specify a local path if you have downloaded the model
     is_instruct_finetuned=False,
+)
+
+llama8b_instruct = Model(
+    model_name="Llama-3.1-8B-Instruct",
+    model_path_or_repoid="meta-llama/Llama-3.1-8B-Instruct",
+    is_instruct_finetuned=True,
 )
 
 def continue_pretrain():
@@ -99,7 +105,8 @@ def direct_preference_optimization():
     gemma2b_c4_alpaca_orca.save_permanent()  # saved to output/saved/saved_model/gemma-2b_c4_alpaca_orca
 
 def dialogue_manipulation():
-    global gemma2b_c4_alpaca_orca_dialogue
+    # ============== Generating a dialogue, using a model to play the role of both user and assistant ==============
+    global llama8b_instruct
     dialogue_data = Data(
         "dialogue_data",
         data_content=[
@@ -111,18 +118,19 @@ def dialogue_manipulation():
             }
         ]
     )
-    dialogue_data = gemma2b_c4_alpaca_orca.inference(
+    dialogue_data = llama8b_instruct.inference(
         dialogue_data, "dialogue_data", backend="sglang"
     )
     dialogue_data = dialogue_data.switch_role_to_user()
-    dialogue_data = gemma2b_c4_alpaca_orca.inference(
+    dialogue_data = llama8b_instruct.inference(
         dialogue_data, "dialogue_data", backend="sglang"
     )
     dialogue_data = dialogue_data.switch_role_to_assistant()
+    print(list(dialogue_data.all_passages()))
     
 
 if __name__ == "__main__":
-    continue_pretrain()
-    supervised_finetune()
-    direct_preference_optimization()
+    # continue_pretrain()
+    # supervised_finetune()
+    # direct_preference_optimization()
     dialogue_manipulation()
