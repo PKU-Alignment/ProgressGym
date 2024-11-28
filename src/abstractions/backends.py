@@ -1,4 +1,5 @@
 # Edit flashinfer cascade.py to make it compatible with Python 3.8
+from src.path import root
 import os
 
 path = os.path.join(
@@ -31,16 +32,16 @@ from transformers import AutoTokenizer
 import random
 
 # create output directories
-os.makedirs("./output/benchmark_results", exist_ok=True)
-os.makedirs("./output/datasets", exist_ok=True)
-os.makedirs("./output/evaluation_results", exist_ok=True)
-os.makedirs("./output/inference_results", exist_ok=True)
-os.makedirs("./output/training_results", exist_ok=True)
-os.makedirs("./output/rlhf_results", exist_ok=True)
-os.makedirs("./output/merged_lora_results", exist_ok=True)
-os.makedirs("./output/saved/saved_model/", exist_ok=True)
-os.makedirs("./output/saved/saved_data/", exist_ok=True)
-os.makedirs("./output/downloaded", exist_ok=True)
+os.makedirs(f"{root}/output/benchmark_results", exist_ok=True)
+os.makedirs(f"{root}/output/datasets", exist_ok=True)
+os.makedirs(f"{root}/output/evaluation_results", exist_ok=True)
+os.makedirs(f"{root}/output/inference_results", exist_ok=True)
+os.makedirs(f"{root}/output/training_results", exist_ok=True)
+os.makedirs(f"{root}/output/rlhf_results", exist_ok=True)
+os.makedirs(f"{root}/output/merged_lora_results", exist_ok=True)
+os.makedirs(f"{root}/output/saved/saved_model/", exist_ok=True)
+os.makedirs(f"{root}/output/saved/saved_data/", exist_ok=True)
+os.makedirs(f"{root}/output/downloaded", exist_ok=True)
 
 random.seed(time.time())
 MY_USERNAME = pwd.getpwuid(os.getuid()).pw_name

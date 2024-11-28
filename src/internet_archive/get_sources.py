@@ -1,14 +1,15 @@
+from src.path import root
 import os, json, requests
-import src.text_utils as tw
+import src.utils.text_utils as tw
 from tqdm import tqdm
 import re
 import time
 
 
 def build_internet_archive_LibOfCong(max_hours: int = None):
-    ia_path = "./src/internet_archive/ia"
+    ia_path = f"{root}/src/internet_archive/ia"
     identifier_list_path = (
-        "./dataset/raw_downloads/internet_archive_identifier_list_libofcong.txt"
+        f"{root}/dataset/raw_downloads/internet_archive_identifier_list_libofcong.txt"
     )
     os.system(f"chmod +x {ia_path}")
 

@@ -4,7 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import scipy.stats as stats
 from tqdm import tqdm
-from src import text_utils
+from src import utils
 import logging
 
 mpl_logger = logging.getLogger("matplotlib")
@@ -13,6 +13,8 @@ from collections import defaultdict
 from collections import Counter
 import glob
 import pandas as pd
+
+from src.path import root
 
 
 # %%
@@ -138,11 +140,11 @@ def main():
     # iteratively read in all json files in directory
     for pathname in tqdm(
         glob.iglob(
-            "dataset/dataset_text_sequence/histext_1826_to_2018_collection_G/**/**/*.json",
+            f"{root}/dataset/dataset_text_sequence/histext_1826_to_2018_collection_G/**/**/*.json",
             recursive=True,
         )
     ):
-        dict_iterator = text_utils.read_json_memory_efficient(pathname)
+        dict_iterator = utils.read_json_memory_efficient(pathname)
         for doc in tqdm(dict_iterator):
             # extract metadata
             lst_content_length.append(len(doc.get("content", "")))

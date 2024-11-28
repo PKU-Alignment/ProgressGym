@@ -1,8 +1,9 @@
+from src.path import root
 import os
 from time import sleep
 
 
-def download_eebo(path: str = "./dataset/raw_downloads/EEBO.zip"):
+def download_eebo(path: str = f"{root}/dataset/raw_downloads/EEBO.zip"):
     if os.path.exists(path.replace(".zip", "")):
         print(f"EEBO already exists; continue")
         return

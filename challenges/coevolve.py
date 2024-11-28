@@ -1,11 +1,12 @@
+from src.path import root
+from src.utils.data_utils import elicit_rw_preference, default_rw_data
 from benchmark.framework import JudgeBase, ExamineeBase
 from typing import Iterable, Tuple, Dict, Union, List, Any
 from src.abstractions import Model, Data
 import numpy as np
 import scipy.spatial as sp
 import datasets
-import json, os
-from algorithms.utils.rw_utils import elicit_rw_preference, default_rw_data
+import json, os, sys
 
 
 class CoevolveJudge(JudgeBase):
@@ -27,10 +28,10 @@ class CoevolveJudge(JudgeBase):
         assert self.simulated_model.model_name == self.model_list[0].model_name
 
         if os.path.exists(
-            f"./output/benchmark_results/initial_supplementary_data.json"
+            f"{root}/output/benchmark_results/initial_supplementary_data.json"
         ):
             with open(
-                f"./output/benchmark_results/initial_supplementary_data.json", "r"
+                f"{root}/output/benchmark_results/initial_supplementary_data.json", "r"
             ) as f:
                 self.supplementary_data = json.load(f)
         else:
@@ -47,7 +48,7 @@ class CoevolveJudge(JudgeBase):
 
             # Backup supplementary data
             with open(
-                f"./output/benchmark_results/initial_supplementary_data.json", "w"
+                f"{root}/output/benchmark_results/initial_supplementary_data.json", "w"
             ) as f:
                 json.dump(self.supplementary_data, f)
 

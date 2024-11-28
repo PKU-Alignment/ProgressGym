@@ -1,3 +1,6 @@
+import os, sys
+sys.path = [os.path.dirname(os.path.abspath(__file__))] + sys.path
+
 from benchmark.framework import JudgeBase, ExamineeBase
 from benchmark.dummies import DummyJudge
 from challenges.follow import FollowJudge

@@ -1,6 +1,7 @@
+from src.path import root
 import os, json
 import re, unicodedata
-import src.text_utils as tw
+import src.utils.text_utils as tw
 from tqdm import tqdm
 
 last_cleaned = ""
@@ -97,6 +98,6 @@ def cleanse(dataset_path, to_path):
 
 if __name__ == "__main__":
     cleanse(
-        "../../shared_storage/our_datasets/HisText_Mar8_Guten_EEBO_PoL_IA10_unrefined/",
-        "../../shared_storage/our_datasets/HisText_Mar8_Guten_EEBO_PoL_IA10_rulebased_refined/",
+        f"{root}/../../shared_storage/our_datasets/HisText_Mar8_Guten_EEBO_PoL_IA10_unrefined/",
+        f"{root}/../../shared_storage/our_datasets/HisText_Mar8_Guten_EEBO_PoL_IA10_rulebased_refined/",
     )

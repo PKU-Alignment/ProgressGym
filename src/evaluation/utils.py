@@ -1,3 +1,4 @@
+from src.path import root
 import json, os, argparse
 import statistics, itertools
 import csv, Levenshtein
@@ -6,30 +7,30 @@ import numpy as np
 import copy
 
 repeat = 1
-assets = os.path.join("src", "evaluation", "assets")
+assets = os.path.join(root, "src", "evaluation", "assets")
 
-if not os.path.exists("logs/eval"):
-    os.makedirs("logs/eval")
+if not os.path.exists(f"{root}/logs/eval"):
+    os.makedirs(f"{root}/logs/eval")
 
 
 def regenerate_inputs(logprobs=False) -> Data:
-    input_file = os.path.join("src", "evaluation", "assets", "input_alpaca.json")
+    input_file = os.path.join(root, "src", "evaluation", "assets", "input_alpaca.json")
 
     if os.path.exists(input_file):
         os.remove(input_file)
 
     generate_alpaca(
-        "mc", os.path.join("src", "evaluation", "raw_dataset", "moralchoice"), rearrange = True, logprobs=logprobs
+        "mc", os.path.join(root, "src", "evaluation", "raw_dataset", "moralchoice"), rearrange = True, logprobs=logprobs
     )
-    generate_alpaca("views", os.path.join("src", "evaluation", "raw_dataset", "views"), rearrange = True, logprobs=logprobs)
+    generate_alpaca("views", os.path.join(root, "src", "evaluation", "raw_dataset", "views"), rearrange = True, logprobs=logprobs)
     generate_alpaca(
-        "foundation", os.path.join("src", "evaluation", "raw_dataset", "foundation"), rearrange = True, logprobs=logprobs
+        "foundation", os.path.join(root, "src", "evaluation", "raw_dataset", "foundation"), rearrange = True, logprobs=logprobs
     )
 
     result = Data(
         "evaluation",
         data_type="sft",
-        data_path="./src/evaluation/assets/input_alpaca.json",
+        data_path=f"{root}/src/evaluation/assets/input_alpaca.json",
     )
     result.set_key_fields(prompt_field_name="instruction", query_field_name="input")
     return result
@@ -116,7 +117,7 @@ def semantic_matching(item, mapping, four=False, verbal=False):
         optionC, optionD = item["action" + str(1+ mapping.index(3))], item["action" + str(1+ mapping.index(4))]
 
     response_template = os.path.join(
-        "src", "evaluation", "assets", "data", "response_templates"
+        root, "src", "evaluation", "assets", "data", "response_templates"
     )
     with open(os.path.join(response_template, "refusals.txt"), "r") as f:
         refusals = f.readlines()
@@ -244,8 +245,8 @@ def semantic_matching(item, mapping, four=False, verbal=False):
     """
     logging invalid
     """
-    mode = "a+" if os.path.exists("logs/eval/log_sem.txt") else "w+"
-    with open("logs/eval/log_sem.txt", mode) as f:
+    mode = "a+" if os.path.exists(f"{root}/logs/eval/log_sem.txt") else "w+"
+    with open(f"{root}/logs/eval/log_sem.txt", mode) as f:
         f.write(
             "answer [" + answer + "];\n templates [" + ";".join(answers_action1) + "]\n"
         )
@@ -338,7 +339,7 @@ def __collect(output_data):
         if prob > old_prob:
             middle[s_id][q_type][mapping_id][0] = predict_id
             middle[s_id][q_type][mapping_id][1] = prob
-        with open('output/evaluation_results/middle.json', 'a+') as f:
+        with open(f'{root}/output/evaluation_results/middle.json', 'a+') as f:
             record = copy.deepcopy(middle)
             for x in record.keys():
                 for y in record[x].keys():
@@ -532,7 +533,7 @@ def generate_alpaca(source: str, dir: str, rearrange = True, logprobs = False):
                 output_list_dic.extend([boi_ab, boi_compare, boi_repeat])
         try:
             with open(
-                os.path.join("src", "evaluation", "assets", "input_alpaca.json"), "r"
+                os.path.join(root, "src", "evaluation", "assets", "input_alpaca.json"), "r"
             ) as f:
                 temp = json.load(f)
         except:
@@ -541,7 +542,7 @@ def generate_alpaca(source: str, dir: str, rearrange = True, logprobs = False):
 
         temp.extend(output_list_dic)
         with open(
-            os.path.join("src", "evaluation", "assets", "input_alpaca.json"), "w"
+            os.path.join(root, "src", "evaluation", "assets", "input_alpaca.json"), "w"
         ) as f:
             json.dump(temp, f)
         print("done", source)
@@ -636,7 +637,7 @@ def generate_alpaca(source: str, dir: str, rearrange = True, logprobs = False):
                 
 
         with open(
-            os.path.join("src", "evaluation", "assets", "input_alpaca.json"), "r"
+            os.path.join(root, "src", "evaluation", "assets", "input_alpaca.json"), "r"
         ) as f:
             temp = json.load(f)
 
@@ -644,7 +645,7 @@ def generate_alpaca(source: str, dir: str, rearrange = True, logprobs = False):
 
         temp.extend(output_list_dic)
         with open(
-            os.path.join("src", "evaluation", "assets", "input_alpaca.json"), "w"
+            os.path.join(root, "src", "evaluation", "assets", "input_alpaca.json"), "w"
         ) as f:
             json.dump(temp, f)
         print("done", source, cut, "made the cut")
@@ -688,19 +689,19 @@ def collect_dim(output_from_collect):
     look_up_dict = []
     look_up_dict.append(
         csv_to_dict(
-            "src/evaluation/raw_dataset/moralchoice/final.csv",
+            f"{root}/src/evaluation/raw_dataset/moralchoice/final.csv",
             ["scenario_id", "generation_rule"],
         )
     )
     look_up_dict.append(
         csv_to_dict(
-            "src/evaluation/raw_dataset/foundation/final.csv",
+            f"{root}/src/evaluation/raw_dataset/foundation/final.csv",
             ["scenario_id", "generation_theme"],
         )
     )
     look_up_dict.append(
         csv_to_dict(
-            "src/evaluation/raw_dataset/views/final.csv",
+            f"{root}/src/evaluation/raw_dataset/views/final.csv",
             ["scenario_id", "generation_theme"],
         )
     )

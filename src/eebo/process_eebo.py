@@ -1,8 +1,9 @@
+from src.path import root
 import xml.etree.ElementTree as ET
 import os
 from tqdm import tqdm
 import json
-import src.text_utils as tw
+import src.utils.text_utils as tw
 
 
 # a utility function called by build_eebo_dataset, to read the contents in an eebo xml file in a suitable manner
@@ -25,7 +26,7 @@ def process_eebo_file(path: str):
 
 
 # if download_eebo is already called, build_eebo_dataset is the only thing you need to call to build the EEBO dataset
-def build_eebo_dataset(eebo_path: str = "./dataset/raw_downloads/EEBO/"):
+def build_eebo_dataset(eebo_path: str = f"{root}/dataset/raw_downloads/EEBO/"):
     for phase_num in [1, 2]:
         print(f"start building dataset from EEBO Phase {phase_num} (2 in total)")
         root_dir = os.path.join(eebo_path, f"eebo_phase{phase_num}")

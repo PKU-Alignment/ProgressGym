@@ -1,3 +1,4 @@
+from src.path import root
 from src.abstractions import Model, Data, DataFileCollection
 
 gemma2b_base = Model(
@@ -59,7 +60,7 @@ def supervised_finetune():
     histext_collection = DataFileCollection(  # build a collection holding json files of year 1826 to 2018
         collection_name="histext_1826_to_2018_collection",
         data_type="pretrain",
-        collection_path="./dataset/dataset_text_sequence/",
+        collection_path=f"{root}/dataset/dataset_text_sequence/",
         file_selection_func=(
             lambda path: "Y" in path and 1826 <= int(path.split("/")[-1][1:6]) <= 2018
         ),  # if this argument is omitted, all json files will be selected

@@ -1,10 +1,11 @@
-import src.text_utils as tw
+from src.path import root
+import src.utils.text_utils as tw
 import os, json
 import csv
 from tqdm import tqdm
 
 """
-This file is to be excecuted after get_data.py. Reads metadata from raw files and writes them via text_utils API
+This file is to be excecuted after get_data.py. Reads metadata from raw files and writes them via utils API
 """
 
 
@@ -61,7 +62,7 @@ def gather_meta(raw_dir, record):
             """
             with open(
                 os.path.join(
-                    "dataset", "raw_downloads", "Gutenberg", "metadata", "metadata.csv"
+                    root, "dataset", "raw_downloads", "Gutenberg", "metadata", "metadata.csv"
                 )
             ) as file:
                 reader = csv.reader(file)

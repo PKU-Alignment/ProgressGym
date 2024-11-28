@@ -4,10 +4,11 @@ import os, json
 from multiprocessing import freeze_support
 import src.evaluation.quantify as qt
 import numpy as np
+from src.path import root
 """
-generate_alpaca('mc', os.path.join('src', 'evaluation', 'raw_dataset', 'moralchoice'))
-generate_alpaca('views', os.path.join('src', 'evaluation', 'raw_dataset', 'views'))
-generate_alpaca('foundation', os.path.join('src', 'evaluation', 'raw_dataset', 'foundation'))
+generate_alpaca('mc', os.path.join(root, 'src', 'evaluation', 'raw_dataset', 'moralchoice'))
+generate_alpaca('views', os.path.join(root, 'src', 'evaluation', 'raw_dataset', 'views'))
+generate_alpaca('foundation', os.path.join(root, 'src', 'evaluation', 'raw_dataset', 'foundation'))
 """
 if __name__ == "__main__":
     os.environ["CUDA_VISIBLE_DEVICE"] = "0"
@@ -19,16 +20,16 @@ if __name__ == "__main__":
     ]
     vec = []
     for m in set_model:
-        with open("output/datasets/evaluation_output_mc_" + m + ".json", 'r') as f:
+        with open(f"{root}/output/datasets/evaluation_output_mc_" + m + ".json", 'r') as f:
             d = json.load(f)
         raw = collect(d, logprobs = True)
-        with open('output/evaluation_results/' + m + '_single/' + m + '_raw.json', 'w') as f:
+        with open(f'{root}/output/evaluation_results/' + m + '_single/' + m + '_raw.json', 'w') as f:
             json.dump(raw, f)
-        v = qt.calculate_model('output/evaluation_results/' + m + '_single/', m)
+        v = qt.calculate_model(f'{root}/output/evaluation_results/' + m + '_single/', m)
         vec.append(v)
     test_name = "8b_all_fixed"
     vec = np.array(vec)
-    with open("output/evaluation_results/" + test_name + ".json", "w") as f:
+    with open(f"{root}/output/evaluation_results/" + test_name + ".json", "w") as f:
         lst = [list(boi) for boi in vec]
         json.dump(lst, f)
     qt.plot_heatmap(vec[:, 10:15], test_name + '_foundation', label_set = 2, norm = "group")
