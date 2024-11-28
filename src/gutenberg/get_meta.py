@@ -1,10 +1,10 @@
-import src.text_writer as tw
+import src.text_utils as tw
 import os, json
 import csv
 from tqdm import tqdm
 
 """
-This file is to be excecuted after get_data.py. Reads metadata from raw files and writes them via text_writer API
+This file is to be excecuted after get_data.py. Reads metadata from raw files and writes them via text_utils API
 """
 
 

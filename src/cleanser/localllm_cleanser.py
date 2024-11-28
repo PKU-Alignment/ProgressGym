@@ -3,7 +3,7 @@ import os
 from vllm import LLM, SamplingParams
 from src.abstractions import Model, Data, fill_in_QA_template, DataFileCollection
 from typing import List, Tuple, Dict, Optional, Set
-from src.text_writer import write_log, JsonListWriter
+from src.text_utils import write_log, JsonListWriter
 import time
 import re
 

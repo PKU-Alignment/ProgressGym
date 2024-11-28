@@ -2,7 +2,7 @@ import xml.etree.ElementTree as ET
 import os
 from tqdm import tqdm
 import json
-import src.text_writer as tw
+import src.text_utils as tw
 
 
 # a utility function called by build_eebo_dataset, to read the contents in an eebo xml file in a suitable manner

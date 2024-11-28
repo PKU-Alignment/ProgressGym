@@ -14,7 +14,7 @@ from typing import (
 import os
 import json
 import warnings
-import src.text_writer as tw
+import src.text_utils as tw
 from tqdm import tqdm
 
 with open("./src/abstractions/configs/abstractions_config.json", "r") as config_file:

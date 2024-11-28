@@ -7,7 +7,7 @@ import random
 import pandas as pd
 import json
 import datasets
-from src.text_writer import write_log
+from src.text_utils import write_log
 import warnings
 from tqdm import tqdm
 from sympy import binomial

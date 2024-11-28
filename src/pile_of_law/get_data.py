@@ -2,7 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 import os, json
 import lzma
-import src.text_writer as tw
+import src.text_utils as tw
 from tqdm import tqdm
 from copy import copy
 

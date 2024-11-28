@@ -7,7 +7,7 @@ from src.gpt_utils import (
     convo_clear_history,
     independent_get_response,
 )
-from src.text_writer import write_log
+from src.text_utils import write_log
 from threading import Thread, Lock
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import time

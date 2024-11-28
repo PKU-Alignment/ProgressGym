@@ -7,7 +7,7 @@ import os
 import json
 import torch
 import warnings
-import src.text_writer as tw
+import src.text_utils as tw
 import random
 import numpy as np
 from transformers import (
