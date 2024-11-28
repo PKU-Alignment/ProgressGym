@@ -1,5 +1,5 @@
 import os, json, requests
-import src.text_writer as tw
+import src.text_utils as tw
 from tqdm import tqdm
 import re
 import time

@@ -55,7 +55,7 @@ if __name__ == "__main__":
     # Custom models (local or on hub) can be similarly loaded, e.g.:
     # model = Model(
     #     "mixtral-8x7b-instruct-v0.1",
-    #     model_path="mistralai/Mixtral-8x7B-Instruct-v0.1",
+    #     model_path_or_repoid="mistralai/Mixtral-8x7B-Instruct-v0.1",
     #     template_type="mistral",
     # )
     

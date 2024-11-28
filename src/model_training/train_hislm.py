@@ -1,5 +1,5 @@
 from src.abstractions import Model, Data, DataFileCollection
-from src.text_writer import write_log
+from src.text_utils import write_log
 from collections import defaultdict
 from typing import List
 import os

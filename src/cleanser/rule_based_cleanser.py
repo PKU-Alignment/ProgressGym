@@ -1,6 +1,6 @@
 import os, json
 import re, unicodedata
-import src.text_writer as tw
+import src.text_utils as tw
 from tqdm import tqdm
 
 last_cleaned = ""

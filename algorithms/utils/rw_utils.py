@@ -6,7 +6,7 @@ import random
 import pandas as pd
 import json
 from datasets import load_dataset
-from src.text_writer import write_log
+from src.text_utils import write_log
 import src.evaluation.utils as eval_utils
 from benchmark import JudgeBase, ExamineeBase, PredictJudge
 import warnings
