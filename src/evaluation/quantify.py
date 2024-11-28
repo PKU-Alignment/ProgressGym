@@ -35,7 +35,7 @@ description = [
 if not os.path.exists(f"{root}/output/evaluation_results/figs"):
     os.makedirs(f"{root}/output/evaluation_results/figs")
 
-if not os.path.exists(f"{root}logs/eval"):
+if not os.path.exists(f"{root}/logs/eval"):
     os.makedirs(f"{root}/logs/eval")
 
 

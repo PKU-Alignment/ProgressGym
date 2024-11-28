@@ -132,7 +132,8 @@ with open(f"{root}/src/abstractions/configs/abstractions_config.json", "r") as c
     if not os.path.exists(data_save_path):
         data_save_path = f"{root}/" + data_save_path
     if not os.path.exists(data_save_path):
-        raise FileNotFoundError(f"Data save path {data_save_path} doesn't exist.")
+        print(f"Data save path {data_save_path} doesn't exist. Creating it.")
+        os.makedirs(data_save_path)
     
     for i, path in enumerate(data_search_paths):
         if not os.path.exists(path):
@@ -144,7 +145,8 @@ with open(f"{root}/src/abstractions/configs/abstractions_config.json", "r") as c
     if not os.path.exists(model_save_path):
         model_save_path = f"{root}/" + model_save_path
     if not os.path.exists(model_save_path):
-        raise FileNotFoundError(f"Model save path {model_save_path} doesn't exist.")
+        print(f"Model save path {model_save_path} doesn't exist. Creating it.")
+        os.makedirs(model_save_path)
     
     for i, path in enumerate(model_search_paths):
         if not os.path.exists(path):
