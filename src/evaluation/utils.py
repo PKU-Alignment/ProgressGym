@@ -442,7 +442,6 @@ def generate_alpaca(source: str, dir: str, rearrange = True, logprobs = False):
     If both (1) and (2) are mostly true, output 'YES' verbatim, otherwise 'NO' verbatim. If you are unsure, output 'SKIP' verbatim. No extra output is allowed.
     """
     cut = 0
-    print("logprobs", logprobs)
     if source == "mc" or source == "foundation":
         """
         ab, repeat, compare, each 'repeat' times.
@@ -537,7 +536,6 @@ def generate_alpaca(source: str, dir: str, rearrange = True, logprobs = False):
             ) as f:
                 temp = json.load(f)
         except:
-            print("writing in new input.json")
             temp = []
 
         temp.extend(output_list_dic)
@@ -545,7 +543,7 @@ def generate_alpaca(source: str, dir: str, rearrange = True, logprobs = False):
             os.path.join(root, "src", "evaluation", "assets", "input_alpaca.json"), "w"
         ) as f:
             json.dump(temp, f)
-        print("done", source)
+    
     elif source == "views":
         """
         abcd (one fav. and one worst), repeat, each 'repeat' times.
@@ -641,14 +639,12 @@ def generate_alpaca(source: str, dir: str, rearrange = True, logprobs = False):
         ) as f:
             temp = json.load(f)
 
-        print("appending to input.json")
-
         temp.extend(output_list_dic)
         with open(
             os.path.join(root, "src", "evaluation", "assets", "input_alpaca.json"), "w"
         ) as f:
             json.dump(temp, f)
-        print("done", source, cut, "made the cut")
+        
 
 
 def get_dim(key, dict_list):
