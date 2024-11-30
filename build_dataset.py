@@ -1,5 +1,5 @@
 from src.path import root
-import src.utils.text_utils as tw
+import src.utils.text_utils as tu
 import src.cleanser.rule_based_cleanser as rb
 import src.cleanser.localllm_cleanser as llm_cleanser
 import src.model_training.train_hislm as hislm
@@ -53,7 +53,7 @@ def build_pile_of_law():
 
 
 if __name__ == "__main__":
-    tw.write_log(f"\n\n\n\n\n\n=========== NEW RUN ============\n\n")
+    tu.write_log(f"\n\n\n\n\n\n=========== NEW RUN ============\n\n")
     print(
         "This script is NOT meant to be run as part of the benchmarking process. Unless you would like to replicate the dataset building & model training process, you could directly run `run_benchmark.py` instead, which will automatically download the pre-built dataset and/or models on demand."
     )
@@ -82,7 +82,7 @@ if __name__ == "__main__":
                 max_hours=10
             )  # takes ~100h, but if max_hours is supplied then stops after this many hours (won't affect data integrity)
             # finishing up
-            tw.seal_all_files()
+            tu.seal_all_files()
             print("Finished building entire dataset. Proceed to data cleansing.")
 
         if (

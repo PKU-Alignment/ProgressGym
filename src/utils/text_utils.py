@@ -308,4 +308,5 @@ class JsonListWriter:
 
     def __exit__(self, type, value, traceback):
         self.file_obj.write("\n]")
+        self.file_obj.flush()
         self.file_obj.close()

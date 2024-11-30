@@ -8,7 +8,7 @@ import os
 import json
 import torch
 import warnings
-import src.utils.text_utils as tw
+import src.utils.text_utils as tu
 import random
 import numpy as np
 from transformers import (
@@ -702,7 +702,7 @@ class Model:
              :code:`serial` - Serial inference.
         """
 
-        tw.write_log(
+        tu.write_log(
             f"Inference start, with result_data_name = {result_data_name} and backend = {backend}."
         )
         input_is_data = isinstance(data, Data)
@@ -773,7 +773,7 @@ class Model:
                 f'Backend {backend} not recognized. Options are "sglang", "vllm", "deepspeed", and "serial".'
             )
 
-        tw.write_log(
+        tu.write_log(
             f"Inference finished, with result_data_name = {result_data_name} and backend = {backend}."
         )
 
@@ -908,7 +908,7 @@ class Model:
             result_data_path, f"{escape(result_data_name)}.json"
         )
 
-        with tw.JsonListWriter(final_file_path) as writer:
+        with tu.JsonListWriter(final_file_path) as writer:
             with open(initial_file_path, "r") as results_file:
                 for i, (input_dict, result) in enumerate(
                     zip(data.all_passages(), results_file)
@@ -960,11 +960,11 @@ class Model:
             root, "output", "inference_results", "inf", data_name + ".json"
         )
 
-        with tw.JsonListWriter(
+        with tu.JsonListWriter(
             data_path
         ) as writer:  # memory-efficient: no need to place all answers in memory
             if isinstance(input_data, Data):
-                eles = tw.read_json_memory_efficient(input_data.data_path)
+                eles = tu.read_json_memory_efficient(input_data.data_path)
             else:
                 eles = input_data
 
@@ -988,7 +988,7 @@ class Model:
 
                 # display the first element to showcase results
                 if writer.is_first:
-                    tw.write_log(
+                    tu.write_log(
                         f"Inference sample: {ele}. Raw response: {repr(response)}."
                     )
 

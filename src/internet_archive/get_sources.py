@@ -1,6 +1,6 @@
 from src.path import root
 import os, json, requests
-import src.utils.text_utils as tw
+import src.utils.text_utils as tu
 from tqdm import tqdm
 import re
 import time
@@ -44,11 +44,11 @@ def build_internet_archive_LibOfCong(max_hours: int = None):
         if max_hours is not None:
             if time.monotonic() - start_time > 3600 * max_hours:
                 print("time is up! ending loop.")
-                tw.write_log("IA-LOC: time is up! ending loop.")
+                tu.write_log("IA-LOC: time is up! ending loop.")
                 break
 
             if example_counter % 100 == 2:
-                tw.write_log(
+                tu.write_log(
                     "IA-LOC: time %.0f/%.0f = %.2f%%, progress %d/%d = %.2f%%"
                     % (
                         time.monotonic() - start_time,
@@ -62,11 +62,11 @@ def build_internet_archive_LibOfCong(max_hours: int = None):
 
         try:
             if example_counter <= 200:
-                tw.write_log(f"IA-LOC: {identifier} request #1 starts")
+                tu.write_log(f"IA-LOC: {identifier} request #1 starts")
             response = requests.get(url)
             response.raise_for_status()
             if example_counter <= 200:
-                tw.write_log(f"IA-LOC: {identifier} request #1 ends")
+                tu.write_log(f"IA-LOC: {identifier} request #1 ends")
 
             content = response.json().get("files", [])
             content_strings = []
@@ -74,7 +74,7 @@ def build_internet_archive_LibOfCong(max_hours: int = None):
             for file_info in content:
                 if file_info["name"].endswith(".txt"):
                     if example_counter <= 200:
-                        tw.write_log(
+                        tu.write_log(
                             f'IA-LOC: {identifier}-{file_info["name"]} request #2 starts'
                         )
                     file_url = (
@@ -83,7 +83,7 @@ def build_internet_archive_LibOfCong(max_hours: int = None):
                     file_response = requests.get(file_url)
                     file_response.raise_for_status()
                     if example_counter <= 200:
-                        tw.write_log(
+                        tu.write_log(
                             f'IA-LOC: {identifier}-{file_info["name"]} request #2 ends'
                         )
                     file_content = file_response.text
@@ -93,18 +93,18 @@ def build_internet_archive_LibOfCong(max_hours: int = None):
 
             if "date" not in metadata:
                 nodate_counter += 1
-                tw.write_log(
+                tu.write_log(
                     f'IA-LOC: {nodate_counter}-th time, metadata contains no "date" field: {metadata}'
                 )
                 continue
 
             date_str: str = metadata["date"]
-            creation_year = tw.decode_year_num(date_str, 510, 2024)
+            creation_year = tu.decode_year_num(date_str, 510, 2024)
 
             if example_counter <= 200 or (
                 type(creation_year) == int and creation_year < 500
             ):
-                tw.write_log(
+                tu.write_log(
                     f"IA-LOC: date {date_str} interpreted as year {creation_year}"
                 )
 
@@ -115,18 +115,18 @@ def build_internet_archive_LibOfCong(max_hours: int = None):
 
             if creation_year is None:
                 nodate_counter += 1
-                tw.write_log(
+                tu.write_log(
                     f"IA-LOC: {nodate_counter}-th time, date {date_str} uninterpretable; saving to undated.json"
                 )
-                tw.report_undated_entry(json_dict=metadata)
+                tu.report_undated_entry(json_dict=metadata)
             else:
-                tw.write_single_entry(json_dict=metadata)
+                tu.write_single_entry(json_dict=metadata)
 
         # raise an exception if request fails
         # except requests.exceptions.RequestException as e:
         except Exception as e:
             download_fail_counter += 1
-            tw.write_log(
+            tu.write_log(
                 f"IA-LOC: {download_fail_counter}-th time, error fetching metadata for {identifier}: {type(e)} {e}"
             )
 

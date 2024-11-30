@@ -3,7 +3,7 @@ import xml.etree.ElementTree as ET
 import os
 from tqdm import tqdm
 import json
-import src.utils.text_utils as tw
+import src.utils.text_utils as tu
 
 
 # a utility function called by build_eebo_dataset, to read the contents in an eebo xml file in a suitable manner
@@ -106,10 +106,10 @@ def build_eebo_dataset(eebo_path: str = f"{root}/dataset/raw_downloads/EEBO/"):
                 1000 < year_earliest <= year <= year_latest < 2025
                 and year_latest - year_earliest < 50
             ):
-                tw.write_single_entry(json_dict=json_element)
+                tu.write_single_entry(json_dict=json_element)
             else:
                 del json_element["creation_year"]
-                tw.write_log(
+                tu.write_log(
                     f"EEBO: Uncertainty too large, saving to undated.json: {line.strip()}"
                 )
-                tw.report_undated_entry(json_dict=json_element)
+                tu.report_undated_entry(json_dict=json_element)

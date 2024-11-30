@@ -1,5 +1,5 @@
 from src.path import root
-import src.utils.text_utils as tw
+import src.utils.text_utils as tu
 import os, json
 import csv
 from tqdm import tqdm
@@ -56,7 +56,7 @@ def gather_meta(raw_dir, record):
                         break
 
             assert add["content"]
-            # add['creation_year'] = tw.decode_year_num(add["created_timestamp"], 1100, 2024)
+            # add['creation_year'] = tu.decode_year_num(add["created_timestamp"], 1100, 2024)
             """
             Taking average from the author's y.o.b & y.o.d
             """
@@ -81,20 +81,20 @@ def gather_meta(raw_dir, record):
                                 add["creation_year"] = None
                         break
             if add["creation_year"] is not None:
-                tw.write_single_entry(json_dict=add)
+                tu.write_single_entry(json_dict=add)
             else:
-                tw.report_undated_entry(add)
+                tu.report_undated_entry(add)
                 gutenberg_failure_counter += 1
                 if (
                     gutenberg_failure_counter <= 100
                     or gutenberg_failure_counter % 100 == 0
                 ):
-                    tw.write_log(
+                    tu.write_log(
                         f'Gutenberg: {gutenberg_failure_counter}-th time, saving to undated.json: created_timestamp={add["created_timestamp"]},{full_timestamp}'
                     )
 
         except Exception as e:
             gutenberg_failure_counter += 1
-            tw.write_log(
+            tu.write_log(
                 f"Gutenberg: {gutenberg_failure_counter}-th time, exception {type(e)} {e}"
             )

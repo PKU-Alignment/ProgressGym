@@ -15,7 +15,7 @@ from typing import (
 import os
 import json
 import warnings
-import src.utils.text_utils as tw
+import src.utils.text_utils as tu
 from tqdm import tqdm
 from src.abstractions.configs.templates_configs import *
 
@@ -126,7 +126,7 @@ class Data:
                 data_path = f"{root}/output/datasets/{data_name}.json"
                 Data.ask_and_remove_if_exists(data_path, forced_rewrite=True)
 
-            with tw.JsonListWriter(data_path) as json_writer:
+            with tu.JsonListWriter(data_path) as json_writer:
                 for element in data_content:
                     json_writer.append(element)
 
@@ -169,9 +169,19 @@ class Data:
         else:
             Data.name2data[data_name] = [self]
 
-    def copy(self) -> "Data":
-        """Returns a shallow copy of the current Data instance."""
-        cp = Data(self.data_name, self.data_type, self.data_path)
+    def copy(self, data_name: str = None) -> "Data":
+        """
+        Returns a copy of the current Data instance. 
+        Shallow copy if data_name is not provided or identical to the current data_name; deep copy otherwise.
+        """
+        if data_name and data_name != self.data_name:
+            new_data_path = f"{root}/output/datasets/{data_name}.json"
+            Data.ask_and_remove_if_exists(new_data_path, forced_rewrite=True)
+            execute(f"cp {escape(self.data_path)} {escape(new_data_path)}")
+            cp = Data(data_name, self.data_type, new_data_path)
+        else:
+            cp = Data(self.data_name, self.data_type, self.data_path)
+        
         cp.key_fields = self.key_fields.copy()
         return cp
 
@@ -213,6 +223,19 @@ class Data:
         :rtype: Data.
         """
         out_path = f"{root}/output/datasets/{result_data_name}.json"
+        if self.data_name == result_data_name or self.data_path == out_path:
+            warnings.warn(
+                f"Data name {result_data_name} is the same as the current data name. The old instance will be invalidated."
+            )
+            return self.copy("temp_transform_artifact").transform(
+                transformation,
+                result_data_name,
+                forced_rewrite,
+                max_batch_size,
+                keep_key_fields,
+                map_key_fields,
+            )
+            
         Data.ask_and_remove_if_exists(out_path, forced_rewrite)
 
         def write_dict(sample_dict: Dict):
@@ -225,7 +248,7 @@ class Data:
         def map_key_fields_fn(sample_dict: Dict) -> Dict:
             nonlocal self
             for k, v in self.default_key_fields.items():
-                if k in self.key_fields and self.key_fields[k] != v:
+                if k in self.key_fields and self.key_fields.get(k, v) != v and self.key_fields[k] in sample_dict:
                     sample_dict[v] = sample_dict[self.key_fields[k]]
                     del sample_dict[self.key_fields[k]]
             
@@ -234,7 +257,7 @@ class Data:
         def inv_map_key_fields_fn(sample_dict: Dict) -> Dict:
             nonlocal self
             for k, v in self.default_key_fields.items():
-                if v in sample_dict and self.key_fields[k] != v:
+                if v in sample_dict and self.key_fields.get(k, v) != v:
                     sample_dict[self.key_fields[k]] = sample_dict[v]
                     del sample_dict[v]
             
@@ -245,27 +268,29 @@ class Data:
             is_first = True
 
             if max_batch_size == 1:
-                for element in tw.read_json_memory_efficient(self.data_path):
-                    if map_key_fields:
-                        element = map_key_fields_fn(element)
-                    
-                    transformed = transformation(element)
-                    if transformed is not None:
-                        write_dict(transformed if not map_key_fields else inv_map_key_fields_fn(transformed))
+                with tu.JsonListReader(self.data_path) as reader:
+                    for element in reader:
+                        if map_key_fields:
+                            element = map_key_fields_fn(element)
+                        
+                        transformed = transformation(element)
+                        if transformed is not None:
+                            write_dict(transformed if not map_key_fields else inv_map_key_fields_fn(transformed))
 
             else:
                 buffer = []
 
-                for element in tw.read_json_memory_efficient(self.data_path):
-                    if map_key_fields:
-                        element = map_key_fields_fn(element)
-                    
-                    buffer.append(element)
-                    if len(buffer) == max_batch_size:
-                        for e in transformation(buffer):
-                            write_dict(e if not map_key_fields else inv_map_key_fields_fn(e))
-                        buffer = []
-                        out_file.flush()
+                with tu.JsonListReader(self.data_path) as reader:
+                    for element in reader:
+                        if map_key_fields:
+                            element = map_key_fields_fn(element)
+                        
+                        buffer.append(element)
+                        if len(buffer) == max_batch_size:
+                            for e in transformation(buffer):
+                                write_dict(e if not map_key_fields else inv_map_key_fields_fn(e))
+                            buffer = []
+                            out_file.flush()
 
                 if buffer:
                     for e in transformation(buffer):
@@ -566,8 +591,9 @@ class Data:
         """
         Returns an iterator of all passages (json dicts) in this dataset.
         """
-        for element in tw.read_json_memory_efficient(self.data_path):
-            yield element
+        with tu.JsonListReader(self.data_path) as reader:
+            for element in reader:
+                yield element
 
 
 class DataFileCollection:
@@ -704,8 +730,9 @@ class DataFileCollection:
             list(self.all_files())
         ):  # remove list() if it turns out that the file count is super huge
             assert in_path[: len(self.collection_path)] == self.collection_path
-            for element in tw.read_json_memory_efficient(in_path):
-                yield element
+            with tu.JsonListReader(in_path) as reader:
+                for element in reader:
+                    yield element
 
     def transform(
         self,
@@ -766,21 +793,23 @@ class DataFileCollection:
                 is_first = True
 
                 if max_batch_size == 1:
-                    for element in tw.read_json_memory_efficient(in_path):
-                        transformed = transformation(element)
-                        if transformed is not None:
-                            write_dict(transformed)
+                    with tu.JsonListReader(in_path) as reader:
+                        for element in reader:
+                            transformed = transformation(element)
+                            if transformed is not None:
+                                write_dict(transformed)
 
                 else:
                     buffer = []
 
-                    for element in tw.read_json_memory_efficient(in_path):
-                        buffer.append(element)
-                        if len(buffer) == max_batch_size:
-                            for e in transformation(buffer):
-                                write_dict(e)
-                            buffer = []
-                            out_file.flush()
+                    with tu.JsonListReader(in_path) as reader:
+                        for element in reader:
+                            buffer.append(element)
+                            if len(buffer) == max_batch_size:
+                                for e in transformation(buffer):
+                                    write_dict(e)
+                                buffer = []
+                                out_file.flush()
 
                     if buffer:
                         for e in transformation(buffer):
@@ -843,10 +872,11 @@ class DataFileCollection:
             for in_path in tqdm(
                 list(self.all_files())
             ):  # remove list() if it turns out that the file count is super huge
-                for element in tw.read_json_memory_efficient(in_path):
-                    out_file.write("\n" if is_first else ",\n")
-                    is_first = False
-                    out_file.write(json.dumps(clean_dict(element, filter_fields)))
+                with tu.JsonListReader(in_path) as reader:
+                    for element in reader:
+                        out_file.write("\n" if is_first else ",\n")
+                        is_first = False
+                        out_file.write(json.dumps(clean_dict(element, filter_fields)))
 
             out_file.write("\n]")
 

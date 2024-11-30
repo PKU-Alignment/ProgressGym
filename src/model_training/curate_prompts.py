@@ -96,7 +96,7 @@ def __init__(self, collection_name: str, data_type: Literal['pretrain', 'sft', '
 
 from src.path import root
 from src.abstractions import Data, DataFileCollection, fill_in_QA_template
-from src.utils.text_utils import write_log, read_json_memory_efficient
+from src.utils.text_utils import write_log
 
 # Multithreading for GPT interaction
 import threading

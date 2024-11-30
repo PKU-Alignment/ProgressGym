@@ -481,6 +481,7 @@ def start_inference_backend(
             )
             assert len(output) == len(sample_dicts)
 
+            count = 0
             for _ in range(20):
                 bad_indices = [
                     k
