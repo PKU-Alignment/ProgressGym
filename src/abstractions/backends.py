@@ -1,4 +1,5 @@
 # Edit flashinfer cascade.py to make it compatible with Python 3.8
+from src.path import root
 import os
 
 path = os.path.join(
@@ -31,16 +32,16 @@ from transformers import AutoTokenizer
 import random
 
 # create output directories
-os.makedirs("./output/benchmark_results", exist_ok=True)
-os.makedirs("./output/datasets", exist_ok=True)
-os.makedirs("./output/evaluation_results", exist_ok=True)
-os.makedirs("./output/inference_results", exist_ok=True)
-os.makedirs("./output/training_results", exist_ok=True)
-os.makedirs("./output/rlhf_results", exist_ok=True)
-os.makedirs("./output/merged_lora_results", exist_ok=True)
-os.makedirs("./output/saved/saved_model/", exist_ok=True)
-os.makedirs("./output/saved/saved_data/", exist_ok=True)
-os.makedirs("./output/downloaded", exist_ok=True)
+os.makedirs(f"{root}/output/benchmark_results", exist_ok=True)
+os.makedirs(f"{root}/output/datasets", exist_ok=True)
+os.makedirs(f"{root}/output/evaluation_results", exist_ok=True)
+os.makedirs(f"{root}/output/inference_results", exist_ok=True)
+os.makedirs(f"{root}/output/training_results", exist_ok=True)
+os.makedirs(f"{root}/output/rlhf_results", exist_ok=True)
+os.makedirs(f"{root}/output/merged_lora_results", exist_ok=True)
+os.makedirs(f"{root}/output/saved/saved_model/", exist_ok=True)
+os.makedirs(f"{root}/output/saved/saved_data/", exist_ok=True)
+os.makedirs(f"{root}/output/downloaded", exist_ok=True)
 
 random.seed(time.time())
 MY_USERNAME = pwd.getpwuid(os.getuid()).pw_name
@@ -480,6 +481,7 @@ def start_inference_backend(
             )
             assert len(output) == len(sample_dicts)
 
+            count = 0
             for _ in range(20):
                 bad_indices = [
                     k
@@ -568,9 +570,20 @@ def dict_to_dialogue_list(
     :rtype: Union[List[Dict[str, str]], List[List[Dict[str, str]]]
     """
     if isinstance(dic, dict):
-        res = [{"role": "user", "content": dic["input"]}]
-        if "instruction" in dic:
-            res = [{"role": "system", "content": dic["instruction"]}] + res
+        res = []
+        
+        if "system" in dic:
+            res = [{"role": "system", "content": dic["system"]}]
+        
+        if "history" in dic:
+            for turn in dic["history"]:
+                res.append({"role": "user", "content": turn[0]}, {"role": "assistant", "content": turn[1]})
+        
+        if "input" in dic or "instruction" in dic:
+            input = dic.get("input", "")
+            instruction = dic.get("instruction", "")
+            res.append({"role": "user", "content": input + ("\n\n" if input and instruction else "") + instruction})
+        
         if purpose == "logprobs" and "predict" in dic and isinstance(dic["predict"], str):
             res.append({"role": "assistant", "content": dic["predict"]})
         

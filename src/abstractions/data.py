@@ -1,4 +1,5 @@
 # from src.abstractions.model import Model   # Uncommenting will lead to circular import
+from src.path import root
 from typing import (
     Dict,
     Any,
@@ -14,13 +15,9 @@ from typing import (
 import os
 import json
 import warnings
-import src.text_writer as tw
+import src.utils.text_utils as tu
 from tqdm import tqdm
-
-with open("./src/abstractions/configs/abstractions_config.json", "r") as config_file:
-    abstractions_config = json.load(config_file)
-    data_search_paths: List[str] = abstractions_config["data_search_paths"]
-    data_save_path: str = abstractions_config["data_save_path"]
+from src.abstractions.configs.templates_configs import *
 
 
 # helper function, escape spaces in paths
@@ -56,6 +53,13 @@ class Data:
     name2data: Dict[str, Any] = {}
     always_force_rewrite: bool = True
     data_type: Literal["pretrain", "sft", "preference"]
+    
+    default_key_fields = {
+        "prompt": "instruction",
+        "query": "input",
+        "response": "output",
+        "history": "history",
+    }
 
     # check with user before removing a file
     @classmethod
@@ -119,10 +123,10 @@ class Data:
 
         if data_content is not None:
             if data_path is None:
-                data_path = f"./output/datasets/{data_name}.json"
+                data_path = f"{root}/output/datasets/{data_name}.json"
                 Data.ask_and_remove_if_exists(data_path, forced_rewrite=True)
 
-            with tw.JsonListWriter(data_path) as json_writer:
+            with tu.JsonListWriter(data_path) as json_writer:
                 for element in data_content:
                     json_writer.append(element)
 
@@ -146,11 +150,11 @@ class Data:
             print(
                 f"Data {data_name} not found locally. Searching among Llama-Factory datasets."
             )
-            with open("./libs/llama_factory/data/dataset_info.json", "r") as in_file:
+            with open(f"{root}/libs/llama_factory/data/dataset_info.json", "r") as in_file:
                 registrations = json.load(in_file)
 
             if self.data_name in registrations:
-                self.data_path = f'./libs/llama_factory/data/{registrations[self.data_name]["file_name"]}'
+                self.data_path = f'{root}/libs/llama_factory/data/{registrations[self.data_name]["file_name"]}'
                 print(f'Found {registrations[self.data_name]["file_name"]}.')
             else:
                 raise FileNotFoundError(
@@ -165,9 +169,19 @@ class Data:
         else:
             Data.name2data[data_name] = [self]
 
-    def copy(self) -> "Data":
-        """Returns a shallow copy of the current Data instance."""
-        cp = Data(self.data_name, self.data_type, self.data_path)
+    def copy(self, data_name: str = None) -> "Data":
+        """
+        Returns a copy of the current Data instance. 
+        Shallow copy if data_name is not provided or identical to the current data_name; deep copy otherwise.
+        """
+        if data_name and data_name != self.data_name:
+            new_data_path = f"{root}/output/datasets/{data_name}.json"
+            Data.ask_and_remove_if_exists(new_data_path, forced_rewrite=True)
+            execute(f"cp {escape(self.data_path)} {escape(new_data_path)}")
+            cp = Data(data_name, self.data_type, new_data_path)
+        else:
+            cp = Data(self.data_name, self.data_type, self.data_path)
+        
         cp.key_fields = self.key_fields.copy()
         return cp
 
@@ -196,7 +210,7 @@ class Data:
         :param result_data_name: The name of the resulting data. Do not include path in result_data_name.
         :type result_data_name: str
 
-        :param forced_rewrite: Whether to forcefully rewrite the existing data
+        :param forced_rewrite: Whether to forcefully rewrite the existing file, if there is one.
         :type forced_rewrite: bool = False
 
         :param max_batch_size: If max_batch_size is specified and is >1, the transformation function must take inputs of type List[Dict] and return a List[Dict].
@@ -208,7 +222,20 @@ class Data:
         :return: The data after transformation.
         :rtype: Data.
         """
-        out_path = f"./output/datasets/{result_data_name}.json"
+        out_path = f"{root}/output/datasets/{result_data_name}.json"
+        if self.data_name == result_data_name or self.data_path == out_path:
+            warnings.warn(
+                f"Data name {result_data_name} is the same as the current data name. The old instance will be invalidated."
+            )
+            return self.copy("temp_transform_artifact").transform(
+                transformation,
+                result_data_name,
+                forced_rewrite,
+                max_batch_size,
+                keep_key_fields,
+                map_key_fields,
+            )
+            
         Data.ask_and_remove_if_exists(out_path, forced_rewrite)
 
         def write_dict(sample_dict: Dict):
@@ -220,29 +247,19 @@ class Data:
         
         def map_key_fields_fn(sample_dict: Dict) -> Dict:
             nonlocal self
-            if "prompt" in self.key_fields and self.key_fields["prompt"] != "instruction":
-                sample_dict["instruction"] = sample_dict[self.key_fields["prompt"]]
-                del sample_dict[self.key_fields["prompt"]]
-            if "query" in self.key_fields and self.key_fields["query"] != "input":
-                sample_dict["input"] = sample_dict[self.key_fields["query"]]
-                del sample_dict[self.key_fields["query"]]
-            if "response" in self.key_fields and self.key_fields["response"] != "output":
-                sample_dict["output"] = sample_dict[self.key_fields["response"]]
-                del sample_dict[self.key_fields["response"]]
+            for k, v in self.default_key_fields.items():
+                if k in self.key_fields and self.key_fields.get(k, v) != v and self.key_fields[k] in sample_dict:
+                    sample_dict[v] = sample_dict[self.key_fields[k]]
+                    del sample_dict[self.key_fields[k]]
             
             return sample_dict
         
         def inv_map_key_fields_fn(sample_dict: Dict) -> Dict:
             nonlocal self
-            if "instruction" in sample_dict and self.key_fields["prompt"] != "instruction":
-                sample_dict[self.key_fields["prompt"]] = sample_dict["instruction"]
-                del sample_dict["instruction"]
-            if "input" in sample_dict and self.key_fields["query"] != "input":
-                sample_dict[self.key_fields["query"]] = sample_dict["input"]
-                del sample_dict["input"]
-            if "output" in sample_dict and self.key_fields["response"] != "output":
-                sample_dict[self.key_fields["response"]] = sample_dict["output"]
-                del sample_dict["output"]
+            for k, v in self.default_key_fields.items():
+                if v in sample_dict and self.key_fields.get(k, v) != v:
+                    sample_dict[self.key_fields[k]] = sample_dict[v]
+                    del sample_dict[v]
             
             return sample_dict
 
@@ -251,27 +268,29 @@ class Data:
             is_first = True
 
             if max_batch_size == 1:
-                for element in tw.read_json_memory_efficient(self.data_path):
-                    if map_key_fields:
-                        element = map_key_fields_fn(element)
-                    
-                    transformed = transformation(element)
-                    if transformed is not None:
-                        write_dict(transformed if not map_key_fields else inv_map_key_fields_fn(transformed))
+                with tu.JsonListReader(self.data_path) as reader:
+                    for element in reader:
+                        if map_key_fields:
+                            element = map_key_fields_fn(element)
+                        
+                        transformed = transformation(element)
+                        if transformed is not None:
+                            write_dict(transformed if not map_key_fields else inv_map_key_fields_fn(transformed))
 
             else:
                 buffer = []
 
-                for element in tw.read_json_memory_efficient(self.data_path):
-                    if map_key_fields:
-                        element = map_key_fields_fn(element)
-                    
-                    buffer.append(element)
-                    if len(buffer) == max_batch_size:
-                        for e in transformation(buffer):
-                            write_dict(e if not map_key_fields else inv_map_key_fields_fn(e))
-                        buffer = []
-                        out_file.flush()
+                with tu.JsonListReader(self.data_path) as reader:
+                    for element in reader:
+                        if map_key_fields:
+                            element = map_key_fields_fn(element)
+                        
+                        buffer.append(element)
+                        if len(buffer) == max_batch_size:
+                            for e in transformation(buffer):
+                                write_dict(e if not map_key_fields else inv_map_key_fields_fn(e))
+                            buffer = []
+                            out_file.flush()
 
                 if buffer:
                     for e in transformation(buffer):
@@ -284,6 +303,94 @@ class Data:
             result.key_fields = self.key_fields.copy()
         return result
 
+    def move_current_to_history(self):
+        """
+        Move the current dialogue turn in the prompt/question field and the response/predict field to the history field.
+        
+        :return: The data after the operation.
+        :rtype: Data.
+        """
+        def move_to_history_fn(sample_dict: Dict) -> Dict:
+            if sample_dict.get("instruction", "") or sample_dict.get("input", "") or sample_dict.get("output", "") or sample_dict.get("predict", ""):
+                assert (sample_dict.get("instruction", "") or sample_dict.get("input", "")) and (sample_dict.get("output", "") or sample_dict.get("predict", ""))
+                sample_dict["history"] = sample_dict.get("history", []) + [
+                    [
+                        sample_dict.get("instruction", "") + 
+                            ("\n\n" if "instruction" in sample_dict and "input" in sample_dict else "") +
+                            sample_dict.get("input", ""),
+                        sample_dict.get("output", "") + sample_dict.get("predict", "")
+                    ]
+                ]
+                sample_dict.pop("instruction", None)
+                sample_dict.pop("input", None)
+                sample_dict.pop("output", None)
+                sample_dict.pop("predict", None)
+            
+            return sample_dict
+        
+        return self.transform(move_to_history_fn, self.data_name, forced_rewrite=True, map_key_fields=True)
+    
+    def switch_role_to_user(self, user_system_prompt: str = None, dialogue_starter: str = None):
+        """
+        Switch the prompt/question field and the response/predict field, thereby shifting the dialogue turn from the assistant to the user.
+        
+        :param user_system_prompt: The system prompt of the user role.
+        :type user_system_prompt: str = None
+        
+        :param dialogue_starter: Placeholder message for the "zeroth" dialogue turn by the assistant that prompts the user to start the conversation.
+        :type dialogue_starter: str = None
+        
+        :return: The data after the operation.
+        :rtype: Data.
+        """
+        if user_system_prompt is None:
+            user_system_prompt = "You are an assistant tasked with questioning the user, aka your partner. Ask informed questions to guide the conversation, follow up on the user's responses, and generally follow a natural conversation flow. Don't be too courteous; be concise."
+        
+        if dialogue_starter is None:
+            dialogue_starter = "I am your partner. Please directly ask your first question."
+        
+        moved_to_history = self.move_current_to_history()
+        
+        def switch_role_to_user_fn(sample_dict: Dict) -> Dict:
+            assert not (sample_dict.get("instruction", "") or sample_dict.get("input", "") or sample_dict.get("output", "") or sample_dict.get("predict", ""))
+            
+            all_histories = [h[i] for h in sample_dict.get("history", []) for i in range(2)]
+            all_histories = [dialogue_starter] + all_histories
+            assert len(all_histories) % 2 == 1
+            sample_dict["history"] = [[all_histories[i], all_histories[i + 1]] for i in range(len(all_histories)-1, 2)]
+            sample_dict["instruction"] = all_histories[-1]
+            sample_dict["system"] = user_system_prompt
+            return sample_dict
+        
+        return moved_to_history.transform(switch_role_to_user_fn, self.data_name, forced_rewrite=True, map_key_fields=True)
+    
+    def switch_role_to_assistant(self, assistant_system_prompt: str = None):
+        """
+        Switch the prompt/question field and the response/predict field, thereby shifting the dialogue turn from the user to the assistant.
+        
+        :param assistant_system_prompt: The system prompt of the assistant role.
+        :type assistant_system_prompt: str = None
+        
+        :return: The data after the operation.
+        :rtype: Data.
+        """
+        if assistant_system_prompt is None:
+            assistant_system_prompt = "Please answer the user's questions. Be concise and not overly courteous, but be informative and provide all necessary details."
+        
+        moved_to_history = self.move_current_to_history()
+        
+        def switch_role_to_assistant_fn(sample_dict: Dict) -> Dict:
+            assert not (sample_dict.get("instruction", "") or sample_dict.get("input", "") or sample_dict.get("output", "") or sample_dict.get("predict", ""))
+            
+            all_histories = [h[i] for h in sample_dict.get("history", []) for i in range(2)]
+            assert len(all_histories) % 2 == 0
+            sample_dict["history"] = [[all_histories[i], all_histories[i + 1]] for i in range(1, len(all_histories)-1, 2)]
+            sample_dict["instruction"] = all_histories[-1]
+            sample_dict["system"] = assistant_system_prompt
+            return sample_dict
+
+        return moved_to_history.transform(switch_role_to_assistant_fn, self.data_name, forced_rewrite=True, map_key_fields=True)
+    
     def manage_llama_factory_registration(
         self, operation: Literal["add", "remove", "query"], forced_update: bool = True
     ) -> bool:
@@ -300,19 +407,19 @@ class Data:
         :return: A boolean meaning the registration status before this operation.
         :rtype: bool.
         """
-        with open("./libs/llama_factory/data/dataset_info.json", "r") as in_file:
+        with open(f"{root}/libs/llama_factory/data/dataset_info.json", "r") as in_file:
             registrations = json.load(in_file)
 
         return_val = self.data_name in registrations
 
         if operation == "add":
-            path = f"./libs/llama_factory/data/{self.data_name}.json"
+            path = f"{root}/libs/llama_factory/data/{self.data_name}.json"
             if "llama_factory/data" not in self.data_path:
                 Data.ask_and_remove_if_exists(path, forced_rewrite=True)
                 os.system(f"cp {escape(self.data_path)} {escape(path)}")
 
         if operation == "add" and (forced_update or not return_val):
-            path = f"./libs/llama_factory/data/{self.data_name}.json"
+            path = f"{root}/libs/llama_factory/data/{self.data_name}.json"
 
             if "llama_factory" not in self.data_path:  # if is not built-in dataset
                 if ("prompt" not in self.key_fields) or (
@@ -338,22 +445,22 @@ class Data:
                 f"Adding registration of data {self.data_name}: {registrations[self.data_name]}."
             )
 
-            with open("./libs/llama_factory/data/dataset_info.json", "w") as out_file:
+            with open(f"{root}/libs/llama_factory/data/dataset_info.json", "w") as out_file:
                 json.dump(registrations, out_file)
 
             print(f"Successfully completed registration of data {self.data_name}.")
 
         elif operation == "remove" and return_val:
             with open(
-                "./libs/llama_factory/data/dataset_info_original.json", "r"
+                f"{root}/libs/llama_factory/data/dataset_info_original.json", "r"
             ) as in_file:
                 registrations_original = json.load(in_file)
 
             assert self.data_name not in registrations_original
-            path = f'./libs/llama_factory/data/{registrations[self.data_name]["file_name"]}'
+            path = f'{root}/libs/llama_factory/data/{registrations[self.data_name]["file_name"]}'
             del registrations[self.data_name]
 
-            with open("./libs/llama_factory/data/dataset_info.json", "w") as out_file:
+            with open(f"{root}/libs/llama_factory/data/dataset_info.json", "w") as out_file:
                 json.dump(registrations, out_file)
 
             if os.path.exists(path):
@@ -372,6 +479,7 @@ class Data:
         query_field_name: Optional[str] = None,
         response_field_name: Optional[str] = None,
         system_field_name: Optional[str] = None,
+        history_field_name: Optional[str] = None,
         suppress_registration_update: bool = False,
         **kwargs,
     ) -> None:
@@ -393,6 +501,9 @@ class Data:
 
         :param system_field_name: The name of the system field
         :type system_field_name: Optional[str] = None
+        
+        :param history_field_name: The name of the history field
+        :type history_field_name: Optional[str] = None
 
         :param suppress_registration_update: Whether to suppress the update of the registration
         :type suppress_registration_update: bool = False
@@ -428,6 +539,11 @@ class Data:
             del self.key_fields["system"]
         elif system_field_name:
             self.key_fields["system"] = system_field_name
+        
+        if history_field_name == "" and "history" in self.key_fields:
+            del self.key_fields["history"]
+        elif history_field_name:
+            self.key_fields["history"] = history_field_name
 
         if isinstance(kwargs, dict):
             for k, v in kwargs.items():
@@ -475,8 +591,9 @@ class Data:
         """
         Returns an iterator of all passages (json dicts) in this dataset.
         """
-        for element in tw.read_json_memory_efficient(self.data_path):
-            yield element
+        with tu.JsonListReader(self.data_path) as reader:
+            for element in reader:
+                yield element
 
 
 class DataFileCollection:
@@ -542,7 +659,7 @@ class DataFileCollection:
 
                 DataFileCollection(collection_name='histtext_1826_to_2018',
                                 data_type='pretrain',
-                                collection_path = './dataset/dataset_text_sequence/',
+                                collection_path = f'{root}/dataset/dataset_text_sequence/',
                                 file_selection_func = (lambda path: 1826 <= int(path.split('/')[-1][1:6]) <= 2018))
 
         """
@@ -613,8 +730,9 @@ class DataFileCollection:
             list(self.all_files())
         ):  # remove list() if it turns out that the file count is super huge
             assert in_path[: len(self.collection_path)] == self.collection_path
-            for element in tw.read_json_memory_efficient(in_path):
-                yield element
+            with tu.JsonListReader(in_path) as reader:
+                for element in reader:
+                    yield element
 
     def transform(
         self,
@@ -648,7 +766,7 @@ class DataFileCollection:
         :param suppress_tqdm: Whether to suppress the tqdm progress bar
         :type suppress_tqdm: bool = False
         """
-        result_dir = f"./output/datasets/{result_collection_name}/"
+        result_dir = f"{root}/output/datasets/{result_collection_name}/"
         DataFileCollection.ask_and_remove_if_exists(result_dir, forced_rewrite)
         os.makedirs(result_dir, exist_ok=True)
 
@@ -675,21 +793,23 @@ class DataFileCollection:
                 is_first = True
 
                 if max_batch_size == 1:
-                    for element in tw.read_json_memory_efficient(in_path):
-                        transformed = transformation(element)
-                        if transformed is not None:
-                            write_dict(transformed)
+                    with tu.JsonListReader(in_path) as reader:
+                        for element in reader:
+                            transformed = transformation(element)
+                            if transformed is not None:
+                                write_dict(transformed)
 
                 else:
                     buffer = []
 
-                    for element in tw.read_json_memory_efficient(in_path):
-                        buffer.append(element)
-                        if len(buffer) == max_batch_size:
-                            for e in transformation(buffer):
-                                write_dict(e)
-                            buffer = []
-                            out_file.flush()
+                    with tu.JsonListReader(in_path) as reader:
+                        for element in reader:
+                            buffer.append(element)
+                            if len(buffer) == max_batch_size:
+                                for e in transformation(buffer):
+                                    write_dict(e)
+                                buffer = []
+                                out_file.flush()
 
                     if buffer:
                         for e in transformation(buffer):
@@ -742,7 +862,7 @@ class DataFileCollection:
         :param filter_fields: Fields to filter the data (default is None)
         :type filter_fields: Optional = None
         """
-        path = f"./output/datasets/{result_data_name}.json"
+        path = f"{root}/output/datasets/{result_data_name}.json"
         Data.ask_and_remove_if_exists(path, forced_rewrite)
 
         with open(path, "w") as out_file:
@@ -752,10 +872,11 @@ class DataFileCollection:
             for in_path in tqdm(
                 list(self.all_files())
             ):  # remove list() if it turns out that the file count is super huge
-                for element in tw.read_json_memory_efficient(in_path):
-                    out_file.write("\n" if is_first else ",\n")
-                    is_first = False
-                    out_file.write(json.dumps(clean_dict(element, filter_fields)))
+                with tu.JsonListReader(in_path) as reader:
+                    for element in reader:
+                        out_file.write("\n" if is_first else ",\n")
+                        is_first = False
+                        out_file.write(json.dumps(clean_dict(element, filter_fields)))
 
             out_file.write("\n]")
 

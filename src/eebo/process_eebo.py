@@ -1,8 +1,9 @@
+from src.path import root
 import xml.etree.ElementTree as ET
 import os
 from tqdm import tqdm
 import json
-import src.text_writer as tw
+import src.utils.text_utils as tu
 
 
 # a utility function called by build_eebo_dataset, to read the contents in an eebo xml file in a suitable manner
@@ -25,7 +26,7 @@ def process_eebo_file(path: str):
 
 
 # if download_eebo is already called, build_eebo_dataset is the only thing you need to call to build the EEBO dataset
-def build_eebo_dataset(eebo_path: str = "./dataset/raw_downloads/EEBO/"):
+def build_eebo_dataset(eebo_path: str = f"{root}/dataset/raw_downloads/EEBO/"):
     for phase_num in [1, 2]:
         print(f"start building dataset from EEBO Phase {phase_num} (2 in total)")
         root_dir = os.path.join(eebo_path, f"eebo_phase{phase_num}")
@@ -105,10 +106,10 @@ def build_eebo_dataset(eebo_path: str = "./dataset/raw_downloads/EEBO/"):
                 1000 < year_earliest <= year <= year_latest < 2025
                 and year_latest - year_earliest < 50
             ):
-                tw.write_single_entry(json_dict=json_element)
+                tu.write_single_entry(json_dict=json_element)
             else:
                 del json_element["creation_year"]
-                tw.write_log(
+                tu.write_log(
                     f"EEBO: Uncertainty too large, saving to undated.json: {line.strip()}"
                 )
-                tw.report_undated_entry(json_dict=json_element)
+                tu.report_undated_entry(json_dict=json_element)

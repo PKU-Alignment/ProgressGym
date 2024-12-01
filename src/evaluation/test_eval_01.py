@@ -1,15 +1,15 @@
 import os, json
 # os.environ["CUDA_VISIBLE_DEVICES"] = "0,1,2,3"
-
+from src.path import root
 from ..abstractions import Model
 from .utils import generate_alpaca, _collect
 from multiprocessing import freeze_support
 from . import quantify as qt
 import numpy as np
 """
-generate_alpaca('mc', os.path.join('src', 'evaluation', 'raw_dataset', 'moralchoice'))
-generate_alpaca('views', os.path.join('src', 'evaluation', 'raw_dataset', 'views'))
-generate_alpaca('foundation', os.path.join('src', 'evaluation', 'raw_dataset', 'foundation'))
+generate_alpaca('mc', os.path.join(root, 'src', 'evaluation', 'raw_dataset', 'moralchoice'))
+generate_alpaca('views', os.path.join(root, 'src', 'evaluation', 'raw_dataset', 'views'))
+generate_alpaca('foundation', os.path.join(root, 'src', 'evaluation', 'raw_dataset', 'foundation'))
 """
 if __name__ == "__main__":
     freeze_support()
@@ -34,7 +34,7 @@ if __name__ == "__main__":
         with open("output/datasets/evaluation_output_mc_" + m + ".json", 'r') as f:
             d = json.load(f)
         raw = _collect(d)
-        with open('output/evaluation_results/' + m + '_single/' + m + '_raw.json', 'w') as f:
+        with open(f'{root}/output/evaluation_results/' + m + '_single/' + m + '_raw.json', 'w') as f:
             json.dump(raw, f)
         v = qt.calculate_model('output/evaluation_results/' + m + '_single/', m)
         

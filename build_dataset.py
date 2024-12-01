@@ -1,4 +1,5 @@
-import src.text_writer as tw
+from src.path import root
+import src.utils.text_utils as tu
 import src.cleanser.rule_based_cleanser as rb
 import src.cleanser.localllm_cleanser as llm_cleanser
 import src.model_training.train_hislm as hislm
@@ -7,7 +8,6 @@ import traceback
 import sys
 import os
 import time
-
 
 import src.eebo.download_eebo as eebo_dl
 import src.eebo.process_eebo as eebo_pc
@@ -26,10 +26,10 @@ import src.gutenberg.get_meta as gtb_gm
 
 def build_gutenberg():
     print("======= START BUILDING GUTENBERG DATASET =======")
-    dir = "./dataset/raw_downloads/Gutenberg/"
+    dir = f"{root}/dataset/raw_downloads/Gutenberg/"
     gtb_gd.get_data_gutenberg(dir)
     gtb_gm.gather_meta(
-        os.path.join(dir, "data/raw"), "./dataset/raw_downloads/Gutenberg_records.txt"
+        os.path.join(dir, "data/raw"), f"{root}/dataset/raw_downloads/Gutenberg_records.txt"
     )
     print("======= FINISHED BUILDING GUTENBERG DATASET =======\n\n\n")
 
@@ -53,7 +53,7 @@ def build_pile_of_law():
 
 
 if __name__ == "__main__":
-    tw.write_log(f"\n\n\n\n\n\n=========== NEW RUN ============\n\n")
+    tu.write_log(f"\n\n\n\n\n\n=========== NEW RUN ============\n\n")
     print(
         "This script is NOT meant to be run as part of the benchmarking process. Unless you would like to replicate the dataset building & model training process, you could directly run `run_benchmark.py` instead, which will automatically download the pre-built dataset and/or models on demand."
     )
@@ -82,7 +82,7 @@ if __name__ == "__main__":
                 max_hours=10
             )  # takes ~100h, but if max_hours is supplied then stops after this many hours (won't affect data integrity)
             # finishing up
-            tw.seal_all_files()
+            tu.seal_all_files()
             print("Finished building entire dataset. Proceed to data cleansing.")
 
         if (
@@ -91,8 +91,8 @@ if __name__ == "__main__":
         ):
             proceed = True
             rb.cleanse(
-                "./dataset/dataset_text_sequence/",
-                "./dataset/dataset_text_sequence_rulebased_cleansed/",
+                f"{root}/dataset/dataset_text_sequence/",
+                f"{root}/dataset/dataset_text_sequence_rulebased_cleansed/",
             )
             print("Finished rule-based data cleansing. Now exiting.")
 
@@ -102,25 +102,25 @@ if __name__ == "__main__":
         ):
             proceed = True
             llm_cleanser.run_cleanser(
-                in_path="./dataset/dataset_text_sequence_rulebased_cleansed/",
-                out_path="./dataset/dataset_text_sequence_llm_cleansed/",
+                in_path=f"{root}/dataset/dataset_text_sequence_rulebased_cleansed/",
+                out_path=f"{root}/dataset/dataset_text_sequence_llm_cleansed/",
             )
 
             # Make llm-cleansed version the official version ("dataset_text_sequence"), and move the other two versions into dataset/raw_downloads
             path = (
-                f"./dataset/raw_downloads/dataset_text_sequence_versions/{timestamp}/"
+                f"{root}/dataset/raw_downloads/dataset_text_sequence_versions/{timestamp}/"
             )
             os.makedirs(path)
 
             print(f"Moving pre-cleansing version to backup folder...")
             os.rename(
-                "./dataset/dataset_text_sequence/",
+                f"{root}/dataset/dataset_text_sequence/",
                 os.path.join(path, "dataset_text_sequence_original/"),
             )
 
             print(f"Moving rule-cleansed version to backup folder...")
             os.rename(
-                "./dataset/dataset_text_sequence_rulebased_cleansed/",
+                f"{root}/dataset/dataset_text_sequence_rulebased_cleansed/",
                 os.path.join(path, "dataset_text_sequence_rulebased_cleansed/"),
             )
 
@@ -131,7 +131,7 @@ if __name__ == "__main__":
 
             print(f"Copying LLM-cleansed version to backup folder...")
             os.rename(
-                "./dataset/dataset_text_sequence_llm_cleansed/",
+                f"{root}/dataset/dataset_text_sequence_llm_cleansed/",
                 os.path.join(path, "dataset_text_sequence_llm_cleansed/"),
             )
 
@@ -148,19 +148,19 @@ if __name__ == "__main__":
             proceed = True
 
             print(f"Removing overly small or messy subdatasets...")
-            path = f"./dataset/raw_downloads/dataset_text_sequence_versions/{timestamp}/removed/"
+            path = f"{root}/dataset/raw_downloads/dataset_text_sequence_versions/{timestamp}/removed/"
             os.makedirs(path)
 
             sub_datasets = [
                 f
-                for f in os.listdir("./dataset/dataset_text_sequence/")
-                if os.path.isdir(os.path.join("./dataset/dataset_text_sequence/", f))
+                for f in os.listdir(f"{root}/dataset/dataset_text_sequence/")
+                if os.path.isdir(os.path.join(f"{root}/dataset/dataset_text_sequence/", f))
             ]
             for sub in sub_datasets:
                 # Remove if size < 10MB AND century number < 13
                 if (
                     hislm.get_directory_size_bytes(
-                        os.path.join("./dataset/dataset_text_sequence/", sub)
+                        os.path.join(f"{root}/dataset/dataset_text_sequence/", sub)
                     )
                     < 10 * 1024 * 1024
                     and int(sub.strip("C")) < 13
@@ -169,7 +169,7 @@ if __name__ == "__main__":
                     os.system(f"mv ./dataset/dataset_text_sequence/{sub} {path}")
 
             hislm.run_training(
-                "./dataset/dataset_text_sequence/", "./dataset/dataset_model_sequence/"
+                f"{root}/dataset/dataset_text_sequence/", f"{root}/dataset/dataset_model_sequence/"
             )
             print("Finished model training. Exiting.")
 

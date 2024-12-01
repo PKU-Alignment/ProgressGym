@@ -1,3 +1,4 @@
+from src.path import root
 import subprocess
 
 
@@ -16,11 +17,11 @@ def download_all_models(download_8B=True, download_70B=False):
         for i in range(13, 22):
             download_model(
                 f"PKU-Alignment/ProgressGym-HistLlama3-8B-C0{i}-pretrain",
-                f"./dataset/dataset_model_sequence/8B-C0{i}-pretrain",
+                f"{root}/dataset/dataset_model_sequence/8B-C0{i}-pretrain",
             )
     if download_70B:
         for i in range(13, 22):
             download_model(
                 f"PKU-Alignment/ProgressGym-HistLlama3-70B-C0{i}-instruct",
-                f"./dataset/dataset_model_sequence/70B-C0{i}-instruct",
+                f"{root}/dataset/dataset_model_sequence/70B-C0{i}-instruct",
             )

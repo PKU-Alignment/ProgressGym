@@ -1,13 +1,14 @@
+from src.path import root
 from typing import List, Tuple, Dict, Optional, Set
 from src.abstractions import DataFileCollection
-from src.gpt_utils import (
+from src.utils.gpt_utils import (
     context_len,
     gpt,
     convo_get_response,
     convo_clear_history,
     independent_get_response,
 )
-from src.text_writer import write_log
+from src.utils.text_utils import write_log
 from threading import Thread, Lock
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import time

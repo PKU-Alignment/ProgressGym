@@ -1,8 +1,9 @@
+from src.path import root
 import requests
 from bs4 import BeautifulSoup
 import os, json
 import lzma
-import src.text_writer as tw
+import src.utils.text_utils as tu
 from tqdm import tqdm
 from copy import copy
 
@@ -18,8 +19,8 @@ def get_pile_of_law():
     """
     DOWNLOADING COMPRESSED FILES FROM HUGGINGFACE
     """
-    compressed_dir = "./dataset/raw_downloads/pile_of_law_compressed"
-    decompressed_dir = "./dataset/raw_downloads/pile_of_law_decompressed"
+    compressed_dir = f"{root}/dataset/raw_downloads/pile_of_law_compressed"
+    decompressed_dir = f"{root}/dataset/raw_downloads/pile_of_law_decompressed"
     if not os.path.isdir(compressed_dir):
         os.mkdir(compressed_dir)
     if not os.path.isdir(decompressed_dir):
@@ -31,14 +32,14 @@ def get_pile_of_law():
         file_path = os.path.join(folder_path, file_name)
 
         # 发起HTTP请求并下载文件
-        tw.write_log(f"PileOfLaw: start downloading {url}")
+        tu.write_log(f"PileOfLaw: start downloading {url}")
         with requests.get(url, stream=True) as r:
             r.raise_for_status()
             with open(file_path, "wb") as f:
                 for chunk in r.iter_content(chunk_size=8192):
                     if chunk:
                         f.write(chunk)
-        tw.write_log(f"PileOfLaw: File '{file_name}' downloaded to '{folder_path}'")
+        tu.write_log(f"PileOfLaw: File '{file_name}' downloaded to '{folder_path}'")
 
     # 示例网页链接
     url = "https://huggingface.co/datasets/pile-of-law/pile-of-law/tree/main/data"
@@ -65,7 +66,7 @@ def get_pile_of_law():
         this_url = "https://huggingface.co" + file_link
         file_name = this_url.split("/")[-1].split("?")[0]
         if os.path.isfile(os.path.join(download_folder, file_name)):
-            tw.write_log(
+            tu.write_log(
                 f"PileOfLaw: file {file_name} already downloaded. skipping to the next file in line."
             )
         else:
@@ -106,7 +107,7 @@ def get_pile_of_law():
                         dd["culture"] = "English"
                         dd["source_dataset"] = "Pile_of_Law"
 
-                        with open("./src/pile_of_law/source.json", "r") as f:
+                        with open(f"{root}/src/pile_of_law/source.json", "r") as f:
                             source_dict = json.load(f)
                             dd["source_dataset_detailed"] = "Pile_of_Law_" + name
                             dd["source_dataset_detailed_explanation"] = (
@@ -123,23 +124,23 @@ def get_pile_of_law():
                                 creation_year = dd["created_timestamp"]
 
                             if type(dd["created_timestamp"]) == str:
-                                creation_year = tw.decode_year_num(
+                                creation_year = tu.decode_year_num(
                                     dd["created_timestamp"], 1100, 2024
                                 )
 
                         if creation_year is None:
-                            tw.report_undated_entry(dd)
+                            tu.report_undated_entry(dd)
                             PoL_failure_counter += 1
-                            tw.write_log(
+                            tu.write_log(
                                 f'PileOfLaw: {PoL_failure_counter}-th time, saving to undated.json: created_timestamp={dd["created_timestamp"] if "created_timestamp" in dd else None}'
                             )
                         else:
                             dd["creation_year"] = creation_year
-                            tw.write_single_entry(json_dict=dd)
+                            tu.write_single_entry(json_dict=dd)
 
                     except Exception as e:
                         PoL_failure_counter += 1
-                        tw.write_log(
+                        tu.write_log(
                             f"PileOfLaw: {PoL_failure_counter}-th time, error processing metadata for {i}-th entry of {name}: {type(e)} {e}"
                         )
 

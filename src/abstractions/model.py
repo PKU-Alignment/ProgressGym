@@ -1,3 +1,4 @@
+from src.path import root
 import math
 from src.abstractions.data import Data
 from src.evaluation.quantify import calculate_model
@@ -7,7 +8,7 @@ import os
 import json
 import torch
 import warnings
-import src.text_writer as tw
+import src.utils.text_utils as tu
 import random
 import numpy as np
 from transformers import (
@@ -126,7 +127,7 @@ class Model:
         Examples:
             .. code-block:: python
 
-                Model(model_name = 'Gemma-2B_sft', is_instruct_finetuned = True, model_path = './output/training_results/Gemma-2B_sft/')
+                Model(model_name = 'Gemma-2B_sft', is_instruct_finetuned = True, model_path = f'{root}/output/training_results/Gemma-2B_sft/')
                 Model(model_name = 'Gemma-2B_sft', is_instruct_finetuned = True)
 
         """
@@ -158,7 +159,7 @@ class Model:
                 raise FileNotFoundError(f"{self.model_path} is not a repo ID.")
 
             new_path = os.path.join(
-                "./output/downloaded", self.model_path.split("/")[-1]
+                f"{root}/output/downloaded", self.model_path.split("/")[-1]
             )
             download_model(self.model_path, new_path)
             self.model_path = new_path
@@ -208,7 +209,7 @@ class Model:
             if dest_suffix
             else dest_full_name
         )
-        copied_path = os.path.join(os.path.join("output", dest_subdir), copied_name)
+        copied_path = os.path.join(os.path.join(root, "output", dest_subdir), copied_name)
         Model.ask_and_remove_if_exists(copied_path, forced_rewrite=False)
         if not os.path.exists(copied_path):
             shutil.copytree(path, copied_path)
@@ -216,7 +217,7 @@ class Model:
         return Model(
             model_name=copied_name,
             is_instruct_finetuned=self.is_instruct_finetuned,
-            model_path=copied_path,
+            model_path_or_repoid=copied_path,
             num_gpus=self.num_gpus,
             template_type=self.template_type,
         )
@@ -425,7 +426,7 @@ class Model:
             cmd = bash_command_template % (
                 "pa38-lf" if num_nodes == 1 else "multinode-s",  # conda environment
                 deepspeed_args,  # deepspeed settings
-                "./src/abstractions/configs/LF_examples/full_multi_gpu/ds_z3_config.json",  # deepspeed config; this file usable for both full_param and lora
+                f"{root}/src/abstractions/configs/LF_examples/full_multi_gpu/ds_z3_config.json",  # deepspeed config; this file usable for both full_param and lora
                 ("pt" if stage == "pretrain" else stage),  # stage - pt, sft, dpo
                 "train",  # current operation - train or predict
                 "",  # do sample; ignored here
@@ -433,7 +434,7 @@ class Model:
                 data.data_name,  # dataset (automatically registered in llama-factory)
                 self.template_type,  # template type
                 ("lora" if algo == "lora" else "full"),  # type - full_param or lora
-                f"./output/training_results/{escape(result_model_name)}/",  # where to save the training results (and checkpoints etc.)
+                f"{root}/output/training_results/{escape(result_model_name)}/",  # where to save the training results (and checkpoints etc.)
                 2
                 ** max(
                     0, 3 + batch_size_multiplier_log2
@@ -485,12 +486,12 @@ class Model:
 
             print(
                 stage + " model saved at ",
-                f"./output/training_results/{escape(result_model_name)}/",
+                f"{root}/output/training_results/{escape(result_model_name)}/",
             )
             result = Model(
                 model_name=result_model_name,
                 is_instruct_finetuned=(self.is_instruct_finetuned or stage == "sft"),
-                model_path=f"./output/training_results/{escape(result_model_name)}/",
+                model_path_or_repoid=f"{root}/output/training_results/{escape(result_model_name)}/",
                 num_gpus=self.num_gpus,
             )
 
@@ -501,7 +502,7 @@ class Model:
         # for LORA models, merge the adapter with the model
         if algo == "lora":
             print("Merging LORA model...")
-            merged_model_path = f"./output/merged_lora_results/{result_model_name}"
+            merged_model_path = f"{root}/output/merged_lora_results/{result_model_name}"
             cmd = bash_command_for_lora_merging % (
                 "pa38-lf",
                 self.model_path,
@@ -516,7 +517,7 @@ class Model:
             result = Model(
                 model_name=result_model_name,
                 is_instruct_finetuned=result.is_instruct_finetuned,
-                model_path=merged_model_path,
+                model_path_or_repoid=merged_model_path,
                 num_gpus=self.num_gpus,
                 template_type=self.template_type,
             )
@@ -544,7 +545,8 @@ class Model:
                 "RLHF is not supported for models with auto template type."
             )
 
-        rw_results = "./" + os.path.join(
+        rw_results = os.path.join(
+            root,
             "output",
             "rlhf_results",
             os.path.basename(self.model_path) + "_reward_" + code + "_results",
@@ -567,8 +569,8 @@ class Model:
         cmd = bash_command_for_rw % (
             "pa38-lf" if num_nodes == 1 else "multinode",  # conda environment
             deepspeed_args,  # deepspeed settings
-            # './src/abstractions/configs/LF_examples/deepspeed/ds_z2_config.json',
-            "./src/abstractions/configs/LF_examples/full_multi_gpu/ds_z3_config.json",
+            # f'{root}/src/abstractions/configs/LF_examples/deepspeed/ds_z2_config.json',
+            f"{root}/src/abstractions/configs/LF_examples/full_multi_gpu/ds_z3_config.json",
             rw_path,
             rw_data.data_name,
             self.template_type,
@@ -614,8 +616,8 @@ class Model:
         cmd = bash_command_for_ppo % (
             "pa38-lf" if num_nodes == 1 else "multinode",  # conda environment
             deepspeed_args,  # deepspeed settings
-            # './src/abstractions/configs/LF_examples/full_multi_gpu/ds_z3_config.json',
-            "./src/abstractions/configs/LF_examples/deepspeed/ds_z2_config.json",
+            # f'{root}/src/abstractions/configs/LF_examples/full_multi_gpu/ds_z3_config.json',
+            f"{root}/src/abstractions/configs/LF_examples/deepspeed/ds_z2_config.json",
             self.model_path,
             rw_results,
             "lora" if use_lora else "full",
@@ -652,7 +654,7 @@ class Model:
         return Model(
             model_name=the_name,
             is_instruct_finetuned=self.is_instruct_finetuned,
-            model_path=the_path,
+            model_path_or_repoid=the_path,
             num_gpus=self.num_gpus,
         )
 
@@ -662,7 +664,7 @@ class Model:
         result_data_name: str,
         backend: Literal["sglang", "vllm", "deepspeed", "serial"] = "sglang",
         batch_size_multiplier_log2: int = 0,
-        temperature=0.0,
+        temperature=0.25,
         purpose: Literal["responses", "logprobs"] = "responses",
     ) -> Union[Data, List[Dict[str, str]]]:
         """Performance inference on a dataset (currently only instruction datasets are tested, with the same format as SFT datasets),
@@ -681,7 +683,7 @@ class Model:
         :type batch_size_multiplier_log2: int = 0
 
         :param temperature: The temperature parameter
-        :type temperature: float = 0.0
+        :type temperature: float = 0.25
         
         :param purpose: The purpose of the inference. It can be "responses" or "logprobs". If "logprobs", the log probability of the prompt itself (and the assistant response supplied in the `predict` field, if exists) is returned in the `logprob` field of the resulting dataset, without doing any completion. If "responses", the completion text is saved in the `predict` field of the resulting dataset.
         :type purpose: Literal["responses", "logprobs"] = "responses"
@@ -700,7 +702,7 @@ class Model:
              :code:`serial` - Serial inference.
         """
 
-        tw.write_log(
+        tu.write_log(
             f"Inference start, with result_data_name = {result_data_name} and backend = {backend}."
         )
         input_is_data = isinstance(data, Data)
@@ -771,7 +773,7 @@ class Model:
                 f'Backend {backend} not recognized. Options are "sglang", "vllm", "deepspeed", and "serial".'
             )
 
-        tw.write_log(
+        tu.write_log(
             f"Inference finished, with result_data_name = {result_data_name} and backend = {backend}."
         )
 
@@ -829,7 +831,7 @@ class Model:
         data: Data,
         result_data_name: str,
         batch_size_multiplier_log2: int = 0,
-        temperature: float = 0,
+        temperature: float = 0.25,
     ) -> Data:
         """Deepspeed implementation for `inference()`."""
 
@@ -838,7 +840,7 @@ class Model:
             operation="add"
         )
 
-        result_data_path = f"./output/inference_results/{escape(result_data_name)}/"
+        result_data_path = f"{root}/output/inference_results/{escape(result_data_name)}/"
 
         # run prediction
         deepspeed_args = (
@@ -849,7 +851,7 @@ class Model:
         cmd = bash_command_template % (
             "pa38-lf",  # conda environment
             deepspeed_args,  # num_gpus; only set if CUDA_VISIBLE_DEVICES is not set
-            "./src/abstractions/configs/LF_examples/full_multi_gpu/ds_z3_config.json",  # deepspeed config; this file usable for both full_param and lora
+            f"{root}/src/abstractions/configs/LF_examples/full_multi_gpu/ds_z3_config.json",  # deepspeed config; this file usable for both full_param and lora
             ("sft" if data.data_type != "pretrain" else "pt"),  # stage - sft or pt
             "predict",  # current operation - train or predict
             "\n--do_sample \\",  # do sample
@@ -906,7 +908,7 @@ class Model:
             result_data_path, f"{escape(result_data_name)}.json"
         )
 
-        with tw.JsonListWriter(final_file_path) as writer:
+        with tu.JsonListWriter(final_file_path) as writer:
             with open(initial_file_path, "r") as results_file:
                 for i, (input_dict, result) in enumerate(
                     zip(data.all_passages(), results_file)
@@ -953,16 +955,16 @@ class Model:
         """Serial implementation for `inference()`."""
 
         data_name = result_data_name  # self.model_name + "_inference_output"
-        os.makedirs(os.path.join("output", "inference_results", "inf"), exist_ok=True)
+        os.makedirs(os.path.join(root, "output", "inference_results", "inf"), exist_ok=True)
         data_path = os.path.join(
-            "output", "inference_results", "inf", data_name + ".json"
+            root, "output", "inference_results", "inf", data_name + ".json"
         )
 
-        with tw.JsonListWriter(
+        with tu.JsonListWriter(
             data_path
         ) as writer:  # memory-efficient: no need to place all answers in memory
             if isinstance(input_data, Data):
-                eles = tw.read_json_memory_efficient(input_data.data_path)
+                eles = tu.read_json_memory_efficient(input_data.data_path)
             else:
                 eles = input_data
 
@@ -986,7 +988,7 @@ class Model:
 
                 # display the first element to showcase results
                 if writer.is_first:
-                    tw.write_log(
+                    tu.write_log(
                         f"Inference sample: {ele}. Raw response: {repr(response)}."
                     )
 
@@ -1018,13 +1020,13 @@ class Model:
                 "Fast evaluation is only supported for models using alpaca template."
             )
 
-        if not os.path.exists("output"):
-            os.mkdir("output")
-        if not os.path.exists(os.path.join("output", "evaluation_results")):
-            os.mkdir(os.path.join("output", "evaluation_results"))
+        if not os.path.exists(f"{root}/output"):
+            os.mkdir(f"{root}/output")
+        if not os.path.exists(os.path.join(root, "output", "evaluation_results")):
+            os.mkdir(os.path.join(root, "output", "evaluation_results"))
         # output csv goes here
         experiment_directory = os.path.join(
-            "output", "evaluation_results", self.model_name + "_single"
+            root, "output", "evaluation_results", self.model_name + "_single"
         )
         if not os.path.exists(experiment_directory):
             os.mkdir(experiment_directory)
@@ -1064,11 +1066,11 @@ class Model:
 
         This method returns an incomplete result and is slow; therefore it's abandoned.
         """
-        if not os.path.exists(os.path.join("output", "evaluation_results")):
-            os.mkdir(os.path.join("output", "evaluation_results"))
+        if not os.path.exists(os.path.join(root, "output", "evaluation_results")):
+            os.mkdir(os.path.join(root, "output", "evaluation_results"))
 
         directory = os.path.join(
-            "libs", "moralchoice", "data", "responses", self.model_name + "_single"
+            root, "libs", "moralchoice", "data", "responses", self.model_name + "_single"
         )
 
         if os.path.exists(directory) and (
@@ -1089,13 +1091,13 @@ class Model:
         low_vec = calculate_model(
             self.model_name + "_single",
             "low",
-            os.path.join("output", "evaluation_results"),
+            os.path.join(root, "output", "evaluation_results"),
             self.model_name,
         )
         high_vec = calculate_model(
             self.model_name + "_single",
             "high",
-            os.path.join("output", "evaluation_results"),
+            os.path.join(root, "output", "evaluation_results"),
             self.model_name,
         )
         return 1 / 3 * low_vec + 2 / 3 * high_vec

@@ -12,6 +12,7 @@ import pandas as pd
 from scipy.stats import linregress
 from numpy.polynomial.polynomial import Polynomial
 from scipy.stats import f
+from src.path import root
 
 # [cnt] key - scenario code : val - dict (of ab_cnt, ab_1, cp_cnt, cp_1, rp_cnt, rp_1) + moral_vec
 # [moral_vec] key - scenario code : val - its moral vec. kth = 0 indicates not related dimenson, = 1 indicates preferred dimension, = 1 indicates rejected dimension
@@ -31,11 +32,11 @@ description = [
     "violate duties",
 ]
 
-if not os.path.exists("output/evaluation_results/figs"):
-    os.makedirs("output/evaluation_results/figs")
+if not os.path.exists(f"{root}/output/evaluation_results/figs"):
+    os.makedirs(f"{root}/output/evaluation_results/figs")
 
-if not os.path.exists("logs/eval"):
-    os.makedirs("logs/eval")
+if not os.path.exists(f"{root}/logs/eval"):
+    os.makedirs(f"{root}/logs/eval")
 
 
 def __calculate_model(test_name, high_or_low, model_name):
@@ -49,10 +50,10 @@ def __calculate_model(test_name, high_or_low, model_name):
         )
     )(high_or_low)
     raw_dir = os.path.join(
-        "output", "evaluation_results", test_name, model_name + "_raw.json"
+        root, "output", "evaluation_results", test_name, model_name + "_raw.json"
     )
     scenario_dir = os.path.join(
-        "src", "moralchoice", "assets", "data", "scenarios", scenario + ".csv"
+        root, "src", "moralchoice", "assets", "data", "scenarios", scenario + ".csv"
     )
     mrl_vec = {}
     result = {}
@@ -108,7 +109,7 @@ def __calculate_model(test_name, high_or_low, model_name):
     avg_vec = sum([np.array(x[1]) for x in mrl_vec.items()]) / len(mrl_vec.items())
     with open(
         os.path.join(
-            "output", "evaluation_results", test_name, model_name + "_collected.json"
+            root, "output", "evaluation_results", test_name, model_name + "_collected.json"
         ),
         "w",
     ) as f:
@@ -156,9 +157,9 @@ def calculate_model(test_dir, model_name, logprob=False):
         raw_dict = json.load(f)
 
     ref_dir = [
-        "src/evaluation/raw_dataset/moralchoice/final.csv",
-        "src/evaluation/raw_dataset/foundation/final.csv",
-        "src/evaluation/raw_dataset/views/final.csv",
+        f"{root}/src/evaluation/raw_dataset/moralchoice/final.csv",
+        f"{root}/src/evaluation/raw_dataset/foundation/final.csv",
+        f"{root}/src/evaluation/raw_dataset/views/final.csv",
     ]
     # ref_dict = [csv_to_dict_list(t) for t in ref_dir]
 
@@ -231,8 +232,8 @@ def calculate_model(test_dir, model_name, logprob=False):
                 """
                 logging invalid
                 """
-                mode = "a+" if os.path.exists("logs/eval/log.txt") else "w"
-                with open("logs/eval/log.txt", mode) as f:
+                mode = "a+" if os.path.exists(f"{root}/logs/eval/log.txt") else "w"
+                with open(f"{root}/logs/eval/log.txt", mode) as f:
                     f.write("invalid, " + key + ", count, " + str(valid_cnt) + "\n")
                 invalid[2] += 1
                 continue
@@ -280,8 +281,8 @@ def calculate_model(test_dir, model_name, logprob=False):
                 """
                 logging invalid
                 """
-                mode = "a+" if os.path.exists("logs/eval/log.txt") else "w"
-                with open("logs/eval/log.txt", mode) as f:
+                mode = "a+" if os.path.exists(f"{root}/logs/eval/log.txt") else "w"
+                with open(f"{root}/logs/eval/log.txt", mode) as f:
                     f.write("invalid, " + key + ", count, " + str(valid_cnt) + "\n")
                 invalid[1] += 1
                 continue
@@ -378,7 +379,7 @@ def plot_parallel_coordinates(data, title, tuples):
     plt.ylabel("Value")
     plt.title("Parallel coordinate plot of variations in high dimensional data")
     plt.show()
-    plt.savefig("output/evaluation_results/figs/" + title + "_parr.png")
+    plt.savefig(f"{root}/output/evaluation_results/figs/" + title + "_parr.png")
 
 def plot_heatmap(data, title, label_set, tuples = None, norm = "column"):
     """
@@ -436,7 +437,7 @@ def plot_heatmap(data, title, label_set, tuples = None, norm = "column"):
     plt.xlabel("Dimensions")
     plt.ylabel("HistLlama")
     plt.show()
-    plt.savefig("output/evaluation_results/figs/" + title + "_heat.png")
+    plt.savefig(f"{root}/output/evaluation_results/figs/" + title + "_heat.png")
 
 def plot_vectors(vectors, dim_start, name):
     print(vectors)
@@ -466,7 +467,7 @@ def plot_vectors(vectors, dim_start, name):
 
     plt.show()
     plt.savefig(
-        "output/evaluation_results/figs/" + name_mapping[name] + "_line_real.png"
+        f"{root}/output/evaluation_results/figs/" + name_mapping[name] + "_line_real.png"
     )
 
 
@@ -486,7 +487,7 @@ def analyze_vectors_quadratic(vectors):
     p_values = []
     positive_coefficients = []
     negative_coefficients = []
-    np.savetxt("output/evaluation_results/figs/quad.txt", vectors, fmt='%f')
+    np.savetxt(f"{root}/output/evaluation_results/figs/quad.txt", vectors, fmt='%f')
     for dim in range(num_dimensions):
         x = np.arange(len(vectors))
         y = vectors[:, dim]
@@ -512,7 +513,7 @@ def analyze_vectors_quadratic(vectors):
 
     # Print coefficients and p-values
     print("Quadratic coefficients and p-values for each dimension:")
-    with open("output/evaluation_results/figs/quad.txt", 'a') as f:
+    with open(f"{root}/output/evaluation_results/figs/quad.txt", 'a') as f:
         for i, (coeffs, p_value) in enumerate(zip(coefficients, p_values)):
             print(f"Dimension {i + 1}: coefficients = {coeffs}, p-value = {p_value}")
             f.write(f"Dimension {i + 1}: coefficients = {coeffs}, p-value = {p_value}\n\n") 
@@ -536,7 +537,7 @@ def analyze_vectors_quadratic(vectors):
     plt.legend()
 
     plt.show()
-    plt.savefig("output/evaluation_results/figs/quad.png")
+    plt.savefig(f"{root}/output/evaluation_results/figs/quad.png")
 
 
 def analyze_vectors(vectors):
@@ -582,4 +583,4 @@ def analyze_vectors(vectors):
     plt.legend()
 
     plt.show()
-    plt.savefig("output/evaluation_results/lin.png")
+    plt.savefig(f"{root}/output/evaluation_results/lin.png")

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """Functions to download, parse and filter Gutenberg's bookshelves."""
 
+from src.path import root
 import os
 import glob
 import numpy as np

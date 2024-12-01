@@ -1,6 +1,7 @@
+from src.path import root
 import os, json
 import re, unicodedata
-import src.text_writer as tw
+import src.utils.text_utils as tu
 from tqdm import tqdm
 
 last_cleaned = ""
@@ -62,13 +63,13 @@ def cleanse_text(text):
 def cleanse_dir(dirct, to_dir):
     os.makedirs(to_dir)
     for year in tqdm(os.listdir(dirct), desc=dirct.split("/")[-1]):
-        generator = tw.read_json_memory_efficient(os.path.join(dirct, year))
+        generator = tu.read_json_memory_efficient(os.path.join(dirct, year))
         out = []
         for boi in generator:
             orig_len = len(boi["content"])
             boi["content"] = cleanse_text(boi["content"])
 
-            tw.write_log(
+            tu.write_log(
                 "cleansed an object in "
                 + year
                 + ", length reduced from "
@@ -82,7 +83,7 @@ def cleanse_dir(dirct, to_dir):
             if len(boi["content"]) > 200:
                 out.append(boi)
             else:
-                tw.write_log(f"Ignoring {repr(boi['content'])}.")
+                tu.write_log(f"Ignoring {repr(boi['content'])}.")
 
         with open(os.path.join(to_dir, year), "w") as file:
             json.dump(out, file)
@@ -97,6 +98,6 @@ def cleanse(dataset_path, to_path):
 
 if __name__ == "__main__":
     cleanse(
-        "../../shared_storage/our_datasets/HisText_Mar8_Guten_EEBO_PoL_IA10_unrefined/",
-        "../../shared_storage/our_datasets/HisText_Mar8_Guten_EEBO_PoL_IA10_rulebased_refined/",
+        f"{root}/../../shared_storage/our_datasets/HisText_Mar8_Guten_EEBO_PoL_IA10_unrefined/",
+        f"{root}/../../shared_storage/our_datasets/HisText_Mar8_Guten_EEBO_PoL_IA10_rulebased_refined/",
     )

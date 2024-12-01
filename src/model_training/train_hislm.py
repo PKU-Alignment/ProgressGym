@@ -1,5 +1,6 @@
+from src.path import root
 from src.abstractions import Model, Data, DataFileCollection
-from src.text_writer import write_log
+from src.utils.text_utils import write_log
 from collections import defaultdict
 from typing import List
 import os
@@ -260,8 +261,8 @@ def run_training(dataset_dir: str, models_save_dir: str, num_gpus: int = None):
             "lang_stat": lang_stat,
         }
 
-    os.makedirs("./logs", exist_ok=True)
-    with open("./logs/century_stats.json", "w") as f:
+    os.makedirs(f"{root}/logs", exist_ok=True)
+    with open(f"{root}/logs/century_stats.json", "w") as f:
         json.dump(century_stats, f)
 
     # Start training

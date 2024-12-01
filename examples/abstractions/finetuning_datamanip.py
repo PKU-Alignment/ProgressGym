@@ -1,21 +1,30 @@
+from src.path import root
 from src.abstractions import Model, Data, DataFileCollection
 
-if __name__ == "__main__":
+gemma2b_base = Model(
+    model_name="gemma-2b",
+    model_path_or_repoid="google/gemma-2-2b",  # or specify a local path if you have downloaded the model
+    is_instruct_finetuned=False,
+)
 
-    gemma2b_base = Model(
-        model_name="gemma-2b",
-        model_path="google/gemma-2-2b",  # or specify a local path if you have downloaded the model
-        is_instruct_finetuned=False,
-    )
+llama8b_instruct = Model(
+    model_name="Llama-3.1-8B-Instruct",
+    model_path_or_repoid="meta-llama/Llama-3.1-8B-Instruct",
+    is_instruct_finetuned=True,
+)
 
+def continue_pretrain():
     # ============== Continue pretraining from Gemma 2B ==============
+    global gemma2b_c4
     c4_data = Data("c4_demo", data_type="pretrain")
     gemma2b_c4 = gemma2b_base.finetune(
         c4_data, stage="pretrain", algo="full_param", result_model_name="gemma-2b_c4"
     )
     print(gemma2b_c4.is_instruct_finetuned)  # False
 
+def supervised_finetune():
     # ============== Then do SFT using alpaca data ==============
+    global gemma2b_c4_alpaca
     alpaca_data = Data("alpaca_gpt4_en", data_type="sft")
     gemma2b_c4_alpaca = gemma2b_c4.finetune(
         alpaca_data,
@@ -25,17 +34,7 @@ if __name__ == "__main__":
     )
     print(gemma2b_c4_alpaca.is_instruct_finetuned)  # True
     gemma2b_c4_alpaca.save_permanent()  # saved to output/saved/saved_model/gemma-2b_c4_alpaca
-
-    # ============== Then do DPO using ORCA data ==============
-    hh_data = Data("orca_rlhf", data_type="preference")
-    gemma2b_c4_alpaca_orca = gemma2b_c4_alpaca.finetune(
-        hh_data,
-        stage="dpo",
-        algo="full_param",
-        result_model_name="gemma-2b_c4_alpaca_orca",
-    )
-    gemma2b_c4_alpaca_orca.save_permanent()  # saved to output/saved/saved_model/gemma-2b_c4_alpaca_orca
-
+    
     # ============== Or maybe, we should censor curse words before SFT ==============
     def remove_curse_words(sample_dict: dict) -> dict:
         filter = lambda s: (
@@ -56,12 +55,12 @@ if __name__ == "__main__":
     )
     gemma2b_c4_alpaca_G.save_permanent()  # saved to output/saved/saved_model/gemma-2b_c4_alpaca_G
     alpaca_data_G.save_permanent_and_register()  # saved to output/saved/saved_model/alpaca_gpt4_en_G.json & added to llama-factory dataset registry
-
+    
     # ============== What about using our own data (scattered across multiple files in multiple directories) for finetuning? ==============
     histext_collection = DataFileCollection(  # build a collection holding json files of year 1826 to 2018
         collection_name="histext_1826_to_2018_collection",
         data_type="pretrain",
-        collection_path="./dataset/dataset_text_sequence/",
+        collection_path=f"{root}/dataset/dataset_text_sequence/",
         file_selection_func=(
             lambda path: "Y" in path and 1826 <= int(path.split("/")[-1][1:6]) <= 2018
         ),  # if this argument is omitted, all json files will be selected
@@ -93,3 +92,46 @@ if __name__ == "__main__":
         algo="full_param",
         result_model_name="gemma-2b_histext",
     )
+
+def direct_preference_optimization():
+    # ============== Then do DPO using ORCA data ==============
+    global gemma2b_c4_alpaca_orca
+    hh_data = Data("orca_rlhf", data_type="preference")
+    gemma2b_c4_alpaca_orca = gemma2b_c4_alpaca.finetune(
+        hh_data,
+        stage="dpo",
+        algo="full_param",
+        result_model_name="gemma-2b_c4_alpaca_orca",
+    )
+    gemma2b_c4_alpaca_orca.save_permanent()  # saved to output/saved/saved_model/gemma-2b_c4_alpaca_orca
+
+def dialogue_manipulation():
+    # ============== Generating a dialogue, using a model to play the role of both user and assistant ==============
+    global llama8b_instruct
+    dialogue_data = Data(
+        "dialogue_data",
+        data_content=[
+            {
+                "input": "Is Eiffel Tower in Paris?",
+                "history": [
+                    ["What is the capital of France?", "Paris."],
+                ]
+            }
+        ]
+    )
+    dialogue_data = llama8b_instruct.inference(
+        dialogue_data, "dialogue_data", backend="sglang"
+    )
+    dialogue_data = dialogue_data.switch_role_to_user()
+    dialogue_data = llama8b_instruct.inference(
+        dialogue_data, "dialogue_data", backend="sglang"
+    )
+    dialogue_data = dialogue_data.switch_role_to_assistant()
+    print(list(dialogue_data.all_passages()))
+    
+
+if __name__ == "__main__":
+    # continue_pretrain()
+    # supervised_finetune()
+    # direct_preference_optimization()
+    dialogue_manipulation()

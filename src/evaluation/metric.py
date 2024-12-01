@@ -1,5 +1,6 @@
 import os, json
 import numpy as np
+from src.path import root
 
 
 def cosine_similarity(v1, v2):
@@ -113,7 +114,7 @@ def predict(path):
             continue
         score = get_score_predict(os.path.join(path, p))
         result.update(score)
-    with open("output/benchmark_results/predict.json", "w") as f:
+    with open(f"{root}/output/benchmark_results/predict.json", "w") as f:
         json.dump(result, f)
 
 
@@ -128,7 +129,7 @@ def coevolve(path):
             continue
         score = get_score_coevolve(os.path.join(path, p))
         result.update(score)
-    with open("output/benchmark_results/coevolve.json", "w") as f:
+    with open(f"{root}/output/benchmark_results/coevolve.json", "w") as f:
         json.dump(result, f)
 
 
@@ -143,13 +144,13 @@ def follow(path):
             continue
         score = get_score_follow(os.path.join(path, p))
         result.update(score)
-    with open("output/benchmark_results/follow.json", "w") as f:
+    with open(f"{root}/output/benchmark_results/follow.json", "w") as f:
         json.dump(result, f)
 
 
-# predict('output/benchmark_results/complete_results')
-# coevolve('output/benchmark_results/complete_results')
-# follow('output/benchmark_results/complete_results')
+# predict(f'{root}/output/benchmark_results/complete_results')
+# coevolve(f'{root}/output/benchmark_results/complete_results')
+# follow(f'{root}/output/benchmark_results/complete_results')
 
 
 def calculate_score(key, dict):

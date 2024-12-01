@@ -28,6 +28,7 @@ Examples:
 Note that all names are case-sensitive. Dummies are for debugging purposes only.
 """
 
+from src.path import root
 import pdb
 import traceback
 import argparse
@@ -97,7 +98,7 @@ if __name__ == "__main__":
         parser.add_argument(
             "--output_dir",
             type=str,
-            default="./output/benchmark_results",
+            default=f"{root}/output/benchmark_results",
             required=False,
         )
         args, unknownargs = parser.parse_known_args()

@@ -1,3 +1,4 @@
+from src.path import root
 import json
 from typing import Tuple, Iterable, Dict, Hashable, Any
 import os
@@ -20,12 +21,12 @@ mapping from file id (year number) to number of entries written.
 not in year_lengths:  uninitialized.
 """
 year_lengths = {}
-os.makedirs("./logs", exist_ok=True)
+os.makedirs(f"{root}/logs", exist_ok=True)
 
 
 def write_log(s: str, log_name: str = "build_dataset"):
     time_str = strftime("%d %b %H:%M:%S", localtime())
-    with open(f"./logs/{log_name}.log", "a") as log_file:
+    with open(f"{root}/logs/{log_name}.log", "a") as log_file:
         log_file.write(time_str + "  ---  " + s + "\n")
 
 
@@ -34,7 +35,7 @@ def year2path(yr_num: int) -> Tuple[str, str]:
     returns (filefolder, filefullpath) for any given year number
     """
     century = "C%03d" % (yr_num // 100 + 1,)
-    century_path = f"./dataset/dataset_text_sequence/{century}/"
+    century_path = f"{root}/dataset/dataset_text_sequence/{century}/"
     if not os.path.exists(century_path):
         os.mkdir(century_path)
 
@@ -107,7 +108,7 @@ def write_single_entry(
         out_file.write(json.dumps(json_dict))
 
 
-undated_path = "./dataset/dataset_text_sequence/undated.json"
+undated_path = f"{root}/dataset/dataset_text_sequence/undated.json"
 undated_count = 0
 
 
@@ -307,4 +308,5 @@ class JsonListWriter:
 
     def __exit__(self, type, value, traceback):
         self.file_obj.write("\n]")
+        self.file_obj.flush()
         self.file_obj.close()
