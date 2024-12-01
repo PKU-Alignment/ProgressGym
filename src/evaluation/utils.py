@@ -253,7 +253,10 @@ def semantic_matching(item, mapping, four=False, verbal=False):
 
 def _collect(output_data):
     output = {}
+    invalid = 0
     for entry in output_data:
+        if "logprob" not in entry.keys():
+            continue
         s_id = entry["scenario_id"]
         q_type = entry["question_type"]
         mapping = entry["mapping"]
@@ -270,9 +273,13 @@ def _collect(output_data):
                     "compare": [0, 0, 0],
                     "repeat": [0, 0, 0],
                 }
-        for i, x in enumerate(logprob):
-            output[s_id][q_type][mapping[i] - 1] = x
-            output[s_id][q_type][-1] += x
+        if isinstance(logprob, list):
+            for i, x in enumerate(logprob):
+                output[s_id][q_type][mapping[i] - 1] += np.exp(x)
+                output[s_id][q_type][-1] += np.exp(x)
+        else:
+            invalid += 1
+            print(invalid)
     return output
         
 

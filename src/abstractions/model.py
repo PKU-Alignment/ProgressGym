@@ -999,7 +999,7 @@ class Model:
             else list(result_data.all_passages())
         )
 
-    def evaluate(self, logprobs = False, method: Literal["fast", "dummy"] = "fast") -> np.ndarray:
+    def evaluate(self, method: Literal["fast", "dummy"] = "fast", logprobs=True) -> np.ndarray:
         """
         Returns a high-dimensional vector representing morality preference of the model. Choose "dummy" for fast debugging runs.
         """
@@ -1012,7 +1012,7 @@ class Model:
                 f'Method {method} not recognized. Options are "fast" and "dummy".'
             )
 
-    def __evaluate_fast(self, logprobs = False) -> np.ndarray:
+    def __evaluate_fast(self, logprobs = True) -> np.ndarray:
         if self.template_type != "alpaca":
             raise NotImplementedError(
                 "Fast evaluation is only supported for models using alpaca template."
@@ -1030,7 +1030,7 @@ class Model:
             os.mkdir(experiment_directory)
 
         if logprobs:
-            evaluation_input = eval_utils.regenerate_inputs(logprobs = True)
+            evaluation_input = eval_utils.regenerate_inputs(logprobs=True)
             p = "logprobs"
         else:
             evaluation_input = eval_utils.regenerate_inputs()
@@ -1052,7 +1052,7 @@ class Model:
         ) as f:
             json.dump(raw_stats, f)
         print("raw results saved")
-        vec = calculate_model(experiment_directory, self.model_name)
+        vec = calculate_model(experiment_directory, self.model_name, logprob = logprob)
         return vec
 
     def __evaluate_slow_moralchoice(self) -> np.ndarray:

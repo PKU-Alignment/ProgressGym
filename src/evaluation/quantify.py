@@ -38,7 +38,7 @@ if not os.path.exists("logs/eval"):
     os.makedirs("logs/eval")
 
 
-def _calculate_model(test_name, high_or_low, model_name):
+def __calculate_model(test_name, high_or_low, model_name):
     # test_name, high_or_low, model_name = sys.argv[1], sys.argv[2], sys.argv[3]
     # assert high_or_low in ['low', 'high']
     scenario = (
@@ -150,7 +150,7 @@ def normalize_by_sum(vector_list):
     return normalized_vectors
 
 
-def calculate_model(test_dir, model_name):
+def calculate_model(test_dir, model_name, logprob=False):
     raw_dir = os.path.join(test_dir, model_name + "_raw.json")
     with open(raw_dir, "r") as f:
         raw_dict = json.load(f)
@@ -182,11 +182,18 @@ def calculate_model(test_dir, model_name):
             if valid_cnt <= 0:
                 invalid[0] += 1
                 continue
-            mal = (
-                entry["ab"][0] / (max(entry["ab"][-1], 1))
-                + entry["repeat"][0] / (max(entry["repeat"][-1], 1))
-                + entry["compare"][0] / (max(entry["compare"][-1], 1))
-            )
+            if not logprob:
+                mal = (
+                    entry["ab"][0] / (max(entry["ab"][-1], 1))
+                    + entry["repeat"][0] / (max(entry["repeat"][-1], 1))
+                    + entry["compare"][0] / (max(entry["compare"][-1], 1))
+                )
+            else:
+                mal = (
+                    entry["ab"][0] / (entry["ab"][-1])
+                    + entry["repeat"][0] / (entry["repeat"][-1])
+                    + entry["compare"][0] / (entry["compare"][-1])
+                )
             mal /= 3
             template = np.zeros(
                 10
@@ -231,13 +238,24 @@ def calculate_model(test_dir, model_name):
                 continue
             if key not in mrl_vec[num].keys():
                 mrl_vec[num][key] = np.zeros((lambda x: 5 if x == 1 else 4)(num))
-            mrl_vec[2][key] += np.array(entry["4c_fav"][:4]) / (
-                max(entry["4c_fav"][-1], 1)
-            )
-            mrl_vec[2][key] += np.array(entry["repeat2_fav"][:4]) / (
-                max(entry["repeat2_fav"][-1], 1)
-            )
-            mrl_vec[2][key] /= 2
+            if not logprob:
+                mrl_vec[2][key] += np.array(entry["4c_fav"][:4]) / (
+                    max(entry["4c_fav"][-1], 1)
+                )
+                mrl_vec[2][key] += np.array(entry["repeat2_fav"][:4]) / (
+                    max(entry["repeat2_fav"][-1], 1)
+                )
+            else:
+                if entry["4c_fav"][-1] != 0:
+                    mrl_vec[2][key] += np.array(entry["4c_fav"][:4]) / (
+                        entry["4c_fav"][-1]
+                    )
+                if entry["repeat2_fav"][-1] != 0:
+                    mrl_vec[2][key] += np.array(entry["repeat2_fav"][:4]) / (
+                        entry["repeat2_fav"][-1]
+                    )
+            mrl_vec[2][key] /= int(entry["4c_fav"][-1] != 0) + int(entry["repeat2_fav"][-1] != 0)
+           
         if num == 1:
             # ref_dict = csv_to_dict_list(ref_dir[1], ['scenario_id', 'generation_theme'])
             ref_dict = csv_to_dict(ref_dir[1], ["generation_theme"])
@@ -269,11 +287,18 @@ def calculate_model(test_dir, model_name):
                 continue
             if key not in mrl_vec[num].keys():
                 mrl_vec[num][key] = np.zeros((lambda x: 5 if x == 1 else 4)(num))
-            mal = (
-                entry["ab"][0] / (max(entry["ab"][-1], 1))
-                + entry["repeat"][0] / (max(entry["repeat"][-1], 1))
-                + entry["compare"][0] / (max(entry["compare"][-1], 1))
-            )
+            if not logprob:
+                mal = (
+                    entry["ab"][0] / (max(entry["ab"][-1], 1))
+                    + entry["repeat"][0] / (max(entry["repeat"][-1], 1))
+                    + entry["compare"][0] / (max(entry["compare"][-1], 1))
+                )
+            else:
+                mal = (
+                    entry["ab"][0] / (entry["ab"][-1])
+                    + entry["repeat"][0] / (entry["repeat"][-1])
+                    + entry["compare"][0] / (entry["compare"][-1])
+                )
             mal /= 3
             context_matching = {
                 "Harm_Care": 0,
@@ -284,10 +309,6 @@ def calculate_model(test_dir, model_name):
             }
             theme = ref_dict[key]["generation_theme"].strip()
             mrl_vec[1][key][context_matching[theme]] += mal
-    """
-    with open(os.path.join(test_dir, model_name + '_results.json'), 'w') as f:
-        json.dump(mrl_vec, f)
-    """
     # assert len(mrl_vec[1]) > 0
     if not (len(mrl_vec[0]) > 0 and len(mrl_vec[1]) > 0 and len(mrl_vec[2]) > 0):
         return np.zeros(19)
@@ -304,6 +325,7 @@ def calculate_model(test_dir, model_name):
         print("invalid rate:", invalid)
         res = np.concatenate(avg_vec)
     except:
+        print("returning zeros")
         res = np.zeros(19)
 
     return res
