@@ -315,7 +315,7 @@ def start_inference_backend(
         sgl = import_from_sglang()
         if template_type != "auto":
             warnings.warn(
-                f"SGLang backend only supports auto template type. Ignoring template_type={template_type}. This is not an issue if you simply intend to perform inference on HistLlama models, but may be an issue if you are using a custom model, in which case you may use NO_SGLANG=1 to disable sglang backend."
+                f"SGLang backend only supports auto template type. Ignoring template_type={template_type}. This is not an issue if you simply intend to perform inference on HistLlama models, but may be an issue if the model is neither in the HistLlama family nor in SGLang's supported models list, in which case you may use NO_SGLANG=1 to disable sglang backend."
             )
 
         with open(os.devnull, "w") as devnull:
@@ -577,7 +577,8 @@ def dict_to_dialogue_list(
         
         if "history" in dic:
             for turn in dic["history"]:
-                res.append({"role": "user", "content": turn[0]}, {"role": "assistant", "content": turn[1]})
+                res.append({"role": "user", "content": turn[0]})
+                res.append({"role": "assistant", "content": turn[1]})
         
         if "input" in dic or "instruction" in dic:
             input = dic.get("input", "")
