@@ -15,9 +15,11 @@ from typing import (
 import os
 import json
 import warnings
+from functools import partial
 import src.utils.text_utils as tu
 from tqdm import tqdm
 from src.abstractions.configs.templates_configs import *
+from src.abstractions.backends import dict_to_dialogue_list
 
 
 # helper function, escape spaces in paths
@@ -184,6 +186,15 @@ class Data:
         
         cp.key_fields = self.key_fields.copy()
         return cp
+    
+    def to_openai_format(self) -> Iterable[List[Dict[str, str]]]:
+        """
+        Convert the data to OpenAI format, where each dialogue is a list of dictionaries with string keys and string values.
+        Each dictionary represents a dialogue turn.
+        """
+        convert_fn: Callable[[Dict], List[Dict]] = partial(dict_to_dialogue_list, purpose="logprobs")
+        for element in self.all_passages():
+            yield convert_fn(element)
 
     def transform(
         self,
@@ -357,7 +368,7 @@ class Data:
             all_histories = [h[i] for h in sample_dict.get("history", []) for i in range(2)]
             all_histories = [dialogue_starter] + all_histories
             assert len(all_histories) % 2 == 1
-            sample_dict["history"] = [[all_histories[i], all_histories[i + 1]] for i in range(len(all_histories)-1, 2)]
+            sample_dict["history"] = [[all_histories[i], all_histories[i + 1]] for i in range(0, len(all_histories)-1, 2)]
             sample_dict["instruction"] = all_histories[-1]
             sample_dict["system"] = user_system_prompt
             return sample_dict
