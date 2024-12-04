@@ -288,22 +288,23 @@ def start_inference_backend(
                 temperature=temperature, top_p=0.95, max_tokens=max_tokens
             )
 
-            if not os.environ.get("ALLOW_EMPTY_INPUT") or not eval(
-                os.environ.get("ALLOW_EMPTY_INPUT")
+            if not os.environ.get("ALLOW_EMPTY_INSTRUCTION") or not eval(
+                os.environ.get("ALLOW_EMPTY_INSTRUCTION")
             ):
                 found = 0
                 for dic in sample_dicts:
-                    if not dic.get("input"):
+                    if not dic.get("instruction"):
                         if not found:
                             warnings.warn(
-                                'In at least one sample, "input" field is missing or empty. Content from the "instruction" field will be copied to the "input" field. This behavior can be disabled by ALLOW_EMPTY_INPUT=1.'
+                                'In at least one sample, "instruction" field is missing or empty. Content from the "input" field will be moved to the "instruction" field. This behavior can be disabled by ALLOW_EMPTY_INSTRUCTION=1.'
                             )
                             found = 1
-                        dic["input"] = dic["instruction"]
+                        dic["instruction"] = dic["input"]
+                        del dic["input"]
 
             prompts = [
                 fill_in_QA_template(
-                    dic["instruction"], dic["input"], model_repoid_or_path=template_type
+                    dic.get("instruction"), dic.get("input"), model_repoid_or_path=template_type
                 )
                 for dic in sample_dicts
             ]
@@ -518,18 +519,19 @@ def start_inference_backend(
             """
             nonlocal purpose
             
-            if not os.environ.get("ALLOW_EMPTY_INPUT") or not eval(
-                os.environ.get("ALLOW_EMPTY_INPUT")
+            if not os.environ.get("ALLOW_EMPTY_INSTRUCTION") or not eval(
+                os.environ.get("ALLOW_EMPTY_INSTRUCTION")
             ):
                 found = 0
                 for dic in sample_dicts:
-                    if not dic.get("input"):
+                    if not dic.get("instruction"):
                         if not found:
                             warnings.warn(
-                                'In at least one sample, "input" field is missing or empty. Content from the "instruction" field will be copied to the "input" field. This behavior can be disabled by ALLOW_EMPTY_INPUT=1.'
+                                'In at least one sample, "instruction" field is missing or empty. Content from the "input" field will be moved to the "instruction" field. This behavior can be disabled by ALLOW_EMPTY_INSTRUCTION=1.'
                             )
                             found = 1
-                        dic["input"] = dic["instruction"]
+                        dic["instruction"] = dic["input"]
+                        del dic["input"]
 
             dialogues = dict_to_dialogue_list(sample_dicts, purpose)
             options_lists = [(dic["predict"] if "predict" in dic and isinstance(dic["predict"], list) else []) for dic in sample_dicts]
@@ -675,6 +677,8 @@ def dict_to_dialogue_list(
         
         if purpose == "logprobs" and "predict" in dic and isinstance(dic["predict"], str):
             res.append({"role": "assistant", "content": dic["predict"]})
+        elif "output" in dic:
+            res.append({"role": "assistant", "content": dic["output"]})
         
         return res
 

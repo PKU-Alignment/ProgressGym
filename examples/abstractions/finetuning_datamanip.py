@@ -119,19 +119,29 @@ def dialogue_manipulation():
             }
         ]
     )
-    dialogue_data = llama8b_instruct.inference(
-        dialogue_data, "dialogue_data2", backend="sglang"
-    )
-    dialogue_data = dialogue_data.switch_role_to_user()
-    dialogue_data = llama8b_instruct.inference(
-        dialogue_data, "dialogue_data3", backend="sglang"
-    )
-    dialogue_data = dialogue_data.switch_role_to_assistant()
+    
+    def converse():
+        nonlocal dialogue_data
+        
+        dialogue_data = llama8b_instruct.inference(
+            dialogue_data, "dialogue_data2", backend="sglang"
+        )
+        dialogue_data = dialogue_data.switch_role_to_user()
+        
+        dialogue_data = llama8b_instruct.inference(
+            dialogue_data, "dialogue_data3", backend="sglang"
+        )
+        dialogue_data = dialogue_data.switch_role_to_assistant()
+    
+    for i in range(5):
+        converse()
+    
     print(list(dialogue_data.all_passages()))
+    print(list(dialogue_data.to_openai_format()))
     
 
 if __name__ == "__main__":
-    # continue_pretrain()
-    # supervised_finetune()
-    # direct_preference_optimization()
+    continue_pretrain()
+    supervised_finetune()
+    direct_preference_optimization()
     dialogue_manipulation()
