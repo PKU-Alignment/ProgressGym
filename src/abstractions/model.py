@@ -45,7 +45,7 @@ def inference_standalone(
     purpose: Literal["responses", "logprobs"],
     conn: multiprocessing.connection.Connection,
 ):
-    backend, process_batch = start_inference_backend(
+    backend, process_batch, mopup_memory = start_inference_backend(
         model_path,
         backend_type,
         num_gpus=num_gpus,
@@ -69,6 +69,8 @@ def inference_standalone(
         map_key_fields=True,
     )
     print("Job finished.")
+    mopup_memory()
+    print("Memory mopup done.")
     conn.send(result_data.data_path)
 
 
