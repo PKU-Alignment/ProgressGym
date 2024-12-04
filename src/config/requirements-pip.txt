@@ -9,6 +9,7 @@ yajl
 numpy
 pandas
 gensim
+nvitop
 seaborn
 argparse
 guidance

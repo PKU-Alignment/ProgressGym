@@ -109,7 +109,7 @@ def dialogue_manipulation():
     # ============== Generating a dialogue, using a model to play the role of both user and assistant ==============
     global llama8b_instruct
     dialogue_data = Data(
-        "dialogue_data",
+        "dialogue_data1",
         data_content=[
             {
                 "input": "Is Eiffel Tower in Paris?",
@@ -120,11 +120,11 @@ def dialogue_manipulation():
         ]
     )
     dialogue_data = llama8b_instruct.inference(
-        dialogue_data, "dialogue_data", backend="sglang"
+        dialogue_data, "dialogue_data2", backend="sglang"
     )
     dialogue_data = dialogue_data.switch_role_to_user()
     dialogue_data = llama8b_instruct.inference(
-        dialogue_data, "dialogue_data", backend="sglang"
+        dialogue_data, "dialogue_data3", backend="sglang"
     )
     dialogue_data = dialogue_data.switch_role_to_assistant()
     print(list(dialogue_data.all_passages()))
