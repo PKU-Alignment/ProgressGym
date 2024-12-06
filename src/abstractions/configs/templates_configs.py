@@ -2,7 +2,43 @@ from src.path import root
 from string import Template
 import json
 import os
-from typing import Dict, Any, Literal, Optional, List, Union
+from typing import Dict, Any, Literal, Optional, List, Union, Callable
+
+
+class GlobalState:
+    
+    # Public variables
+    continuous_backend: bool = False
+    
+    # Private variables
+    __active_backend_destroyers: List[Callable[[], None]] = []
+
+    def __init__(self, **kwargs: Dict[str, Any]):
+        """
+        Temporarily set global state variables of ProgressGym for the duration of a context manager block.
+        
+        Example:
+        ```
+        with GlobalState(continuous_backend=True):
+            # code that requires continuous backends (i.e. backend does not die after each call to inference, and it kept alive for reuse)
+        ```
+        """
+        self.kwargs = kwargs
+
+    def __enter__(self):
+        self.prior_state = {k: getattr(GlobalState, k) for k in self.kwargs.keys()}
+        for k, v in self.kwargs.items():
+            setattr(GlobalState, k, v)
+
+    def __exit__(self, type, value, traceback):
+        for k, v in self.prior_state.items():
+            setattr(GlobalState, k, v)
+        
+        for destroy in GlobalState.__active_backend_destroyers:
+            destroy()
+        
+        GlobalState.__active_backend_destroyers = []
+
 
 bash_command_template = """PYTHONNOUSERSITE=1 MASTER_PORT=9902 conda run --no-capture-output -n %s deepspeed %s --master_port=9902 ./libs/llama_factory/src/train_bash.py \\
     --deepspeed %s \\
