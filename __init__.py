@@ -17,6 +17,7 @@ from run_benchmark import run_benchmark
 
 from src.abstractions.model import Model, fill_in_QA_template
 from src.abstractions.data import Data, DataFileCollection
+from src.abstractions.configs.templates_configs import GlobalState
 
 __all__ = [
     "run_benchmark",
@@ -35,4 +36,5 @@ __all__ = [
     "ExtrapolativeDPOExaminee",
     "ExtrapolativeRLHFExaminee",
     "fill_in_QA_template",
+    "GlobalState",
 ]

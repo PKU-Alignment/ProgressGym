@@ -33,6 +33,7 @@ import warnings
 import tqdm
 from transformers import AutoTokenizer
 import random
+from src.abstractions.configs.templates_configs import GlobalState
 
 # create output directories
 os.makedirs(f"{root}/output/benchmark_results", exist_ok=True)
@@ -259,6 +260,11 @@ def start_inference_backend(
         if purpose == "logprobs":
             raise ValueError("VLLM backend does not support logprobs purpose.")
 
+        if GlobalState.continuous_backend:
+            warnings.warn(
+                "VLLM backend does not support continuous_backend=True. Ignoring this setting."
+            )
+
         LLM, SamplingParams, destroy_model_parallel = import_from_vllm()
 
         if template_type == "auto":
@@ -281,7 +287,7 @@ def start_inference_backend(
         )
 
         def vllm_process_batch(
-            sample_dicts: List[dict], temperature: float = 0.2, max_tokens: int = 1024
+            sample_dicts: List[dict], temperature: float = 0.2, max_tokens: int = None
         ) -> List[dict]:
             nonlocal template_type
             sampling_params = SamplingParams(
@@ -477,7 +483,7 @@ def start_inference_backend(
 
         @sgl.function
         def get_response(
-            s, conversation: List, temperature: float = 0.2, max_tokens: int = 256, options: list = []
+            s, conversation: List, temperature: float = 0.2, max_tokens: int = None, options: list = []
         ) -> str:
             nonlocal purpose
 
@@ -511,7 +517,7 @@ def start_inference_backend(
                 )
 
         def sglang_process_batch(
-            sample_dicts: List[dict], temperature: float = 0.2, max_tokens: int = 256
+            sample_dicts: List[dict], temperature: float = 0.2, max_tokens: int = None
         ) -> List[dict]:
             """Process a batch of samples using the sglang backend.
             When purpose is "logprobs", it will return the log probability of the prompt text itself, without generating any text. The probability will be stored in the "logprob" field of the output dictionary, with all other fields staying the same.
@@ -644,6 +650,11 @@ def start_inference_backend(
                         os.kill(process.pid, signal.SIGINT)
                         os.kill(process.pid, signal.SIGKILL)
 
+        if GlobalState.continuous_backend:
+            # If continuous_backend=True, keep the backend alive for reuse until the exit of the context manager.
+            GlobalState.__active_backend_destroyers.append(sglang_free_gpu_memory)
+            return backend, sglang_process_batch, (lambda: None)
+        
         return backend, sglang_process_batch, sglang_free_gpu_memory
 
     raise ValueError(f"Backend type {backend_type} not recognized.")
