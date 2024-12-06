@@ -235,9 +235,11 @@ class Data:
         """
         out_path = f"{root}/output/datasets/{result_data_name}.json"
         if self.data_name == result_data_name or self.data_path == out_path:
-            warnings.warn(
-                f"Data name {result_data_name} is the same as the current data name. The old instance will be invalidated."
-            )
+            if eval(os.environ.get('LOUD_BACKEND', 'False')):
+                warnings.warn(
+                    f"Data name {result_data_name} is the same as the current data name. The old instance will be invalidated."
+                )
+            
             return self.copy("temp_transform_artifact").transform(
                 transformation,
                 result_data_name,
@@ -531,9 +533,6 @@ class Data:
                 os.system(f"rm {escape(path)}")
 
             print(f"Successfully completed de-registration of data {self.data_name}.")
-
-        else:
-            print("No actions taken.")
 
         return return_val
 

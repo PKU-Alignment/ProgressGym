@@ -36,9 +36,11 @@ def truncate_dataset(data: Data, max_samples: int) -> Data:
         forced_rewrite=True,
     )
 
-    print(
-        f"Truncated dataset {data.data_name} from size {original_size} to {len(list(truncated_data.all_passages()))}."
-    )
+    if eval(os.environ.get("LOUD_BACKEND", "False")):
+        print(
+            f"Truncated dataset {data.data_name} from size {original_size} to {len(list(truncated_data.all_passages()))}."
+        )
+    
     return truncated_data
 
 

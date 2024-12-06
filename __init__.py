@@ -1,6 +1,9 @@
 import os, sys
 sys.path = [os.path.dirname(os.path.abspath(__file__))] + sys.path
 
+import logging
+logging.basicConfig(level=logging.ERROR)
+
 from benchmark.framework import JudgeBase, ExamineeBase
 from benchmark.dummies import DummyJudge
 from challenges.follow import FollowJudge
