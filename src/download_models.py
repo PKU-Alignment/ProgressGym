@@ -1,14 +1,17 @@
 from src.path import root
-import subprocess
+import subprocess, os, sys
 
 
 def download_model(model_name: str, save_path: str):
     """Download a model from HuggingFace, if it is not already downloaded."""
     for _ in range(3):  # Retry 3 times
-        process = subprocess.Popen(
-            ["huggingface-cli", "download", model_name, "--local-dir", save_path],
-        )
-        process.wait()
+        with open(os.devnull, "w") as devnull:
+            process = subprocess.Popen(
+                ["huggingface-cli", "download", model_name, "--local-dir", save_path],
+                stdout=(devnull if not eval(os.environ.get("LOUD_BACKEND", "False")) else sys.stdout),
+                stderr=(devnull if not eval(os.environ.get("LOUD_BACKEND", "False")) else sys.stderr),
+            )
+            process.wait()
 
 
 def download_all_models(download_8B=True, download_70B=False):
