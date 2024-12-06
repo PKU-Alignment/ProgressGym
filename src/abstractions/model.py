@@ -1,10 +1,9 @@
 from src.path import root
-import math
 from src.abstractions.data import Data
 from src.evaluation.quantify import calculate_model
 import src.evaluation.utils as eval_utils
 from typing import Dict, Any, Literal, Optional, List, Union, Callable
-import os
+import os, sys
 import json
 import torch
 import warnings
@@ -47,33 +46,38 @@ def inference_standalone(
     purpose: Literal["responses", "logprobs"],
     conn: multiprocessing.connection.Connection,
 ):
-    backend, process_batch, mopup_memory = start_inference_backend(
-        model_path,
-        backend_type,
-        num_gpus=num_gpus,
-        template_type=template_type,
-        purpose=purpose,
-    )
+    with open(os.devnull, "w") as devnull:
+        if not eval(os.environ.get("LOUD_BACKEND", "False")):
+            sys.stdout = devnull
+            sys.stderr = devnull
+        
+        backend, process_batch, mopup_memory = start_inference_backend(
+            model_path,
+            backend_type,
+            num_gpus=num_gpus,
+            template_type=template_type,
+            purpose=purpose,
+        )
 
-    data = Data(data_name="temporary", data_type="sft", data_path=data_path)
-    data.set_key_fields(
-        prompt_field_name=prompt_field_name, query_field_name=query_field_name
-    )
-    result_data = data.transform(
-        transformation=partial(process_batch, temperature=temperature, max_tokens=max_tokens),
-        result_data_name=result_data_name,
-        forced_rewrite=(
-            Model.always_force_rewrite
-            if hasattr(Model, "always_force_rewrite")
-            else False
-        ),
-        max_batch_size=262144,
-        map_key_fields=True,
-    )
-    print("Job finished.")
-    mopup_memory()
-    print("Memory mopup done.")
-    conn.send(result_data.data_path)
+        data = Data(data_name="temporary", data_type="sft", data_path=data_path)
+        data.set_key_fields(
+            prompt_field_name=prompt_field_name, query_field_name=query_field_name
+        )
+        result_data = data.transform(
+            transformation=partial(process_batch, temperature=temperature, max_tokens=max_tokens),
+            result_data_name=result_data_name,
+            forced_rewrite=(
+                Model.always_force_rewrite
+                if hasattr(Model, "always_force_rewrite")
+                else False
+            ),
+            max_batch_size=262144,
+            map_key_fields=True,
+        )
+        print("Job finished.")
+        mopup_memory()
+        print("Memory mopup done.")
+        conn.send(result_data.data_path)
 
 
 class Model:
