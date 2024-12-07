@@ -280,7 +280,8 @@ def _collect(output_data):
                 output[s_id][q_type][-1] += np.exp(x)
         else:
             invalid += 1
-            print(invalid)
+    
+    print(f"{invalid} out of {len(output_data)} entries are invalid")
     return output
         
 

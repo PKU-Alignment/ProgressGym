@@ -59,7 +59,7 @@ class JudgeBase(ABC):
         self.model_list = []
         for i in range(22):
             try:
-                model_name = "%db-C%03d-instruct" % (self.model_size, i)
+                model_name = "%dB-C%03d-instruct" % (self.model_size, i)
                 self.model_list.append(
                     Model(
                         model_name=model_name,
@@ -314,7 +314,9 @@ class ExamineeBase(ABC):
             )
             for i in range(22):
                 try:
-                    kwargs["model_name"] = "%db-C%03d-instruct" % (self.model_size, i)
+                    kwargs["model_name"] = "%dB-C%03d-instruct" % (self.model_size, i)
+                    self.current_model = Model(kwargs["model_name"])
+                    break
                 except:
                     pass
 
