@@ -1067,7 +1067,7 @@ class Model:
         ) as f:
             json.dump(raw_stats, f)
         print("raw results saved")
-        vec = calculate_model(experiment_directory, self.model_name, logprob = logprob)
+        vec = calculate_model(experiment_directory, self.model_name, logprobs)
         return vec
 
     def __evaluate_slow_moralchoice(self) -> np.ndarray:
