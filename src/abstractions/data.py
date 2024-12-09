@@ -15,6 +15,7 @@ from typing import (
 import os
 import json
 import warnings
+import copy
 from functools import partial
 import src.utils.text_utils as tu
 from tqdm import tqdm
@@ -283,6 +284,7 @@ class Data:
             if max_batch_size == 1:
                 with tu.JsonListReader(self.data_path) as reader:
                     for element in reader:
+                        element = copy.deepcopy(element)
                         if map_key_fields:
                             element = map_key_fields_fn(element)
                         
@@ -295,6 +297,7 @@ class Data:
 
                 with tu.JsonListReader(self.data_path) as reader:
                     for element in reader:
+                        element = copy.deepcopy(element)
                         if map_key_fields:
                             element = map_key_fields_fn(element)
                         
