@@ -218,14 +218,14 @@ def start_inference_backend(
     silent: bool = True,
     port: int = PORT_NUM,
     num_gpus: int = None,
-    template_type: Literal["auto", "alpaca", "mistral"] = "auto",
+    template_type: Literal["auto", "alpaca", "mistral", "llama3"] = "auto",
 ) -> Tuple[subprocess.Popen, Callable, Callable]:
     """Start an inference backend for a given model. 
     Returns a tuple containing the backend process and the function to process a batch of samples.
     When purpose is "logprobs", the returned function will return the log probability of the prompt text itself, without generating any text. The probability will be stored in the "logprob" field of the output dictionary, with all other fields staying the same.
     When purpose is "responses", the returned function will generate a response to the prompt text. The response will be stored in the "predict" field of the output dictionary, with all other fields staying the same.
 
-    :param model_repoid_or_path: The model repo ID or path (e.g., "meta-llama/Llama-3.1-8B-Instruct").
+    :param model_repoid_or_path: The model repo ID or path (e.g., "meta-llama/Meta-Llama-3-8B-Instruct").
     :type model_repoid_or_path: str
     
     :param backend_type: The type of backend to start, defaults to "sglang"
@@ -243,8 +243,8 @@ def start_inference_backend(
     :param num_gpus: The number of GPUs to use for the backend, defaults to None (use all available GPUs)
     :type num_gpus: int, optional
     
-    :param template_type: The type of template to use for the backend, defaults to "auto", which uses the appropriate template (not limited to alpaca/mistral) based on the model config file
-    :type template_type: Literal["auto", "alpaca", "mistral"], optional
+    :param template_type: The type of template to use for the backend, defaults to "auto", which uses the appropriate template (not limited to alpaca/mistral/llama3) based on the model config file
+    :type template_type: Literal["auto", "alpaca", "mistral", "llama3"], optional
     
     :return: A tuple containing the backend process, the function to process a batch of samples (type signature: List[dict] -> List[dict], with optional metadata arguments), and the function to destroy the backend after use.
     :rtype: Tuple[subprocess.Popen, Callable, Callable]
@@ -700,18 +700,22 @@ def fill_in_QA_template(
     instruction: str,
     input: str = "",
     suffix: str = "",
-    model_repoid_or_path: Union[Literal["alpaca", "mistral"], str] = "alpaca",
+    model_repoid_or_path: Union[Literal["alpaca", "mistral", "llama3"], str] = "alpaca",
 ) -> str:
     """Provided with a task instruction and (optionally) supplementary input, fill them into a QA template and return the resulting prompt.
 
     :param instruction: The task instruction.
     :type instruction: str
+    
     :param input: Supplementary input to the task, defaults to "".
     :type input: str, optional
+    
     :param suffix: Suffix to add to the prompt, defaults to "".
     :type suffix: str, optional
-    :param model_repoid_or_path: The model repo ID or path (e.g., "meta-llama/Llama-3.1-8B-Instruct"), or one of the special values "alpaca" or "mistral", defaults to "alpaca".
-    :type model_repoid_or_path: Union[Literal["alpaca", "mistral"], str], optional
+    
+    :param model_repoid_or_path: The model repo ID or path (e.g., "meta-llama/Meta-Llama-3-8B-Instruct"), or one of the special values "alpaca" or "mistral" or "llama3", defaults to "alpaca".
+    :type model_repoid_or_path: Union[Literal["alpaca", "mistral", "llama3"], str], optional
+    
     :return: The prompt with the instruction and input filled in.
     :rtype: str
     """
@@ -745,6 +749,9 @@ def fill_in_QA_template(
         input_full += """ [/INST]"""
 
     else:
+        if model_repoid_or_path == "llama3":
+            model_repoid_or_path = "meta-llama/Meta-Llama-3-8B-Instruct"
+            
         if suffix:
             warnings.warn(
                 f"Suffix not supported except with mistral template. Ignoring suffix."

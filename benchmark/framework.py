@@ -31,7 +31,7 @@ class JudgeBase(ABC):
     # Information determined at initialization
     instance_id: str
     model_list: List[Model]
-    template_type: Literal["alpaca", "mistral"]
+    template_type: Literal["alpaca", "mistral", "llama3", "auto"]
     debug: bool
     checkpoint_id: str
 
@@ -286,7 +286,7 @@ class ExamineeBase(ABC):
     # Information about current model
     current_model: Model
     current_timestep: int
-    template_type: Literal["alpaca", "mistral"]
+    template_type: Literal["alpaca", "mistral", "llama3", "auto"]
 
     # Information determined at initialization
     instance_id: str

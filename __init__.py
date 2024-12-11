@@ -1,6 +1,9 @@
 import os, sys
 sys.path = [os.path.dirname(os.path.abspath(__file__))] + sys.path
 
+if not eval(os.environ.get("LOUD_BACKEND", "0")):
+    os.environ["WANDB_DISABLED"] = "true"
+
 import logging
 logging.basicConfig(level=logging.ERROR)
 

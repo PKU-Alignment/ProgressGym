@@ -36,7 +36,7 @@ def inference_standalone(
     data_path: str,
     result_data_name: str,
     model_path: str,
-    template_type: Literal["auto", "alpaca", "mistral"],
+    template_type: Literal["auto", "alpaca", "mistral", "llama3"],
     num_gpus: int,
     prompt_field_name: str,
     query_field_name: str,
@@ -112,7 +112,7 @@ class Model:
         is_instruct_finetuned: bool = True,
         model_path_or_repoid: Optional[str] = None,
         num_gpus: int = None,
-        template_type: Literal["auto", "alpaca", "mistral"] = "alpaca",
+        template_type: Literal["auto", "alpaca", "mistral", "llama3"] = "auto",
     ):
         """
         Initialize.
@@ -129,8 +129,8 @@ class Model:
         :param num_gpus: Number of GPUs to use for parallel finetuning/inference. Default to the total number of gpus on the machine.
         :type num_gpus: Optional[int] = None
 
-        :param template_type: The type of template to use, which can be "auto", "alpaca", or "mistral". If "auto", the template type is inferred from the model's config file.
-        :type template_type: Literal["auto", "alpaca", "mistral"] = "auto"
+        :param template_type: The type of template to use, which can be "auto", "alpaca", "mistral", or "llama3". If "auto", the template type is inferred from the model's config file.
+        :type template_type: Literal["auto", "alpaca", "mistral", "llama3"] = "auto"
 
         Examples:
             .. code-block:: python
@@ -369,6 +369,8 @@ class Model:
             ), "For RLHF, ppo_data must be an instance of Data or not provided at all."
         else:
             raise ValueError(f"Unsupported stage {stage}.")
+        
+        data = data.filter_incomplete_samples(out_of_place=True)
 
         if lr is None:
             lr = 1.5e-5 if stage != "dpo" else 3e-7

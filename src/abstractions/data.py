@@ -101,7 +101,7 @@ class Data:
         :param data_type: Optional, type of usage of data, i.e. which stage of training it will be used in.
         :type data_type: Literal["pretrain", "sft", "preference"] = "sft"
 
-        :param data_path: Optional. Search path of data. When data_path is omitted, make sure it exists in './libs/llama_factory/data/' or other data search paths (see abstractions_config.json) and is recognized by Llama-Factory.
+        :param data_path: Optional. Search path of data. When data_path is omitted, make sure it exists in `ProgressGym/libs/llama_factory/data/` or other data search paths (see abstractions_config.json) and is recognized by Llama-Factory.
         :type data_path: Optional[str] = None
         :raise FileNotFoundError: If file is not found in default search path and path is not specified.
 
@@ -459,6 +459,35 @@ class Data:
         
         new_data_name = (self.data_name + "_appended") if out_of_place else self.data_name
         return self.transform(append_content_fn, new_data_name, forced_rewrite=True, map_key_fields=map_key_fields)
+    
+    def filter_incomplete_samples(self, out_of_place: bool = False) -> "Data":
+        """
+        Remove the samples that has at least one of the key fields missing.
+        
+        :param out_of_place: Whether to perform the operation out-of-place. If out_of_place is True, the original data will not be modified, and a new Data instance with an annotated name will be returned. Otherwise, the original data will be modified in-place, and the same Data instance will be returned.
+        :type out_of_place: bool = False
+        
+        :return: The data after the operation.
+        :rtype: Data.
+        """
+        total_count = 0
+        failure_count = 0
+        def filter_incomplete_samples_fn(sample_dict: Dict) -> Dict:
+            nonlocal self, total_count, failure_count
+            total_count += 1
+            for k in self.key_fields.values():
+                if k not in sample_dict:
+                    failure_count += 1
+                    return None
+            
+            return sample_dict
+        
+        new_data_name = (self.data_name + "_filtered") if out_of_place else self.data_name
+        result = self.transform(filter_incomplete_samples_fn, new_data_name, forced_rewrite=True, map_key_fields=False)
+        if failure_count and (eval(os.environ.get("LOUD_BACKEND", "0")) or failure_count * 8 > total_count):
+            warnings.warn(f"Removed {failure_count} out of {total_count} samples due to missing key fields.")
+        
+        return result
     
     def manage_llama_factory_registration(
         self, operation: Literal["add", "remove", "query"], forced_update: bool = True

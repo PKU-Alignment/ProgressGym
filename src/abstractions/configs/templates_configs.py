@@ -40,14 +40,14 @@ class GlobalState:
         GlobalState.__active_backend_destroyers = []
 
 
-bash_command_template = """PYTHONNOUSERSITE=1 MASTER_PORT=9902 conda run --no-capture-output -n %s deepspeed %s --master_port=9902 ./libs/llama_factory/src/train_bash.py \\
+bash_command_template = f"""PYTHONNOUSERSITE=1 MASTER_PORT=9902 conda run --no-capture-output -n %s deepspeed %s --master_port=9902 {root}/libs/llama_factory/src/train_bash.py \\
     --deepspeed %s \\
     --ddp_timeout 180000000 \\
     --stage %s \\
     --do_%s \\%s
     --model_name_or_path %s \\
     --dataset %s \\
-    --dataset_dir ./libs/llama_factory/data \\
+    --dataset_dir {root}/libs/llama_factory/data \\
     --template %s \\
     --finetuning_type %s \\
     --lora_target q_proj,v_proj \\
@@ -75,7 +75,7 @@ bash_command_template = """PYTHONNOUSERSITE=1 MASTER_PORT=9902 conda run --no-ca
     --plot_loss \\%s
     --fp16"""
 
-bash_command_for_ppo = """PYTHONNOUSERSITE=1 MASTER_PORT=9902 conda run --no-capture-output -n %s deepspeed %s --master_port=9902 ./libs/llama_factory/src/train_bash.py \\
+bash_command_for_ppo = f"""PYTHONNOUSERSITE=1 MASTER_PORT=9902 conda run --no-capture-output -n %s deepspeed %s --master_port=9902 {root}/libs/llama_factory/src/train_bash.py \\
     --deepspeed %s \\
     --model_name_or_path %s \\
     --reward_model %s \\
@@ -86,7 +86,7 @@ bash_command_for_ppo = """PYTHONNOUSERSITE=1 MASTER_PORT=9902 conda run --no-cap
     --finetuning_type %s \\
     --lora_target q_proj,v_proj \\
     --dataset %s \\
-    --dataset_dir ./libs/llama_factory/data \\
+    --dataset_dir {root}/libs/llama_factory/data \\
     --template %s \\
     --cutoff_len 1024 \\
     --overwrite_cache \\
@@ -112,14 +112,14 @@ bash_command_for_ppo = """PYTHONNOUSERSITE=1 MASTER_PORT=9902 conda run --no-cap
     --do_sample True \\
     --top_p 0.9"""
 
-bash_command_for_rw = """PYTHONNOUSERSITE=1 MASTER_PORT=9902 conda run --no-capture-output -n %s deepspeed %s --master_port=9902 ./libs/llama_factory/src/train_bash.py \\
+bash_command_for_rw = f"""PYTHONNOUSERSITE=1 MASTER_PORT=9902 conda run --no-capture-output -n %s deepspeed %s --master_port=9902 {root}/libs/llama_factory/src/train_bash.py \\
     --deepspeed %s \\
     --stage rm \\
     --do_train \\
     --model_name_or_path %s \\
     --finetuning_type full \\
     --dataset %s \\
-    --dataset_dir ./libs/llama_factory/data \\
+    --dataset_dir {root}/libs/llama_factory/data \\
     --template %s \\
     --lora_target q_proj,v_proj \\
     --output_dir %s \\
@@ -142,7 +142,7 @@ bash_command_for_rw = """PYTHONNOUSERSITE=1 MASTER_PORT=9902 conda run --no-capt
     --plot_loss \\
     --fp16"""
 
-bash_command_for_lora_merging = """PYTHONNOUSERSITE=1 conda run --no-capture-output -n %s python ./libs/llama_factory/src/export_model.py \\
+bash_command_for_lora_merging = f"""PYTHONNOUSERSITE=1 conda run --no-capture-output -n %s python {root}/libs/llama_factory/src/export_model.py \\
     --model_name_or_path %s \\
     --adapter_name_or_path %s \\
     --template %s \\

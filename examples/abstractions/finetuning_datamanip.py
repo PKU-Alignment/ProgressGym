@@ -8,8 +8,8 @@ gemma2b_base = Model(
 )
 
 llama8b_instruct = Model(
-    model_name="Llama-3.1-8B-Instruct",
-    model_path_or_repoid="meta-llama/Llama-3.1-8B-Instruct",
+    model_name="Meta-Llama-3-8B-Instruct",
+    model_path_or_repoid="meta-llama/Meta-Llama-3-8B-Instruct",
     is_instruct_finetuned=True,
 )
 
