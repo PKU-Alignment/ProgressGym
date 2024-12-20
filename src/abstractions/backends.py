@@ -481,18 +481,25 @@ def start_inference_backend(
             s, conversation: List, temperature: float = 0.2, max_tokens: int = None, options: list = []
         ) -> str:
             nonlocal purpose
+            last_role = None
 
             for turn in conversation:
                 if turn["role"] == "assistant":
                     s += sgl.assistant(turn["content"])
+                    last_role = "assistant"
+                
                 elif turn["role"] == "user":
                     s += sgl.user(turn["content"])
+                    last_role = "user"
+                
                 elif turn["role"] == "system":
                     s += sgl.system(turn["content"])
+                
                 else:
                     raise ValueError(f"Unknown role: {turn['role']}")
 
-            if purpose == "responses":
+            if purpose == "responses" or options:
+                assert last_role == "user"
                 s += sgl.assistant_begin()
             
             if options:
