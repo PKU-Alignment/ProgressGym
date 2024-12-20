@@ -38,6 +38,9 @@ class GlobalState:
             destroy()
         
         GlobalState.__active_backend_destroyers = []
+    
+    def register_destroyer(destroyer: Callable[[], None]):
+        GlobalState.__active_backend_destroyers.append(destroyer)
 
 
 bash_command_template = f"""PYTHONNOUSERSITE=1 MASTER_PORT=9902 conda run --no-capture-output -n %s deepspeed %s --master_port=9902 {root}/libs/llama_factory/src/train_bash.py \\

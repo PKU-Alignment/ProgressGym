@@ -33,7 +33,6 @@ import warnings
 import tqdm
 from transformers import AutoTokenizer
 import random
-from src.abstractions.configs.templates_configs import GlobalState
 
 # create output directories
 os.makedirs(f"{root}/output/benchmark_results", exist_ok=True)
@@ -260,11 +259,6 @@ def start_inference_backend(
         if purpose == "logprobs":
             raise ValueError("VLLM backend does not support logprobs purpose.")
 
-        if GlobalState.continuous_backend:
-            warnings.warn(
-                "VLLM backend does not support continuous_backend=True. Ignoring this setting."
-            )
-
         LLM, SamplingParams, destroy_model_parallel = import_from_vllm()
 
         if template_type == "auto":
@@ -380,6 +374,7 @@ def start_inference_backend(
             try:    
                 sgl.set_default_backend(sgl.RuntimeEndpoint(f"http://localhost:{port}"))
                 connected = True
+                backend = None
                 print("Connected to backend.", flush=True)
             except:
                 del backend_history[backend_key]
@@ -630,6 +625,17 @@ def start_inference_backend(
         
         def sglang_free_gpu_memory():
             """Wipe out all GPU memory used by the user."""
+            nonlocal backend_key
+            
+            # Remove the backend from the history
+            with open(f"{root}/output/backend_history.json", "r") as f:
+                backend_history = json.load(f)
+                
+            backend_history.pop(backend_key)
+            with open(f"{root}/output/backend_history.json", "w") as f:
+                json.dump(backend_history, f)
+            
+            # Kill the backend process
             try:
                 backend.kill()
             except:
@@ -650,11 +656,6 @@ def start_inference_backend(
                         os.kill(process.pid, signal.SIGINT)
                         os.kill(process.pid, signal.SIGKILL)
 
-        if GlobalState.continuous_backend:
-            # If continuous_backend=True, keep the backend alive for reuse until the exit of the context manager.
-            GlobalState.__active_backend_destroyers.append(sglang_free_gpu_memory)
-            return backend, sglang_process_batch, (lambda: None)
-        
         return backend, sglang_process_batch, sglang_free_gpu_memory
 
     raise ValueError(f"Backend type {backend_type} not recognized.")

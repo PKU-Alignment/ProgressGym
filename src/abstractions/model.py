@@ -46,6 +46,7 @@ def inference_standalone(
     purpose: Literal["responses", "logprobs"],
     conn: multiprocessing.connection.Connection,
 ):
+    old_stdout, old_stderr = sys.stdout, sys.stderr
     with open(os.devnull, "w") as devnull:
         if not eval(os.environ.get("LOUD_BACKEND", "False")):
             sys.stdout = devnull
@@ -58,6 +59,13 @@ def inference_standalone(
             template_type=template_type,
             purpose=purpose,
         )
+        
+        if GlobalState.continuous_backend:
+            print("Continuous backend is enabled.")
+            GlobalState.register_destroyer(mopup_memory)
+            mopup_memory = lambda: None
+        else:
+            print("Continuous backend is disabled.")
 
         data = Data(data_name="temporary", data_type="sft", data_path=data_path)
         data.set_key_fields(
@@ -77,7 +85,11 @@ def inference_standalone(
         print("Job finished.")
         mopup_memory()
         print("Memory mopup done.")
-        conn.send(result_data.data_path)
+        if conn is not None:
+            conn.send(result_data.data_path)
+        
+        sys.stdout, sys.stderr = old_stdout, old_stderr
+        return result_data.data_path
 
 
 class Model:
@@ -812,12 +824,36 @@ class Model:
             data.key_fields["query"] if "query" in data.key_fields else "input"
         )
 
-        # run inference_standalone in a separate process
-        multiprocessing.set_start_method("spawn", force=True)
-        parent_conn, child_conn = multiprocessing.Pipe()
-        p = multiprocessing.Process(
-            target=inference_standalone,
-            args=(
+        if eval(os.environ.get("LOUD_BACKEND", "False")):
+            print(f"GlobalState.continuous_backend = {GlobalState.continuous_backend}")
+        
+        if not GlobalState.continuous_backend:
+            # run inference_standalone in a separate process
+            multiprocessing.set_start_method("spawn", force=True)
+            parent_conn, child_conn = multiprocessing.Pipe()
+            p = multiprocessing.Process(
+                target=inference_standalone,
+                args=(
+                    data_path,
+                    result_data_name,
+                    model_path,
+                    template_type,
+                    num_gpus,
+                    prompt_field_name,
+                    query_field_name,
+                    temperature,
+                    max_tokens,
+                    backend_type,
+                    purpose,
+                    child_conn,
+                ),
+            )
+            p.start()
+            p.join()
+            result_data_path = parent_conn.recv()
+        else:
+            # directly run inference_standalone in the current process
+            result_data_path = inference_standalone(
                 data_path,
                 result_data_name,
                 model_path,
@@ -829,12 +865,9 @@ class Model:
                 max_tokens,
                 backend_type,
                 purpose,
-                child_conn,
-            ),
-        )
-        p.start()
-        p.join()
-        result_data_path = parent_conn.recv()
+                None,
+            )
+        
         print("Inference results saved at ", result_data_path)
 
         return Data(
