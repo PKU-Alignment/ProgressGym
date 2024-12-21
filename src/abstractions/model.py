@@ -124,7 +124,7 @@ class Model:
         is_instruct_finetuned: bool = True,
         model_path_or_repoid: Optional[str] = None,
         num_gpus: int = None,
-        template_type: Literal["auto", "alpaca", "mistral", "llama3"] = "auto",
+        template_type: Literal["auto", "alpaca", "mistral", "llama3"] = None,
     ):
         """
         Initialize.
@@ -141,7 +141,7 @@ class Model:
         :param num_gpus: Number of GPUs to use for parallel finetuning/inference. Default to the total number of gpus on the machine.
         :type num_gpus: Optional[int] = None
 
-        :param template_type: The type of template to use, which can be "auto", "alpaca", "mistral", or "llama3". If "auto", the template type is inferred from the model's config file.
+        :param template_type: The type of template to use, which can be "auto", "alpaca", "mistral", or "llama3". If "auto", the template type is inferred from the model's config file. Set the environment variable DEFAULT_TEMPLATE to specify the default template type, if some other value than "auto" is desired.
         :type template_type: Literal["auto", "alpaca", "mistral", "llama3"] = "auto"
 
         Examples:
@@ -151,6 +151,10 @@ class Model:
                 Model(model_name = 'Gemma-2B_sft', is_instruct_finetuned = True)
 
         """
+        if os.environ.get("DEFAULT_TEMPLATE") and not template_type:
+            template_type = os.environ["DEFAULT_TEMPLATE"].lower()
+            assert template_type in ["auto", "alpaca", "mistral", "llama3"]
+        
         if not num_gpus:
             num_gpus = torch.cuda.device_count()
 
@@ -357,11 +361,6 @@ class Model:
         :return: Returns a Model instance with name {result_model_name}, which is the result of the finetuning.
         :rtype: Model.
         """
-        if self.template_type == "auto":
-            raise ValueError(
-                "Finetuning is not supported for models with auto template type."
-            )
-
         if stage == "pretrain":
             assert (
                 data.data_type == "pretrain"
@@ -454,7 +453,7 @@ class Model:
                 "",  # do sample; ignored here
                 self.model_path,  # where to find the original model
                 data.data_name,  # dataset (automatically registered in llama-factory)
-                self.template_type,  # template type
+                (f"\n    --template {self.template_type} \\" if self.template_type != "auto" else ""),  # template type
                 ("lora" if algo == "lora" else "full"),  # type - full_param or lora
                 f"{root}/output/training_results/{escape(result_model_name)}/",  # where to save the training results (and checkpoints etc.)
                 2
@@ -529,7 +528,7 @@ class Model:
                 "pa38-lf",
                 self.model_path,
                 result.model_path,
-                self.template_type,
+                (f"\n    --template {self.template_type} \\" if self.template_type != "auto" else ""),  # template type
                 merged_model_path,
             )
             print(cmd)
@@ -595,7 +594,7 @@ class Model:
             f"{root}/src/abstractions/configs/LF_examples/full_multi_gpu/ds_z3_config.json",
             rw_path,
             rw_data.data_name,
-            self.template_type,
+            (f"\n    --template {self.template_type} \\" if self.template_type != "auto" else ""),  # template type
             rw_results,
             2 ** max(0, 3 + batch_size_multiplier_log2),  # per_device_train_batch_size
             2 ** max(0, 4 + batch_size_multiplier_log2),  # per_device_eval_batch_size
@@ -644,7 +643,7 @@ class Model:
             rw_results,
             "lora" if use_lora else "full",
             ppo_data.data_name,
-            self.template_type,
+            (f"\n    --template {self.template_type} \\" if self.template_type != "auto" else ""),  # template type
             the_path,
             2 ** max(0, 1 + batch_size_multiplier_log2),  # per_device_train_batch_size
             2 ** max(0, 2 + batch_size_multiplier_log2),  # per_device_eval_batch_size
@@ -905,7 +904,7 @@ class Model:
             "\n--do_sample \\",  # do sample
             self.model_path,  # where to save the resulting model
             data.data_name,  # dataset (automatically registered in llama-factory)
-            self.template_type,  # template type
+            (f"\n    --template {self.template_type} \\" if self.template_type != "auto" else ""),  # template type
             "full",  # type - full_param or lora; useless here
             result_data_path,  # where to save the inference results
             2 ** max(0, 3 + batch_size_multiplier_log2),  # per_device_train_batch_size

@@ -42,7 +42,6 @@ class GlobalState:
     def register_destroyer(destroyer: Callable[[], None]):
         GlobalState.__active_backend_destroyers.append(destroyer)
 
-
 bash_command_template = f"""PYTHONNOUSERSITE=1 MASTER_PORT=9902 conda run --no-capture-output -n %s deepspeed %s --master_port=9902 {root}/libs/llama_factory/src/train_bash.py \\
     --deepspeed %s \\
     --ddp_timeout 180000000 \\
@@ -50,8 +49,7 @@ bash_command_template = f"""PYTHONNOUSERSITE=1 MASTER_PORT=9902 conda run --no-c
     --do_%s \\%s
     --model_name_or_path %s \\
     --dataset %s \\
-    --dataset_dir {root}/libs/llama_factory/data \\
-    --template %s \\
+    --dataset_dir {root}/libs/llama_factory/data \\%s
     --finetuning_type %s \\
     --lora_target q_proj,v_proj \\
     --output_dir %s \\
@@ -89,8 +87,7 @@ bash_command_for_ppo = f"""PYTHONNOUSERSITE=1 MASTER_PORT=9902 conda run --no-ca
     --finetuning_type %s \\
     --lora_target q_proj,v_proj \\
     --dataset %s \\
-    --dataset_dir {root}/libs/llama_factory/data \\
-    --template %s \\
+    --dataset_dir {root}/libs/llama_factory/data \\%s
     --cutoff_len 1024 \\
     --overwrite_cache \\
     --preprocessing_num_workers 16 \\
@@ -122,8 +119,7 @@ bash_command_for_rw = f"""PYTHONNOUSERSITE=1 MASTER_PORT=9902 conda run --no-cap
     --model_name_or_path %s \\
     --finetuning_type full \\
     --dataset %s \\
-    --dataset_dir {root}/libs/llama_factory/data \\
-    --template %s \\
+    --dataset_dir {root}/libs/llama_factory/data \\%s
     --lora_target q_proj,v_proj \\
     --output_dir %s \\
     --overwrite_cache \\
@@ -147,8 +143,7 @@ bash_command_for_rw = f"""PYTHONNOUSERSITE=1 MASTER_PORT=9902 conda run --no-cap
 
 bash_command_for_lora_merging = f"""PYTHONNOUSERSITE=1 conda run --no-capture-output -n %s python {root}/libs/llama_factory/src/export_model.py \\
     --model_name_or_path %s \\
-    --adapter_name_or_path %s \\
-    --template %s \\
+    --adapter_name_or_path %s \\%s
     --finetuning_type lora \\
     --export_dir %s \\
     --export_size 2 \\
