@@ -56,7 +56,7 @@ class Data:
     name2data: Dict[str, Any] = {}
     always_force_rewrite: bool = True
     data_type: Literal["pretrain", "sft", "preference"]
-    
+
     default_key_fields = {
         "prompt": "instruction",
         "query": "input",
@@ -153,7 +153,9 @@ class Data:
             print(
                 f"Data {data_name} not found locally. Searching among Llama-Factory datasets."
             )
-            with open(f"{root}/libs/llama_factory/data/dataset_info.json", "r") as in_file:
+            with open(
+                f"{root}/libs/llama_factory/data/dataset_info.json", "r"
+            ) as in_file:
                 registrations = json.load(in_file)
 
             if self.data_name in registrations:
@@ -174,7 +176,7 @@ class Data:
 
     def copy(self, data_name: str = None) -> "Data":
         """
-        Returns a copy of the current Data instance. 
+        Returns a copy of the current Data instance.
         Shallow copy if data_name is not provided or identical to the current data_name; deep copy otherwise.
         """
         if data_name and data_name != self.data_name:
@@ -184,16 +186,18 @@ class Data:
             cp = Data(data_name, self.data_type, new_data_path)
         else:
             cp = Data(self.data_name, self.data_type, self.data_path)
-        
+
         cp.key_fields = self.key_fields.copy()
         return cp
-    
+
     def to_openai_format(self) -> Iterable[List[Dict[str, str]]]:
         """
         Convert the data to OpenAI format, where each dialogue is a list of dictionaries with string keys and string values.
         Each dictionary represents a dialogue turn.
         """
-        convert_fn: Callable[[Dict], List[Dict]] = partial(dict_to_dialogue_list, purpose="logprobs")
+        convert_fn: Callable[[Dict], List[Dict]] = partial(
+            dict_to_dialogue_list, purpose="logprobs"
+        )
         for element in self.all_passages():
             yield convert_fn(element)
 
@@ -236,11 +240,11 @@ class Data:
         """
         out_path = f"{root}/output/datasets/{result_data_name}.json"
         if self.data_name == result_data_name or self.data_path == out_path:
-            if eval(os.environ.get('LOUD_BACKEND', 'False')):
+            if eval(os.environ.get("LOUD_BACKEND", "False")):
                 warnings.warn(
                     f"Data name {result_data_name} is the same as the current data name. The old instance will be invalidated."
                 )
-            
+
             return self.copy("temp_transform_artifact").transform(
                 transformation,
                 result_data_name,
@@ -249,7 +253,7 @@ class Data:
                 keep_key_fields,
                 map_key_fields,
             )
-            
+
         Data.ask_and_remove_if_exists(out_path, forced_rewrite)
 
         def write_dict(sample_dict: Dict):
@@ -258,23 +262,27 @@ class Data:
             is_first = False
             out_file.write(json.dumps(sample_dict))
             # out_file.flush()
-        
+
         def map_key_fields_fn(sample_dict: Dict) -> Dict:
             nonlocal self
             for k, v in self.default_key_fields.items():
-                if k in self.key_fields and self.key_fields.get(k, v) != v and self.key_fields[k] in sample_dict:
+                if (
+                    k in self.key_fields
+                    and self.key_fields.get(k, v) != v
+                    and self.key_fields[k] in sample_dict
+                ):
                     sample_dict[v] = sample_dict[self.key_fields[k]]
                     del sample_dict[self.key_fields[k]]
-            
+
             return sample_dict
-        
+
         def inv_map_key_fields_fn(sample_dict: Dict) -> Dict:
             nonlocal self
             for k, v in self.default_key_fields.items():
                 if v in sample_dict and self.key_fields.get(k, v) != v:
                     sample_dict[self.key_fields[k]] = sample_dict[v]
                     del sample_dict[v]
-            
+
             return sample_dict
 
         with open(out_path, "w") as out_file:
@@ -287,10 +295,14 @@ class Data:
                         element = copy.deepcopy(element)
                         if map_key_fields:
                             element = map_key_fields_fn(element)
-                        
+
                         transformed = transformation(element)
                         if transformed is not None:
-                            write_dict(transformed if not map_key_fields else inv_map_key_fields_fn(transformed))
+                            write_dict(
+                                transformed
+                                if not map_key_fields
+                                else inv_map_key_fields_fn(transformed)
+                            )
 
             else:
                 buffer = []
@@ -300,17 +312,23 @@ class Data:
                         element = copy.deepcopy(element)
                         if map_key_fields:
                             element = map_key_fields_fn(element)
-                        
+
                         buffer.append(element)
                         if len(buffer) == max_batch_size:
                             for e in transformation(buffer):
-                                write_dict(e if not map_key_fields else inv_map_key_fields_fn(e))
+                                write_dict(
+                                    e
+                                    if not map_key_fields
+                                    else inv_map_key_fields_fn(e)
+                                )
                             buffer = []
                             out_file.flush()
 
                 if buffer:
                     for e in transformation(buffer):
-                        write_dict(e if not map_key_fields else inv_map_key_fields_fn(e))
+                        write_dict(
+                            e if not map_key_fields else inv_map_key_fields_fn(e)
+                        )
 
             out_file.write("\n]")
 
@@ -322,47 +340,66 @@ class Data:
     def move_current_to_history(self, out_of_place: bool = False) -> "Data":
         """
         Move the current dialogue turn in the prompt/question field and the response/predict field to the history field.
-        
+
         :param out_of_place: Whether to perform the operation out-of-place. If out_of_place is True, the original data will not be modified, and a new Data instance with an annotated name will be returned. Otherwise, the original data will be modified in-place, and the same Data instance will be returned.
         :type out_of_place: bool = False
-        
+
         :return: The data after the operation.
         :rtype: Data.
         """
+
         def move_to_history_fn(sample_dict: Dict) -> Dict:
-            if sample_dict.get("instruction", "") or sample_dict.get("input", "") or sample_dict.get("output", "") or sample_dict.get("predict", ""):
-                assert (sample_dict.get("instruction", "") or sample_dict.get("input", "")) and (sample_dict.get("output", "") or sample_dict.get("predict", ""))
+            if (
+                sample_dict.get("instruction", "")
+                or sample_dict.get("input", "")
+                or sample_dict.get("output", "")
+                or sample_dict.get("predict", "")
+            ):
+                assert (
+                    sample_dict.get("instruction", "") or sample_dict.get("input", "")
+                ) and (sample_dict.get("output", "") or sample_dict.get("predict", ""))
                 sample_dict["history"] = sample_dict.get("history", []) + [
                     [
-                        sample_dict.get("instruction", "") + 
-                            ("\n\n" if "instruction" in sample_dict and "input" in sample_dict else "") +
-                            sample_dict.get("input", ""),
-                        sample_dict.get("output", "") + sample_dict.get("predict", "")
+                        sample_dict.get("instruction", "")
+                        + (
+                            "\n\n"
+                            if "instruction" in sample_dict and "input" in sample_dict
+                            else ""
+                        )
+                        + sample_dict.get("input", ""),
+                        sample_dict.get("output", "") + sample_dict.get("predict", ""),
                     ]
                 ]
                 sample_dict.pop("instruction", None)
                 sample_dict.pop("input", None)
                 sample_dict.pop("output", None)
                 sample_dict.pop("predict", None)
-            
+
             return sample_dict
-        
+
         new_data_name = (self.data_name + "_moved") if out_of_place else self.data_name
-        return self.transform(move_to_history_fn, new_data_name, forced_rewrite=True, map_key_fields=True)
-    
-    def switch_role_to_user(self, user_system_prompt: Union[str, Iterable[str]] = None, dialogue_starter: Union[str, Iterable[str]] = None, out_of_place: bool = False) -> "Data":
+        return self.transform(
+            move_to_history_fn, new_data_name, forced_rewrite=True, map_key_fields=True
+        )
+
+    def switch_role_to_user(
+        self,
+        user_system_prompt: Union[str, Iterable[str]] = None,
+        dialogue_starter: Union[str, Iterable[str]] = None,
+        out_of_place: bool = False,
+    ) -> "Data":
         """
         Switch the prompt/question field and the response/predict field, thereby shifting the dialogue turn from the assistant to the user.
-        
+
         :param user_system_prompt: The system prompt of the user role. Can be a single string or an iterable of strings, where each string corresponds to the prompt for a different sample in the dataset. If None, a default prompt will be used.
         :type user_system_prompt: Union[str, Iterable[str]] = None
-        
+
         :param dialogue_starter: Placeholder message for the "zeroth" dialogue turn by the assistant that prompts the user to start the conversation.
         :type dialogue_starter: str = None
-        
+
         :param out_of_place: Whether to perform the operation out-of-place. If out_of_place is True, the original data will not be modified, and a new Data instance with an annotated name will be returned. Otherwise, the original data will be modified in-place, and the same Data instance will be returned.
         :type out_of_place: bool = False
-        
+
         :return: The data after the operation.
         :rtype: Data.
         """
@@ -370,41 +407,68 @@ class Data:
             user_system_prompt = "You are an assistant tasked with questioning the user, aka your partner. Ask informed questions to guide the conversation, follow up on the user's responses, and generally follow a natural conversation flow. Don't be too courteous; be concise."
         elif isinstance(user_system_prompt, list):
             user_system_prompt = iter(user_system_prompt)
-        
+
         if dialogue_starter is None:
             dialogue_starter = "I am your partner. Please start the conversation."
         elif isinstance(dialogue_starter, list):
             dialogue_starter = iter(dialogue_starter)
-        
+
         moved_to_history = self.move_current_to_history(out_of_place)
-        
+
         def switch_role_to_user_fn(sample_dict: Dict) -> Dict:
-            assert not (sample_dict.get("instruction", "") or sample_dict.get("input", "") or sample_dict.get("output", "") or sample_dict.get("predict", ""))
-            
-            current_user_system_prompt = user_system_prompt if isinstance(user_system_prompt, str) else next(user_system_prompt)
-            current_dialogue_starter = dialogue_starter if isinstance(dialogue_starter, str) else next(dialogue_starter)
-            
-            all_histories = [h[i] for h in sample_dict.get("history", []) for i in range(2)]
+            assert not (
+                sample_dict.get("instruction", "")
+                or sample_dict.get("input", "")
+                or sample_dict.get("output", "")
+                or sample_dict.get("predict", "")
+            )
+
+            current_user_system_prompt = (
+                user_system_prompt
+                if isinstance(user_system_prompt, str)
+                else next(user_system_prompt)
+            )
+            current_dialogue_starter = (
+                dialogue_starter
+                if isinstance(dialogue_starter, str)
+                else next(dialogue_starter)
+            )
+
+            all_histories = [
+                h[i] for h in sample_dict.get("history", []) for i in range(2)
+            ]
             all_histories = [current_dialogue_starter] + all_histories
             assert len(all_histories) % 2 == 1
-            sample_dict["history"] = [[all_histories[i], all_histories[i + 1]] for i in range(0, len(all_histories)-1, 2)]
+            sample_dict["history"] = [
+                [all_histories[i], all_histories[i + 1]]
+                for i in range(0, len(all_histories) - 1, 2)
+            ]
             sample_dict["instruction"] = all_histories[-1]
             sample_dict["system"] = current_user_system_prompt
             return sample_dict
-        
+
         new_data_name = (self.data_name + "_user") if out_of_place else self.data_name
-        return moved_to_history.transform(switch_role_to_user_fn, new_data_name, forced_rewrite=True, map_key_fields=True)
-    
-    def switch_role_to_assistant(self, assistant_system_prompt: Union[str, Iterable[str]] = None, out_of_place: bool = False) -> "Data":
+        return moved_to_history.transform(
+            switch_role_to_user_fn,
+            new_data_name,
+            forced_rewrite=True,
+            map_key_fields=True,
+        )
+
+    def switch_role_to_assistant(
+        self,
+        assistant_system_prompt: Union[str, Iterable[str]] = None,
+        out_of_place: bool = False,
+    ) -> "Data":
         """
         Switch the prompt/question field and the response/predict field, thereby shifting the dialogue turn from the user to the assistant.
-        
+
         :param assistant_system_prompt: The system prompt of the assistant role. Can be a single string or an iterable of strings, where each string corresponds to the prompt for a different sample in the dataset. If None, a default prompt will be used.
         :type assistant_system_prompt: Union[str, Iterable[str]] = None
-        
+
         :param out_of_place: Whether to perform the operation out-of-place. If out_of_place is True, the original data will not be modified, and a new Data instance with an annotated name will be returned. Otherwise, the original data will be modified in-place, and the same Data instance will be returned.
         :type out_of_place: bool = False
-        
+
         :return: The data after the operation.
         :rtype: Data.
         """
@@ -412,66 +476,101 @@ class Data:
             assistant_system_prompt = "Please answer the user's questions. Be concise and not overly courteous, but be informative and provide all necessary details."
         elif isinstance(assistant_system_prompt, list):
             assistant_system_prompt = iter(assistant_system_prompt)
-        
+
         moved_to_history = self.move_current_to_history(out_of_place)
-        
+
         def switch_role_to_assistant_fn(sample_dict: Dict) -> Dict:
-            assert not (sample_dict.get("instruction", "") or sample_dict.get("input", "") or sample_dict.get("output", "") or sample_dict.get("predict", ""))
-            
-            current_assistant_system_prompt = assistant_system_prompt if isinstance(assistant_system_prompt, str) else next(assistant_system_prompt)
-            
-            all_histories = [h[i] for h in sample_dict.get("history", []) for i in range(2)]
+            assert not (
+                sample_dict.get("instruction", "")
+                or sample_dict.get("input", "")
+                or sample_dict.get("output", "")
+                or sample_dict.get("predict", "")
+            )
+
+            current_assistant_system_prompt = (
+                assistant_system_prompt
+                if isinstance(assistant_system_prompt, str)
+                else next(assistant_system_prompt)
+            )
+
+            all_histories = [
+                h[i] for h in sample_dict.get("history", []) for i in range(2)
+            ]
             assert len(all_histories) % 2 == 0
-            sample_dict["history"] = [[all_histories[i], all_histories[i + 1]] for i in range(1, len(all_histories)-1, 2)]
+            sample_dict["history"] = [
+                [all_histories[i], all_histories[i + 1]]
+                for i in range(1, len(all_histories) - 1, 2)
+            ]
             sample_dict["instruction"] = all_histories[-1]
             sample_dict["system"] = current_assistant_system_prompt
             return sample_dict
 
-        new_data_name = (self.data_name + "_assistant") if out_of_place else self.data_name
-        return moved_to_history.transform(switch_role_to_assistant_fn, new_data_name, forced_rewrite=True, map_key_fields=True)
-    
-    def append_content(self, field_key: str, content: Union[str, Iterable[str]], out_of_place: bool = False, map_key_fields: bool = False) -> "Data":
+        new_data_name = (
+            (self.data_name + "_assistant") if out_of_place else self.data_name
+        )
+        return moved_to_history.transform(
+            switch_role_to_assistant_fn,
+            new_data_name,
+            forced_rewrite=True,
+            map_key_fields=True,
+        )
+
+    def append_content(
+        self,
+        field_key: str,
+        content: Union[str, Iterable[str]],
+        out_of_place: bool = False,
+        map_key_fields: bool = False,
+    ) -> "Data":
         """
         Append content to a specified field in the dataset.
-        
+
         :param field_key: The key of the field to append content to.
         :type field_key: str
-        
+
         :param content: The content to append. Can be a single string or an iterable of strings, where each string corresponds to the content to append for a different sample in the dataset.
         :type content: Union[str, Iterable[str]]
-        
+
         :param out_of_place: Whether to perform the operation out-of-place. If out_of_place is True, the original data will not be modified, and a new Data instance with an annotated name will be returned. Otherwise, the original data will be modified in-place, and the same Data instance will be returned.
         :type out_of_place: bool = False
-        
+
         :param map_key_fields: Whether to map the key fields to the default key fields before appending content.
         :type map_key_fields: bool = False
-        
+
         :return: The data after the operation.
         :rtype: Data.
         """
         if isinstance(content, list):
             content = iter(content)
-        
+
         def append_content_fn(sample_dict: Dict) -> Dict:
             current_content = content if isinstance(content, str) else next(content)
             sample_dict[field_key] = sample_dict.get(field_key, "") + current_content
             return sample_dict
-        
-        new_data_name = (self.data_name + "_appended") if out_of_place else self.data_name
-        return self.transform(append_content_fn, new_data_name, forced_rewrite=True, map_key_fields=map_key_fields)
-    
+
+        new_data_name = (
+            (self.data_name + "_appended") if out_of_place else self.data_name
+        )
+        return self.transform(
+            append_content_fn,
+            new_data_name,
+            forced_rewrite=True,
+            map_key_fields=map_key_fields,
+        )
+
     def filter_incomplete_samples(self, out_of_place: bool = False) -> "Data":
         """
         Remove the samples that has at least one of the key fields missing.
-        
+
         :param out_of_place: Whether to perform the operation out-of-place. If out_of_place is True, the original data will not be modified, and a new Data instance with an annotated name will be returned. Otherwise, the original data will be modified in-place, and the same Data instance will be returned.
         :type out_of_place: bool = False
-        
+
         :return: The data after the operation.
         :rtype: Data.
         """
         total_count = 0
         failure_count = 0
+
         def filter_incomplete_samples_fn(sample_dict: Dict) -> Dict:
             nonlocal self, total_count, failure_count
             total_count += 1
@@ -479,16 +578,27 @@ class Data:
                 if k not in sample_dict:
                     failure_count += 1
                     return None
-            
+
             return sample_dict
-        
-        new_data_name = (self.data_name + "_filtered") if out_of_place else self.data_name
-        result = self.transform(filter_incomplete_samples_fn, new_data_name, forced_rewrite=True, map_key_fields=False)
-        if failure_count and (eval(os.environ.get("LOUD_BACKEND", "0")) or failure_count * 8 > total_count):
-            warnings.warn(f"Removed {failure_count} out of {total_count} samples due to missing key fields.")
-        
+
+        new_data_name = (
+            (self.data_name + "_filtered") if out_of_place else self.data_name
+        )
+        result = self.transform(
+            filter_incomplete_samples_fn,
+            new_data_name,
+            forced_rewrite=True,
+            map_key_fields=False,
+        )
+        if failure_count and (
+            eval(os.environ.get("LOUD_BACKEND", "0")) or failure_count * 8 > total_count
+        ):
+            warnings.warn(
+                f"Removed {failure_count} out of {total_count} samples due to missing key fields."
+            )
+
         return result
-    
+
     def manage_llama_factory_registration(
         self, operation: Literal["add", "remove", "query"], forced_update: bool = True
     ) -> bool:
@@ -543,7 +653,9 @@ class Data:
                 f"Adding registration of data {self.data_name}: {registrations[self.data_name]}."
             )
 
-            with open(f"{root}/libs/llama_factory/data/dataset_info.json", "w") as out_file:
+            with open(
+                f"{root}/libs/llama_factory/data/dataset_info.json", "w"
+            ) as out_file:
                 json.dump(registrations, out_file)
 
             print(f"Successfully completed registration of data {self.data_name}.")
@@ -558,7 +670,9 @@ class Data:
             path = f'{root}/libs/llama_factory/data/{registrations[self.data_name]["file_name"]}'
             del registrations[self.data_name]
 
-            with open(f"{root}/libs/llama_factory/data/dataset_info.json", "w") as out_file:
+            with open(
+                f"{root}/libs/llama_factory/data/dataset_info.json", "w"
+            ) as out_file:
                 json.dump(registrations, out_file)
 
             if os.path.exists(path):
@@ -596,7 +710,7 @@ class Data:
 
         :param system_field_name: The name of the system field
         :type system_field_name: Optional[str] = None
-        
+
         :param history_field_name: The name of the history field
         :type history_field_name: Optional[str] = None
 
@@ -634,7 +748,7 @@ class Data:
             del self.key_fields["system"]
         elif system_field_name:
             self.key_fields["system"] = system_field_name
-        
+
         if history_field_name == "" and "history" in self.key_fields:
             del self.key_fields["history"]
         elif history_field_name:

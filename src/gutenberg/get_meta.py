@@ -62,7 +62,12 @@ def gather_meta(raw_dir, record):
             """
             with open(
                 os.path.join(
-                    root, "dataset", "raw_downloads", "Gutenberg", "metadata", "metadata.csv"
+                    root,
+                    "dataset",
+                    "raw_downloads",
+                    "Gutenberg",
+                    "metadata",
+                    "metadata.csv",
                 )
             ) as file:
                 reader = csv.reader(file)

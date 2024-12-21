@@ -210,6 +210,7 @@ def get_model_size(model_repoid_or_path: str) -> float:
     )
     return model_size
 
+
 def start_inference_backend(
     model_repoid_or_path: str,
     backend_type: Literal["sglang", "vllm"] = "sglang",
@@ -219,43 +220,43 @@ def start_inference_backend(
     num_gpus: int = None,
     template_type: Literal["auto", "alpaca", "mistral", "llama3"] = "auto",
 ) -> Tuple[subprocess.Popen, Callable, Callable]:
-    """Start an inference backend for a given model. 
+    """Start an inference backend for a given model.
     Returns a tuple containing the backend process and the function to process a batch of samples.
     When purpose is "logprobs", the returned function will return the log probability of the prompt text itself, without generating any text. The probability will be stored in the "logprob" field of the output dictionary, with all other fields staying the same.
     When purpose is "responses", the returned function will generate a response to the prompt text. The response will be stored in the "predict" field of the output dictionary, with all other fields staying the same.
 
     :param model_repoid_or_path: The model repo ID or path (e.g., "meta-llama/Meta-Llama-3-8B-Instruct").
     :type model_repoid_or_path: str
-    
+
     :param backend_type: The type of backend to start, defaults to "sglang"
     :type backend_type: Literal["sglang", "vllm"], optional
-    
+
     :param purpose: The purpose of the backend, defaults to "logprobs"
     :type purpose: Literal["responses, "logprobs"], optional
-    
+
     :param silent: Whether to run the backend silently, defaults to True
     :type silent: bool, optional
-    
+
     :param port: The port number to use for the backend, defaults to PORT_NUM
     :type port: int, optional
-    
+
     :param num_gpus: The number of GPUs to use for the backend, defaults to None (use all available GPUs)
     :type num_gpus: int, optional
-    
+
     :param template_type: The type of template to use for the backend, defaults to "auto", which uses the appropriate template (not limited to alpaca/mistral/llama3) based on the model config file
     :type template_type: Literal["auto", "alpaca", "mistral", "llama3"], optional
-    
+
     :return: A tuple containing the backend process, the function to process a batch of samples (type signature: List[dict] -> List[dict], with optional metadata arguments), and the function to destroy the backend after use.
     :rtype: Tuple[subprocess.Popen, Callable, Callable]
     """
     if eval(os.environ.get("LOUD_BACKEND", "0")):
         silent = False
-    
+
     if num_gpus is None:
         num_gpus = torch.cuda.device_count()
 
     if backend_type == "vllm":
-        
+
         if purpose == "logprobs":
             raise ValueError("VLLM backend does not support logprobs purpose.")
 
@@ -304,7 +305,9 @@ def start_inference_backend(
 
             prompts = [
                 fill_in_QA_template(
-                    dic.get("instruction"), dic.get("input"), model_repoid_or_path=template_type
+                    dic.get("instruction"),
+                    dic.get("input"),
+                    model_repoid_or_path=template_type,
                 )
                 for dic in sample_dicts
             ]
@@ -317,7 +320,7 @@ def start_inference_backend(
                 dic["predict"] = generated_text
 
             return sample_dicts
-        
+
         def vllm_free_gpu_memory():
             """Remove the vllm model and free vllm cache. This should wipe out all GPU memory used by self."""
             if destroy_model_parallel is not None:
@@ -354,24 +357,27 @@ def start_inference_backend(
             warnings.warn(
                 f"SGLang backend only supports auto template type. Ignoring template_type={template_type}. This is not an issue if you simply intend to perform inference on HistLlama models, but may be an issue if the model is neither in the HistLlama family nor in SGLang's supported models list, in which case you may use NO_SGLANG=1 to disable sglang backend."
             )
-        
+
         backend_key = f"{model_repoid_or_path}-{backend_type}-{purpose}-{num_gpus}"
         connected = False
-        
+
         if os.path.exists(f"{root}/output/backend_history.json"):
             with open(f"{root}/output/backend_history.json", "r") as f:
                 backend_history = json.load(f)
         else:
             backend_history = {}
-        
+
         print(f"Current backend history: {backend_history}", flush=True)
         print(f"Looking for prior backend with key {backend_key}...", flush=True)
-        
+
         if backend_key in backend_history:
             backend_port = backend_history[backend_key]
-            print(f"Found prior backend with key {backend_key} at port {backend_port}.", flush=True)
-            
-            try:    
+            print(
+                f"Found prior backend with key {backend_key} at port {backend_port}.",
+                flush=True,
+            )
+
+            try:
                 sgl.set_default_backend(sgl.RuntimeEndpoint(f"http://localhost:{port}"))
                 connected = True
                 backend = None
@@ -379,7 +385,7 @@ def start_inference_backend(
             except:
                 del backend_history[backend_key]
                 print("Failed to connect to backend. Will start a new one.", flush=True)
-        
+
         if not connected:
             with open(os.devnull, "w") as devnull:
                 frac_static = 0.8 if purpose == "responses" else 0.7
@@ -410,10 +416,10 @@ def start_inference_backend(
                     min_gpus_per_instance = (
                         2 if model_size <= 30 else 4 if model_size <= 80 else 8
                     )
-                    
+
                     if os.environ.get("FORCE_TP"):
                         min_gpus_per_instance = int(os.environ.get("FORCE_TP"))
-                                    
+
                     assert num_gpus % min_gpus_per_instance == 0
                     args = [
                         "python",
@@ -443,7 +449,9 @@ def start_inference_backend(
                 if "smol" in model_repoid_or_path.lower():
                     args += ["--chat-template=chatml"]
 
-                print(f"Starting backend for {model_repoid_or_path} - {args}", flush=True)
+                print(
+                    f"Starting backend for {model_repoid_or_path} - {args}", flush=True
+                )
 
                 if silent:
                     new_env = os.environ.copy()
@@ -453,8 +461,11 @@ def start_inference_backend(
                     )
                 else:
                     backend = subprocess.Popen(args)
-                
-                print(f"Registered backend with key {backend_key} at port {port}.", flush=True)
+
+                print(
+                    f"Registered backend with key {backend_key} at port {port}.",
+                    flush=True,
+                )
                 backend_history[backend_key] = port
                 with open(f"{root}/output/backend_history.json", "w") as f:
                     json.dump(backend_history, f)
@@ -463,8 +474,12 @@ def start_inference_backend(
             for _ in range(40):
                 time.sleep(30)
                 try:
-                    print(f"Trying to connect to backend (at port {port})...", flush=True)
-                    sgl.set_default_backend(sgl.RuntimeEndpoint(f"http://localhost:{port}"))
+                    print(
+                        f"Trying to connect to backend (at port {port})...", flush=True
+                    )
+                    sgl.set_default_backend(
+                        sgl.RuntimeEndpoint(f"http://localhost:{port}")
+                    )
                     print("Connected to backend.", flush=True)
                     break
                 except:
@@ -478,7 +493,11 @@ def start_inference_backend(
 
         @sgl.function
         def get_response(
-            s, conversation: List, temperature: float = 0.2, max_tokens: int = None, options: list = []
+            s,
+            conversation: List,
+            temperature: float = 0.2,
+            max_tokens: int = None,
+            options: list = [],
         ) -> str:
             nonlocal purpose
             last_role = None
@@ -487,25 +506,25 @@ def start_inference_backend(
                 if turn["role"] == "assistant":
                     s += sgl.assistant(turn["content"])
                     last_role = "assistant"
-                
+
                 elif turn["role"] == "user":
                     s += sgl.user(turn["content"])
                     last_role = "user"
-                
+
                 elif turn["role"] == "system":
                     s += sgl.system(turn["content"])
-                
+
                 else:
                     raise ValueError(f"Unknown role: {turn['role']}")
 
             if purpose == "responses" or options:
                 assert last_role == "user"
                 s += sgl.assistant_begin()
-            
+
             if options:
                 s += sgl.gen(
                     "NA",
-                    max_tokens=max(len(x) for x in options)+10,
+                    max_tokens=max(len(x) for x in options) + 10,
                     choices=options,
                 )
 
@@ -526,7 +545,7 @@ def start_inference_backend(
             When purpose is "responses", it will generate a response to the prompt text. The response will be stored in the "predict" field of the output dictionary, with all other fields staying the same.
             """
             nonlocal purpose
-            
+
             if not os.environ.get("ALLOW_EMPTY_INSTRUCTION") or not eval(
                 os.environ.get("ALLOW_EMPTY_INSTRUCTION")
             ):
@@ -542,7 +561,14 @@ def start_inference_backend(
                         del dic["input"]
 
             dialogues = dict_to_dialogue_list(sample_dicts, purpose)
-            options_lists = [(dic["predict"] if "predict" in dic and isinstance(dic["predict"], list) else []) for dic in sample_dicts]
+            options_lists = [
+                (
+                    dic["predict"]
+                    if "predict" in dic and isinstance(dic["predict"], list)
+                    else []
+                )
+                for dic in sample_dicts
+            ]
             output = get_response.run_batch(
                 [
                     {
@@ -599,7 +625,7 @@ def start_inference_backend(
                 warnings.warn(
                     f"{count} cases still not completed after 10 retries. Use NO_SGLANG=1 to disable sglang backend."
                 )
-            
+
             if count > 100 or count / len(output) > 0.01:
                 raise Exception(f"Too many cases ({count}) still not completed.")
 
@@ -608,49 +634,57 @@ def start_inference_backend(
                 if out.get_meta_info("NA") is None:
                     failure_count += 1
                     continue
-                
+
                 if purpose == "logprobs":
                     if "predict" in dic and isinstance(dic["predict"], list):
                         dic["logprob"] = [
                             sum(x[0] for x in y if x[0] is not None)
-                            for y in list(out.get_meta_info("NA")['input_token_logprobs'])
+                            for y in list(
+                                out.get_meta_info("NA")["input_token_logprobs"]
+                            )
                         ]
                         assert len(dic["logprob"]) == len(dic["predict"])
                     else:
                         dic["logprob"] = sum(
-                            x[0] for x in list(out.get_meta_info("NA")['input_token_logprobs']) if x[0] is not None
+                            x[0]
+                            for x in list(
+                                out.get_meta_info("NA")["input_token_logprobs"]
+                            )
+                            if x[0] is not None
                         )
                 else:
                     dic["predict"] = (
                         out["NA"] if out.get_meta_info("NA") is not None else None
                     )
-            
+
             if failure_count > count:
-                raise Exception(f"More actual failures ({failure_count}) than cases not completed ({count}), which is unexpected.")
-            
+                raise Exception(
+                    f"More actual failures ({failure_count}) than cases not completed ({count}), which is unexpected."
+                )
+
             return sample_dicts
-        
+
         def sglang_free_gpu_memory():
             """Wipe out all GPU memory used by the user."""
             nonlocal backend_key
-            
+
             # Remove the backend from the history
             with open(f"{root}/output/backend_history.json", "r") as f:
                 backend_history = json.load(f)
-                
+
             backend_history.pop(backend_key)
             with open(f"{root}/output/backend_history.json", "w") as f:
                 json.dump(backend_history, f)
-            
+
             # Kill the backend process
             try:
                 backend.kill()
             except:
                 print("backend.kill() failed.")
-            
+
             MY_USERNAME = pwd.getpwuid(os.getuid()).pw_name
             print(f"Killing all processes on GPU for user {MY_USERNAME}.")
-            
+
             devices = Device.cuda.all()
             signal.signal(signal.SIGCHLD, signal.SIG_IGN)
             for device in devices:
@@ -658,7 +692,7 @@ def start_inference_backend(
                 processes = GpuProcess.take_snapshots(processes.values(), failsafe=True)
                 for process in processes:
                     if process.username.lower() == MY_USERNAME.lower():
-                        print(f'Killing process {process.pid}: {process.cmdline}')
+                        print(f"Killing process {process.pid}: {process.cmdline}")
                         os.kill(process.pid, signal.SIGTERM)
                         os.kill(process.pid, signal.SIGINT)
                         os.kill(process.pid, signal.SIGKILL)
@@ -669,7 +703,8 @@ def start_inference_backend(
 
 
 def dict_to_dialogue_list(
-    dic: Union[dict, List[dict]], purpose: Literal["responses", "logprobs"] = "responses"
+    dic: Union[dict, List[dict]],
+    purpose: Literal["responses", "logprobs"] = "responses",
 ) -> Union[List[Dict[str, str]], List[List[Dict[str, str]]]]:
     """Transform a dictionary into a list of dialogue turns in OpenAI format.
 
@@ -680,25 +715,36 @@ def dict_to_dialogue_list(
     """
     if isinstance(dic, dict):
         res = []
-        
+
         if "system" in dic:
             res = [{"role": "system", "content": dic["system"]}]
-        
+
         if "history" in dic:
             for turn in dic["history"]:
                 res.append({"role": "user", "content": turn[0]})
                 res.append({"role": "assistant", "content": turn[1]})
-        
+
         if "input" in dic or "instruction" in dic:
             input = dic.get("input", "")
             instruction = dic.get("instruction", "")
-            res.append({"role": "user", "content": input + ("\n\n" if input and instruction else "") + instruction})
-        
-        if purpose == "logprobs" and "predict" in dic and isinstance(dic["predict"], str):
+            res.append(
+                {
+                    "role": "user",
+                    "content": input
+                    + ("\n\n" if input and instruction else "")
+                    + instruction,
+                }
+            )
+
+        if (
+            purpose == "logprobs"
+            and "predict" in dic
+            and isinstance(dic["predict"], str)
+        ):
             res.append({"role": "assistant", "content": dic["predict"]})
         elif "output" in dic:
             res.append({"role": "assistant", "content": dic["output"]})
-        
+
         return res
 
     return [dict_to_dialogue_list(d) for d in dic]
@@ -715,34 +761,38 @@ def fill_in_QA_template(
 
     :param instruction: The task instruction, defaults to "". Either this or full_dict must be provided.
     :type instruction: str, optional
-    
+
     :param input: Supplementary input to the task, defaults to "".
     :type input: str, optional
-    
+
     :param suffix: Suffix to add to the prompt, defaults to "".
     :type suffix: str, optional
-    
+
     :param full_dict: The full dictionary containing the instruction and input, defaults to None. Either this or instruction must be provided. If this is provided, instruction, input, and suffix will be ignored.
     :type full_dict: dict, optional
-    
+
     :param model_repoid_or_path: The model repo ID or path (e.g., "meta-llama/Meta-Llama-3-8B-Instruct"), or one of the special values "alpaca" or "mistral" or "llama3", defaults to "alpaca".
     :type model_repoid_or_path: Union[Literal["alpaca", "mistral", "llama3"], str], optional
-    
+
     :return: The prompt with the instruction and input filled in.
     :rtype: str
     """
 
     instruction = instruction.strip()
     input = input.strip()
-    
+
     # Convert full_dict to instruction and input
     if full_dict and model_repoid_or_path in ["alpaca", "mistral"]:
-        assert "history" not in full_dict, "History field not supported with alpaca/mistral template."
-        assert "system" not in full_dict, "System field not supported with alpaca/mistral template."
-        
+        assert (
+            "history" not in full_dict
+        ), "History field not supported with alpaca/mistral template."
+        assert (
+            "system" not in full_dict
+        ), "System field not supported with alpaca/mistral template."
+
         instruction = full_dict.get("instruction", "")
         input = full_dict.get("input", "")
-        
+
     if input and not instruction:
         warnings.warn("Swapping instruction and input fields.")
         instruction, input = input, instruction
@@ -775,7 +825,7 @@ def fill_in_QA_template(
     else:
         if model_repoid_or_path == "llama3":
             model_repoid_or_path = "meta-llama/Meta-Llama-3-8B-Instruct"
-            
+
         if suffix:
             warnings.warn(
                 f"Suffix not supported except with mistral template. Ignoring suffix."

@@ -8,8 +8,16 @@ def download_model(model_name: str, save_path: str):
         with open(os.devnull, "w") as devnull:
             process = subprocess.Popen(
                 ["huggingface-cli", "download", model_name, "--local-dir", save_path],
-                stdout=(devnull if not eval(os.environ.get("LOUD_BACKEND", "False")) else None),
-                stderr=(devnull if not eval(os.environ.get("LOUD_BACKEND", "False")) else None),
+                stdout=(
+                    devnull
+                    if not eval(os.environ.get("LOUD_BACKEND", "False"))
+                    else None
+                ),
+                stderr=(
+                    devnull
+                    if not eval(os.environ.get("LOUD_BACKEND", "False"))
+                    else None
+                ),
             )
             process.wait()
 

@@ -29,7 +29,8 @@ def build_gutenberg():
     dir = f"{root}/dataset/raw_downloads/Gutenberg/"
     gtb_gd.get_data_gutenberg(dir)
     gtb_gm.gather_meta(
-        os.path.join(dir, "data/raw"), f"{root}/dataset/raw_downloads/Gutenberg_records.txt"
+        os.path.join(dir, "data/raw"),
+        f"{root}/dataset/raw_downloads/Gutenberg_records.txt",
     )
     print("======= FINISHED BUILDING GUTENBERG DATASET =======\n\n\n")
 
@@ -107,9 +108,7 @@ if __name__ == "__main__":
             )
 
             # Make llm-cleansed version the official version ("dataset_text_sequence"), and move the other two versions into dataset/raw_downloads
-            path = (
-                f"{root}/dataset/raw_downloads/dataset_text_sequence_versions/{timestamp}/"
-            )
+            path = f"{root}/dataset/raw_downloads/dataset_text_sequence_versions/{timestamp}/"
             os.makedirs(path)
 
             print(f"Moving pre-cleansing version to backup folder...")
@@ -154,7 +153,9 @@ if __name__ == "__main__":
             sub_datasets = [
                 f
                 for f in os.listdir(f"{root}/dataset/dataset_text_sequence/")
-                if os.path.isdir(os.path.join(f"{root}/dataset/dataset_text_sequence/", f))
+                if os.path.isdir(
+                    os.path.join(f"{root}/dataset/dataset_text_sequence/", f)
+                )
             ]
             for sub in sub_datasets:
                 # Remove if size < 10MB AND century number < 13
@@ -169,7 +170,8 @@ if __name__ == "__main__":
                     os.system(f"mv ./dataset/dataset_text_sequence/{sub} {path}")
 
             hislm.run_training(
-                f"{root}/dataset/dataset_text_sequence/", f"{root}/dataset/dataset_model_sequence/"
+                f"{root}/dataset/dataset_text_sequence/",
+                f"{root}/dataset/dataset_model_sequence/",
             )
             print("Finished model training. Exiting.")
 

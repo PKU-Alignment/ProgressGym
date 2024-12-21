@@ -6,17 +6,17 @@ from typing import Dict, Any, Literal, Optional, List, Union, Callable
 
 
 class GlobalState:
-    
+
     # Public variables
     continuous_backend: bool = False
-    
+
     # Private variables
     __active_backend_destroyers: List[Callable[[], None]] = []
 
     def __init__(self, **kwargs: Dict[str, Any]):
         """
         Temporarily set global state variables of ProgressGym for the duration of a context manager block.
-        
+
         Example:
         ```
         with GlobalState(continuous_backend=True):
@@ -33,14 +33,15 @@ class GlobalState:
     def __exit__(self, type, value, traceback):
         for k, v in self.prior_state.items():
             setattr(GlobalState, k, v)
-        
+
         for destroy in GlobalState.__active_backend_destroyers:
             destroy()
-        
+
         GlobalState.__active_backend_destroyers = []
-    
+
     def register_destroyer(destroyer: Callable[[], None]):
         GlobalState.__active_backend_destroyers.append(destroyer)
+
 
 bash_command_template = f"""PYTHONNOUSERSITE=1 MASTER_PORT=9902 conda run --no-capture-output -n %s deepspeed %s --master_port=9902 {root}/libs/llama_factory/src/train_bash.py \\
     --deepspeed %s \\
@@ -157,33 +158,35 @@ eval_command = Template(
 """
 )
 
-with open(f"{root}/src/abstractions/configs/abstractions_config.json", "r") as config_file:
+with open(
+    f"{root}/src/abstractions/configs/abstractions_config.json", "r"
+) as config_file:
     abstractions_config = json.load(config_file)
-    
+
     data_search_paths: List[str] = abstractions_config["data_search_paths"]
     data_save_path: str = abstractions_config["data_save_path"]
-    
+
     if not os.path.exists(data_save_path):
         data_save_path = f"{root}/" + data_save_path
     if not os.path.exists(data_save_path):
         print(f"Data save path {data_save_path} doesn't exist. Creating it.")
         os.makedirs(data_save_path)
-    
+
     for i, path in enumerate(data_search_paths):
         if not os.path.exists(path):
-            data_search_paths[i] = f"{root}/" + path 
-    
+            data_search_paths[i] = f"{root}/" + path
+
     model_search_paths: List[str] = abstractions_config["model_search_paths"]
     model_save_path: str = abstractions_config["model_save_path"]
-    
+
     if not os.path.exists(model_save_path):
         model_save_path = f"{root}/" + model_save_path
     if not os.path.exists(model_save_path):
         print(f"Model save path {model_save_path} doesn't exist. Creating it.")
         os.makedirs(model_save_path)
-    
+
     for i, path in enumerate(model_search_paths):
         if not os.path.exists(path):
             model_search_paths[i] = f"{root}/" + path
-    
+
     multinode_master_addr: str = abstractions_config["multinode_master_addr"]

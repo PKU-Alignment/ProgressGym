@@ -51,7 +51,7 @@ def inference_standalone(
         if not eval(os.environ.get("LOUD_BACKEND", "False")):
             sys.stdout = devnull
             sys.stderr = devnull
-        
+
         backend, process_batch, mopup_memory = start_inference_backend(
             model_path,
             backend_type,
@@ -59,7 +59,7 @@ def inference_standalone(
             template_type=template_type,
             purpose=purpose,
         )
-        
+
         if GlobalState.continuous_backend:
             print("Continuous backend is enabled.")
             GlobalState.register_destroyer(mopup_memory)
@@ -72,7 +72,9 @@ def inference_standalone(
             prompt_field_name=prompt_field_name, query_field_name=query_field_name
         )
         result_data = data.transform(
-            transformation=partial(process_batch, temperature=temperature, max_tokens=max_tokens),
+            transformation=partial(
+                process_batch, temperature=temperature, max_tokens=max_tokens
+            ),
             result_data_name=result_data_name,
             forced_rewrite=(
                 Model.always_force_rewrite
@@ -87,7 +89,7 @@ def inference_standalone(
         print("Memory mopup done.")
         if conn is not None:
             conn.send(result_data.data_path)
-        
+
         sys.stdout, sys.stderr = old_stdout, old_stderr
         return result_data.data_path
 
@@ -154,7 +156,7 @@ class Model:
         if os.environ.get("DEFAULT_TEMPLATE") and not template_type:
             template_type = os.environ["DEFAULT_TEMPLATE"].lower()
             assert template_type in ["auto", "alpaca", "mistral", "llama3"]
-        
+
         if not num_gpus:
             num_gpus = torch.cuda.device_count()
 
@@ -233,7 +235,9 @@ class Model:
             if dest_suffix
             else dest_full_name
         )
-        copied_path = os.path.join(os.path.join(root, "output", dest_subdir), copied_name)
+        copied_path = os.path.join(
+            os.path.join(root, "output", dest_subdir), copied_name
+        )
         Model.ask_and_remove_if_exists(copied_path, forced_rewrite=False)
         if not os.path.exists(copied_path):
             shutil.copytree(path, copied_path)
@@ -380,7 +384,7 @@ class Model:
             ), "For RLHF, ppo_data must be an instance of Data or not provided at all."
         else:
             raise ValueError(f"Unsupported stage {stage}.")
-        
+
         data = data.filter_incomplete_samples(out_of_place=True)
 
         if lr is None:
@@ -453,7 +457,11 @@ class Model:
                 "",  # do sample; ignored here
                 self.model_path,  # where to find the original model
                 data.data_name,  # dataset (automatically registered in llama-factory)
-                (f"\n    --template {self.template_type} \\" if self.template_type != "auto" else ""),  # template type
+                (
+                    f"\n    --template {self.template_type} \\"
+                    if self.template_type != "auto"
+                    else ""
+                ),  # template type
                 ("lora" if algo == "lora" else "full"),  # type - full_param or lora
                 f"{root}/output/training_results/{escape(result_model_name)}/",  # where to save the training results (and checkpoints etc.)
                 2
@@ -528,7 +536,11 @@ class Model:
                 "pa38-lf",
                 self.model_path,
                 result.model_path,
-                (f"\n    --template {self.template_type} \\" if self.template_type != "auto" else ""),  # template type
+                (
+                    f"\n    --template {self.template_type} \\"
+                    if self.template_type != "auto"
+                    else ""
+                ),  # template type
                 merged_model_path,
             )
             print(cmd)
@@ -594,7 +606,11 @@ class Model:
             f"{root}/src/abstractions/configs/LF_examples/full_multi_gpu/ds_z3_config.json",
             rw_path,
             rw_data.data_name,
-            (f"\n    --template {self.template_type} \\" if self.template_type != "auto" else ""),  # template type
+            (
+                f"\n    --template {self.template_type} \\"
+                if self.template_type != "auto"
+                else ""
+            ),  # template type
             rw_results,
             2 ** max(0, 3 + batch_size_multiplier_log2),  # per_device_train_batch_size
             2 ** max(0, 4 + batch_size_multiplier_log2),  # per_device_eval_batch_size
@@ -643,7 +659,11 @@ class Model:
             rw_results,
             "lora" if use_lora else "full",
             ppo_data.data_name,
-            (f"\n    --template {self.template_type} \\" if self.template_type != "auto" else ""),  # template type
+            (
+                f"\n    --template {self.template_type} \\"
+                if self.template_type != "auto"
+                else ""
+            ),  # template type
             the_path,
             2 ** max(0, 1 + batch_size_multiplier_log2),  # per_device_train_batch_size
             2 ** max(0, 2 + batch_size_multiplier_log2),  # per_device_eval_batch_size
@@ -706,10 +726,10 @@ class Model:
 
         :param temperature: The temperature parameter.
         :type temperature: float = 0.25
-        
+
         :param max_tokens: The maximum number of tokens to generate. Ignored if purpose is "logprobs".
         :type max_tokens: int = 8192
-        
+
         :param purpose: The purpose of the inference. It can be "responses" or "logprobs". If "logprobs", the log probability of the prompt itself (and the assistant response supplied in the `predict` field, if exists) is returned in the `logprob` field of the resulting dataset, without doing any completion. If "responses", the completion text is saved in the `predict` field of the resulting dataset.
         :type purpose: Literal["responses", "logprobs"] = "responses"
 
@@ -754,7 +774,7 @@ class Model:
                 "Logprobs are only supported with backend=sglang. Switching to sglang backend."
             )
             backend = "sglang"
-        
+
         if input_is_data:
             assert (
                 data.data_type != "pretrain" or backend == "deepspeed"
@@ -809,7 +829,13 @@ class Model:
         return result
 
     def __inference_parallel_segregated(
-        self, data: Data, result_data_name: str, temperature: float, max_tokens: int, backend_type: str, purpose: str
+        self,
+        data: Data,
+        result_data_name: str,
+        temperature: float,
+        max_tokens: int,
+        backend_type: str,
+        purpose: str,
     ) -> Data:
         """sglang/vllm implementation for `inference()`, but performed in a separate process to free up GPU memory. This is the recommended implementation, due to its superior speed and robustness."""
         data_path = data.data_path
@@ -825,7 +851,7 @@ class Model:
 
         if eval(os.environ.get("LOUD_BACKEND", "False")):
             print(f"GlobalState.continuous_backend = {GlobalState.continuous_backend}")
-        
+
         if not GlobalState.continuous_backend:
             # run inference_standalone in a separate process
             multiprocessing.set_start_method("spawn", force=True)
@@ -866,7 +892,7 @@ class Model:
                 purpose,
                 None,
             )
-        
+
         print("Inference results saved at ", result_data_path)
 
         return Data(
@@ -887,7 +913,9 @@ class Model:
             operation="add"
         )
 
-        result_data_path = f"{root}/output/inference_results/{escape(result_data_name)}/"
+        result_data_path = (
+            f"{root}/output/inference_results/{escape(result_data_name)}/"
+        )
 
         # run prediction
         deepspeed_args = (
@@ -904,7 +932,11 @@ class Model:
             "\n--do_sample \\",  # do sample
             self.model_path,  # where to save the resulting model
             data.data_name,  # dataset (automatically registered in llama-factory)
-            (f"\n    --template {self.template_type} \\" if self.template_type != "auto" else ""),  # template type
+            (
+                f"\n    --template {self.template_type} \\"
+                if self.template_type != "auto"
+                else ""
+            ),  # template type
             "full",  # type - full_param or lora; useless here
             result_data_path,  # where to save the inference results
             2 ** max(0, 3 + batch_size_multiplier_log2),  # per_device_train_batch_size
@@ -1002,7 +1034,9 @@ class Model:
         """Serial implementation for `inference()`."""
 
         data_name = result_data_name  # self.model_name + "_inference_output"
-        os.makedirs(os.path.join(root, "output", "inference_results", "inf"), exist_ok=True)
+        os.makedirs(
+            os.path.join(root, "output", "inference_results", "inf"), exist_ok=True
+        )
         data_path = os.path.join(
             root, "output", "inference_results", "inf", data_name + ".json"
         )
@@ -1048,7 +1082,9 @@ class Model:
             else list(result_data.all_passages())
         )
 
-    def evaluate(self, method: Literal["fast", "dummy"] = "fast", logprobs=True) -> np.ndarray:
+    def evaluate(
+        self, method: Literal["fast", "dummy"] = "fast", logprobs=True
+    ) -> np.ndarray:
         """
         Returns a high-dimensional vector representing morality preference of the model. Choose "dummy" for fast debugging runs.
         """
@@ -1061,7 +1097,7 @@ class Model:
                 f'Method {method} not recognized. Options are "fast" and "dummy".'
             )
 
-    def __evaluate_fast(self, logprobs = True) -> np.ndarray:
+    def __evaluate_fast(self, logprobs=True) -> np.ndarray:
         if self.template_type != "alpaca":
             raise NotImplementedError(
                 "Fast evaluation is only supported for models using alpaca template."
@@ -1084,18 +1120,18 @@ class Model:
         else:
             evaluation_input = eval_utils.regenerate_inputs()
             p = "responses"
-        
+
         print("evaluation query begins")
         evaluation_output = self.inference(
             evaluation_input,
             "evaluation_output_mc_" + self.model_name,
             backend="sglang",
-            purpose=p
+            purpose=p,
         )
         print("answers at", evaluation_output.data_path)
         with open(evaluation_output.data_path, "r") as f:
             evaluation_output_data = json.load(f)
-        raw_stats = eval_utils.collect(evaluation_output_data, logprobs = logprobs)
+        raw_stats = eval_utils.collect(evaluation_output_data, logprobs=logprobs)
         with open(
             os.path.join(experiment_directory, self.model_name + "_raw.json"), "w"
         ) as f:
@@ -1117,7 +1153,12 @@ class Model:
             os.mkdir(os.path.join(root, "output", "evaluation_results"))
 
         directory = os.path.join(
-            root, "libs", "moralchoice", "data", "responses", self.model_name + "_single"
+            root,
+            "libs",
+            "moralchoice",
+            "data",
+            "responses",
+            self.model_name + "_single",
         )
 
         if os.path.exists(directory) and (

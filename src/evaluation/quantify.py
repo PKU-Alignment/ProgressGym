@@ -109,7 +109,11 @@ def __calculate_model(test_name, high_or_low, model_name):
     avg_vec = sum([np.array(x[1]) for x in mrl_vec.items()]) / len(mrl_vec.items())
     with open(
         os.path.join(
-            root, "output", "evaluation_results", test_name, model_name + "_collected.json"
+            root,
+            "output",
+            "evaluation_results",
+            test_name,
+            model_name + "_collected.json",
         ),
         "w",
     ) as f:
@@ -209,7 +213,7 @@ def calculate_model(test_dir, model_name, logprob=False):
                         template[i] = -1
                     else:
                         continue
-                        #print("non-conflicting morality", row[0])
+                        # print("non-conflicting morality", row[0])
             mrl_vec[0][name] = list(template * (mal))
 
     for key in raw_dict.keys():
@@ -255,15 +259,17 @@ def calculate_model(test_dir, model_name, logprob=False):
                     mrl_vec[2][key] += np.array(entry["repeat2_fav"][:4]) / (
                         entry["repeat2_fav"][-1]
                     )
-            mrl_vec[2][key] /= int(entry["4c_fav"][-1] != 0) + int(entry["repeat2_fav"][-1] != 0)
-           
+            mrl_vec[2][key] /= int(entry["4c_fav"][-1] != 0) + int(
+                entry["repeat2_fav"][-1] != 0
+            )
+
         if num == 1:
             # ref_dict = csv_to_dict_list(ref_dir[1], ['scenario_id', 'generation_theme'])
             ref_dict = csv_to_dict(ref_dir[1], ["generation_theme"])
             if key not in ref_dict.keys():
                 print("key", key, "not found")
                 continue
-            
+
             """
             registering invalid
             """
@@ -331,6 +337,7 @@ def calculate_model(test_dir, model_name, logprob=False):
 
     return res
 
+
 def normalize_matrix(matrix, ranges):
     """
     For each row, divide the elements from column ai to column bi by the sum of all elements in that row between columns ai and bi.
@@ -338,22 +345,23 @@ def normalize_matrix(matrix, ranges):
     Arguments:
         matrix: An input matrix with m rows and n columns (numpy array).
         ranges: A list of tuples (ai, bi), where each tuple represents the column range (0-based index) for which the operation will be performed on each row.
-    
+
     Returns:
         The processed matrix (numpy array).
     """
-    matrix = np.array(matrix) 
+    matrix = np.array(matrix)
     m, n = matrix.shape
     if ranges == None:
-        ranges = [(0, n-1)] 
+        ranges = [(0, n - 1)]
     for row_idx in range(m):
-        for (ai, bi) in ranges:
+        for ai, bi in ranges:
             # calculate the sum of columns ai-bi for each row
-            sum_elements = np.sum(matrix[row_idx, ai:bi+1])
+            sum_elements = np.sum(matrix[row_idx, ai : bi + 1])
             if sum_elements != 0:  # avoid division by zero
-                matrix[row_idx, ai:bi+1] /= sum_elements
-    
+                matrix[row_idx, ai : bi + 1] /= sum_elements
+
     return matrix
+
 
 def plot_parallel_coordinates(data, title, tuples):
     """
@@ -381,7 +389,8 @@ def plot_parallel_coordinates(data, title, tuples):
     plt.show()
     plt.savefig(f"{root}/output/evaluation_results/figs/" + title + "_parr.png")
 
-def plot_heatmap(data, title, label_set, tuples = None, norm = "column"):
+
+def plot_heatmap(data, title, label_set, tuples=None, norm="column"):
     """
     Heatmap for list of 19-dimensional vector.
 
@@ -390,18 +399,19 @@ def plot_heatmap(data, title, label_set, tuples = None, norm = "column"):
     """
     if norm == "group":
         data = normalize_matrix(data, tuples)
-        #data -= np.mean(data, axis=0, keepdims=True)
-        #data /= np.std(data, axis=0, keepdims=True)
+        # data -= np.mean(data, axis=0, keepdims=True)
+        # data /= np.std(data, axis=0, keepdims=True)
     if norm == "column":
         data -= np.mean(data, axis=0, keepdims=True)
         data /= np.std(data, axis=0, keepdims=True)
-    #data /= np.sum(data, axis=0, keepdims=True)
+    # data /= np.sum(data, axis=0, keepdims=True)
 
     # Heatmap with appropriate labels
     plt.figure(figsize=(12, 8))
     xlabels = None
     if label_set == 1:
-        xlabels = [ "Do not cause death",
+        xlabels = [
+            "Do not cause death",
             "Do no inflict pain",
             "Do not disable",
             "Do not restrict freedom",
@@ -410,21 +420,18 @@ def plot_heatmap(data, title, label_set, tuples = None, norm = "column"):
             "Do not cheat",
             "Do not break promise",
             "Do not violate law",
-            "Do not violate duties"]
+            "Do not violate duties",
+        ]
     elif label_set == 2:
         xlabels = [
             "Harm/Care",
             "In Group & Loyalty",
             "Fairness & Reciprocity",
             "Authority & Respect",
-            "Purity & Sancity"]
-    elif label_set == 3:
-        xlabels = [
-            "Traditional",
-            "Modern",
-            "Post-modern",
-            "Integrated"
+            "Purity & Sancity",
         ]
+    elif label_set == 3:
+        xlabels = ["Traditional", "Modern", "Post-modern", "Integrated"]
     ax = sns.heatmap(
         data,
         annot=True,
@@ -438,6 +445,7 @@ def plot_heatmap(data, title, label_set, tuples = None, norm = "column"):
     plt.ylabel("HistLlama")
     plt.show()
     plt.savefig(f"{root}/output/evaluation_results/figs/" + title + "_heat.png")
+
 
 def plot_vectors(vectors, dim_start, name):
     print(vectors)
@@ -467,7 +475,9 @@ def plot_vectors(vectors, dim_start, name):
 
     plt.show()
     plt.savefig(
-        f"{root}/output/evaluation_results/figs/" + name_mapping[name] + "_line_real.png"
+        f"{root}/output/evaluation_results/figs/"
+        + name_mapping[name]
+        + "_line_real.png"
     )
 
 
@@ -487,7 +497,7 @@ def analyze_vectors_quadratic(vectors):
     p_values = []
     positive_coefficients = []
     negative_coefficients = []
-    np.savetxt(f"{root}/output/evaluation_results/figs/quad.txt", vectors, fmt='%f')
+    np.savetxt(f"{root}/output/evaluation_results/figs/quad.txt", vectors, fmt="%f")
     for dim in range(num_dimensions):
         x = np.arange(len(vectors))
         y = vectors[:, dim]
@@ -513,10 +523,12 @@ def analyze_vectors_quadratic(vectors):
 
     # Print coefficients and p-values
     print("Quadratic coefficients and p-values for each dimension:")
-    with open(f"{root}/output/evaluation_results/figs/quad.txt", 'a') as f:
+    with open(f"{root}/output/evaluation_results/figs/quad.txt", "a") as f:
         for i, (coeffs, p_value) in enumerate(zip(coefficients, p_values)):
             print(f"Dimension {i + 1}: coefficients = {coeffs}, p-value = {p_value}")
-            f.write(f"Dimension {i + 1}: coefficients = {coeffs}, p-value = {p_value}\n\n") 
+            f.write(
+                f"Dimension {i + 1}: coefficients = {coeffs}, p-value = {p_value}\n\n"
+            )
 
     # Plot positive coefficients
     plt.figure(figsize=(14, 7))

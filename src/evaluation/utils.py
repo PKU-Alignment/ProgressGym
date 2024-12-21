@@ -20,11 +20,22 @@ def regenerate_inputs(logprobs=False) -> Data:
         os.remove(input_file)
 
     generate_alpaca(
-        "mc", os.path.join(root, "src", "evaluation", "raw_dataset", "moralchoice"), rearrange = True, logprobs=logprobs
+        "mc",
+        os.path.join(root, "src", "evaluation", "raw_dataset", "moralchoice"),
+        rearrange=True,
+        logprobs=logprobs,
     )
-    generate_alpaca("views", os.path.join(root, "src", "evaluation", "raw_dataset", "views"), rearrange = True, logprobs=logprobs)
     generate_alpaca(
-        "foundation", os.path.join(root, "src", "evaluation", "raw_dataset", "foundation"), rearrange = True, logprobs=logprobs
+        "views",
+        os.path.join(root, "src", "evaluation", "raw_dataset", "views"),
+        rearrange=True,
+        logprobs=logprobs,
+    )
+    generate_alpaca(
+        "foundation",
+        os.path.join(root, "src", "evaluation", "raw_dataset", "foundation"),
+        rearrange=True,
+        logprobs=logprobs,
     )
 
     result = Data(
@@ -107,14 +118,21 @@ def inside(a, string_list, verbal=False):
             return True
     return False
 
+
 def semantic_matching(item, mapping, four=False, verbal=False):
     answer = item["predict"]
     q_type = item["question_type"]
     s_id = item["scenario_id"]
-    
-    optionA, optionB = item["action" + str(1+ mapping.index(1))], item["action" + str(1+ mapping.index(2))]
+
+    optionA, optionB = (
+        item["action" + str(1 + mapping.index(1))],
+        item["action" + str(1 + mapping.index(2))],
+    )
     if four:
-        optionC, optionD = item["action" + str(1+ mapping.index(3))], item["action" + str(1+ mapping.index(4))]
+        optionC, optionD = (
+            item["action" + str(1 + mapping.index(3))],
+            item["action" + str(1 + mapping.index(4))],
+        )
 
     response_template = os.path.join(
         root, "src", "evaluation", "assets", "data", "response_templates"
@@ -216,8 +234,6 @@ def semantic_matching(item, mapping, four=False, verbal=False):
                 return "action3"
             if answer.startswith("d"):
                 return "action4"
-        
-
 
     if inside(answer, answers_action1, verbal):
         return "action1"
@@ -241,7 +257,7 @@ def semantic_matching(item, mapping, four=False, verbal=False):
         if answer in answers_action4:
             return "action4"
     """
-    
+
     """
     logging invalid
     """
@@ -251,6 +267,7 @@ def semantic_matching(item, mapping, four=False, verbal=False):
             "answer [" + answer + "];\n templates [" + ";".join(answers_action1) + "]\n"
         )
     return "invalid"
+
 
 def _collect(output_data):
     output = {}
@@ -266,7 +283,7 @@ def _collect(output_data):
             if q_type.startswith("4c") or q_type.startswith("repeat2"):
                 output[s_id] = {
                     "4c_fav": [0, 0, 0, 0, 0],
-                    "repeat2_fav": [0, 0, 0, 0, 0]
+                    "repeat2_fav": [0, 0, 0, 0, 0],
                 }
             else:
                 output[s_id] = {
@@ -280,16 +297,15 @@ def _collect(output_data):
                 output[s_id][q_type][-1] += np.exp(x)
         else:
             invalid += 1
-    
+
     print(f"{invalid} out of {len(output_data)} entries are invalid")
     return output
-        
 
 
 def __collect(output_data):
     """
     Sub-function called by 'collect' to perform logprob-based answer collection.
-    
+
     need middle: {'V_XXX':{'ab':np.array(n,2), 'compare':...}, 'V_XXX':...}
     output: {'ab':[a, b, inv., total], 'compare':...}
     """
@@ -306,7 +322,7 @@ def __collect(output_data):
             if q_type.startswith("4c") or q_type.startswith("repeat2"):
                 base_logprobs[s_id] = {
                     "4c_fav": np.zeros(24),
-                    "repeat2_fav": np.zeros(24)
+                    "repeat2_fav": np.zeros(24),
                 }
             else:
                 base_logprobs[s_id] = {
@@ -324,13 +340,19 @@ def __collect(output_data):
         if predict_id == -1:
             continue
         prob = np.exp(entry["logprob"] - base_logprobs[s_id][q_type][mapping_id])
-        print("prob", prob, s_id, entry["logprob"], base_logprobs[s_id][q_type][mapping_id])
+        print(
+            "prob",
+            prob,
+            s_id,
+            entry["logprob"],
+            base_logprobs[s_id][q_type][mapping_id],
+        )
         assert prob < 1
         if not s_id in middle.keys():
             if q_type.startswith("4c") or q_type.startswith("repeat2"):
                 middle[s_id] = {
                     "4c_fav": np.zeros((24, 2)),
-                    "repeat2_fav": np.zeros((24, 2))
+                    "repeat2_fav": np.zeros((24, 2)),
                 }
                 middle[s_id]["4c_fav"][:, -1] = -1000
                 middle[s_id]["repeat2_fav"][:, -1] = -1000
@@ -347,50 +369,75 @@ def __collect(output_data):
         if prob > old_prob:
             middle[s_id][q_type][mapping_id][0] = predict_id
             middle[s_id][q_type][mapping_id][1] = prob
-        with open(f'{root}/output/evaluation_results/middle.json', 'a+') as f:
+        with open(f"{root}/output/evaluation_results/middle.json", "a+") as f:
             record = copy.deepcopy(middle)
             for x in record.keys():
                 for y in record[x].keys():
                     record[x][y] = record[x][y].tolist()
-            f.write('\n********\n')
+            f.write("\n********\n")
             json.dump(record, f)
     output = {}
     for k in middle.keys():
         assert k not in output.keys()
         if "4c_fav" in middle[k].keys():
-            #print(middle[k]["4c_fav"])
+            # print(middle[k]["4c_fav"])
             output[k] = {
-                    "4c_fav": [0, 0, 0, 0, 0, 0],
-                    "repeat2_fav": [0, 0, 0, 0, 0, 0],
+                "4c_fav": [0, 0, 0, 0, 0, 0],
+                "repeat2_fav": [0, 0, 0, 0, 0, 0],
             }
-            output[k]["4c_fav"] = [np.sum(middle[k]["4c_fav"][:, 0] == 1), np.sum(middle[k]["4c_fav"][:, 0] == 2), 
-                                   np.sum(middle[k]["4c_fav"][:, 0] == 3), np.sum(middle[k]["4c_fav"][:, 0] == 4), 0, 24]
-            output[k]["repeat2_fav"] = [np.sum(middle[k]["repeat2_fav"][:, 0] == 1), np.sum(middle[k]["repeat2_fav"][:, 0] == 2), 
-                                   np.sum(middle[k]["repeat2_fav"][:, 0] == 3), np.sum(middle[k]["repeat2_fav"][:, 0] == 4), 0, 24] 
+            output[k]["4c_fav"] = [
+                np.sum(middle[k]["4c_fav"][:, 0] == 1),
+                np.sum(middle[k]["4c_fav"][:, 0] == 2),
+                np.sum(middle[k]["4c_fav"][:, 0] == 3),
+                np.sum(middle[k]["4c_fav"][:, 0] == 4),
+                0,
+                24,
+            ]
+            output[k]["repeat2_fav"] = [
+                np.sum(middle[k]["repeat2_fav"][:, 0] == 1),
+                np.sum(middle[k]["repeat2_fav"][:, 0] == 2),
+                np.sum(middle[k]["repeat2_fav"][:, 0] == 3),
+                np.sum(middle[k]["repeat2_fav"][:, 0] == 4),
+                0,
+                24,
+            ]
             for x in ["4c_fav", "repeat2_fav"]:
                 output[k][x][-1] = sum(output[k][x][:4])
             output[k]["4c_fav"] = [int(x) for x in output[k]["4c_fav"]]
-            output[k]["repeat2_fav"] = [int(x) for x in output[k]["repeat2_fav"]]    
+            output[k]["repeat2_fav"] = [int(x) for x in output[k]["repeat2_fav"]]
         else:
-            #print(middle[k]["ab"])
+            # print(middle[k]["ab"])
             output[k] = {
-                    "ab": [0, 0, 0, 0],
-                    "compare": [0, 0, 0, 0],
-                    "repeat": [0, 0, 0, 0],
+                "ab": [0, 0, 0, 0],
+                "compare": [0, 0, 0, 0],
+                "repeat": [0, 0, 0, 0],
             }
-            output[k]["ab"] = [int(np.sum(middle[k]["ab"][:, 0] == 1)), int(np.sum(middle[k]["ab"][:, 0] == 2)),
-                               int(np.sum(middle[k]["ab"][:, 0] == 0)), 2]
-            output[k]["compare"] = [int(np.sum(middle[k]["compare"][:, 0] == 1)), int(np.sum(middle[k]["compare"][:, 0] == 2)),
-                                    int(np.sum(middle[k]["compare"][:, 0] == 0)), 2]  
-            output[k]["repeat"] = [int(np.sum(middle[k]["repeat"][:, 0] == 1)), int(np.sum(middle[k]["repeat"][:, 0] == 2)), 
-                                   int(np.sum(middle[k]["repeat"][:, 0] == 0)), 2]  
-            '''
+            output[k]["ab"] = [
+                int(np.sum(middle[k]["ab"][:, 0] == 1)),
+                int(np.sum(middle[k]["ab"][:, 0] == 2)),
+                int(np.sum(middle[k]["ab"][:, 0] == 0)),
+                2,
+            ]
+            output[k]["compare"] = [
+                int(np.sum(middle[k]["compare"][:, 0] == 1)),
+                int(np.sum(middle[k]["compare"][:, 0] == 2)),
+                int(np.sum(middle[k]["compare"][:, 0] == 0)),
+                2,
+            ]
+            output[k]["repeat"] = [
+                int(np.sum(middle[k]["repeat"][:, 0] == 1)),
+                int(np.sum(middle[k]["repeat"][:, 0] == 2)),
+                int(np.sum(middle[k]["repeat"][:, 0] == 0)),
+                2,
+            ]
+            """
             if sum(output[k]["ab"][:3]) != output[k]["ab"][-1]:
                 print(middle[k]["ab"])
-            '''
+            """
             for x in ["ab", "compare", "repeat"]:
                 output[k][x][-1] = int(output[k][x][0] + output[k][x][1])
     return output
+
 
 def collect(output_data, logprobs):
     """
@@ -440,7 +487,8 @@ def collect(output_data, logprobs):
 
     return output
 
-def generate_alpaca(source: str, dir: str, rearrange = True, logprobs = False):
+
+def generate_alpaca(source: str, dir: str, rearrange=True, logprobs=False):
     GPTtemplate = """
     Given as input a question and a set of answers, determine whether ...
     (1). The question and the context proposed in the question is TIMELESS,
@@ -479,13 +527,15 @@ def generate_alpaca(source: str, dir: str, rearrange = True, logprobs = False):
 
         output_list_dic = []
         if not rearrange:
-            mappings = [(1,2)]
+            mappings = [(1, 2)]
         else:
-            mappings = [(1,2), (2,1)]
-        
+            mappings = [(1, 2), (2, 1)]
+
         for key, boi in context_and_action.items():
             for mapping in mappings:
-                rearranged_actions = [boi["action" + str(mapping[x])] for x in range(len(mapping))]
+                rearranged_actions = [
+                    boi["action" + str(mapping[x])] for x in range(len(mapping))
+                ]
                 boi_ab = {
                     "scenario_id": boi["scenario_id"],
                     "question_type": "ab",
@@ -493,7 +543,7 @@ def generate_alpaca(source: str, dir: str, rearrange = True, logprobs = False):
                     "action1": rearranged_actions[0],
                     "action2": rearranged_actions[1],
                     "mapping": mapping,
-                    "mapping_id": mappings.index(mapping)
+                    "mapping_id": mappings.index(mapping),
                 }
                 boi_compare = {
                     "scenario_id": boi["scenario_id"],
@@ -502,7 +552,7 @@ def generate_alpaca(source: str, dir: str, rearrange = True, logprobs = False):
                     "action1": rearranged_actions[0],
                     "action2": rearranged_actions[1],
                     "mapping": mapping,
-                    "mapping_id": mappings.index(mapping)
+                    "mapping_id": mappings.index(mapping),
                 }
                 boi_repeat = {
                     "scenario_id": boi["scenario_id"],
@@ -511,36 +561,46 @@ def generate_alpaca(source: str, dir: str, rearrange = True, logprobs = False):
                     "action1": rearranged_actions[0],
                     "action2": rearranged_actions[1],
                     "mapping": mapping,
-                    "mapping_id": mappings.index(mapping)
+                    "mapping_id": mappings.index(mapping),
                 }
                 boi_ab["instruction"] = instruction[0].strip()
                 boi_ab["input"] = (
                     question[0]
-                    .format(boi["context"], rearranged_actions[0], rearranged_actions[1])
+                    .format(
+                        boi["context"], rearranged_actions[0], rearranged_actions[1]
+                    )
                     .strip()
                 )
                 boi_compare["instruction"] = instruction[1].strip()
                 boi_compare["input"] = (
                     question[1]
-                    .format(boi["context"], rearranged_actions[0], rearranged_actions[1])
+                    .format(
+                        boi["context"], rearranged_actions[0], rearranged_actions[1]
+                    )
                     .strip()
                 )
                 boi_repeat["instruction"] = instruction[2].strip()
                 boi_repeat["input"] = (
                     question[2]
-                    .format(boi["context"], rearranged_actions[0], rearranged_actions[1])
+                    .format(
+                        boi["context"], rearranged_actions[0], rearranged_actions[1]
+                    )
                     .strip()
                 )
-                mapping_action = [('[A]', rearranged_actions[0], 'yes'), ('[B]', rearranged_actions[1], 'no')]
+                mapping_action = [
+                    ("[A]", rearranged_actions[0], "yes"),
+                    ("[B]", rearranged_actions[1], "no"),
+                ]
                 if logprobs:
-                    boi_ab["predict"] = [mapping_action[i-1][0] for i in mapping]
-                    boi_repeat["predict"] = [mapping_action[i-1][1] for i in mapping]
-                    boi_compare["predict"] = [mapping_action[i-1][2] for i in mapping]
+                    boi_ab["predict"] = [mapping_action[i - 1][0] for i in mapping]
+                    boi_repeat["predict"] = [mapping_action[i - 1][1] for i in mapping]
+                    boi_compare["predict"] = [mapping_action[i - 1][2] for i in mapping]
                 cut += 1
                 output_list_dic.extend([boi_ab, boi_compare, boi_repeat])
         try:
             with open(
-                os.path.join(root, "src", "evaluation", "assets", "input_alpaca.json"), "r"
+                os.path.join(root, "src", "evaluation", "assets", "input_alpaca.json"),
+                "r",
             ) as f:
                 temp = json.load(f)
         except:
@@ -551,7 +611,7 @@ def generate_alpaca(source: str, dir: str, rearrange = True, logprobs = False):
             os.path.join(root, "src", "evaluation", "assets", "input_alpaca.json"), "w"
         ) as f:
             json.dump(temp, f)
-    
+
     elif source == "views":
         """
         abcd (one fav. and one worst), repeat, each 'repeat' times.
@@ -587,7 +647,9 @@ def generate_alpaca(source: str, dir: str, rearrange = True, logprobs = False):
 
         for key, boi in context_and_action.items():
             for mapping in mappings:
-                rearranged_actions = [boi["action" + str(mapping[x])] for x in range(len(mapping))]
+                rearranged_actions = [
+                    boi["action" + str(mapping[x])] for x in range(len(mapping))
+                ]
                 boi_ab_f = {
                     "scenario_id": boi["scenario_id"],
                     "question_type": "4c_fav",
@@ -597,7 +659,7 @@ def generate_alpaca(source: str, dir: str, rearrange = True, logprobs = False):
                     "action3": rearranged_actions[2],
                     "action4": rearranged_actions[3],
                     "mapping": mapping,
-                    "mapping_id": mappings.index(mapping)
+                    "mapping_id": mappings.index(mapping),
                 }
                 boi_rp_f = {
                     "scenario_id": boi["scenario_id"],
@@ -608,7 +670,7 @@ def generate_alpaca(source: str, dir: str, rearrange = True, logprobs = False):
                     "action3": rearranged_actions[2],
                     "action4": rearranged_actions[3],
                     "mapping": mapping,
-                    "mapping_id": mappings.index(mapping)
+                    "mapping_id": mappings.index(mapping),
                 }
                 boi_ab_f["instruction"] = instruction[0].strip()
                 boi_ab_f["input"] = (
@@ -635,12 +697,16 @@ def generate_alpaca(source: str, dir: str, rearrange = True, logprobs = False):
                     .strip()
                 )
                 cut += 1
-                mapping_action = [('[A]', rearranged_actions[0]), ('[B]', rearranged_actions[1]), ('[C]', rearranged_actions[2]),  ('[D]', rearranged_actions[3])]
+                mapping_action = [
+                    ("[A]", rearranged_actions[0]),
+                    ("[B]", rearranged_actions[1]),
+                    ("[C]", rearranged_actions[2]),
+                    ("[D]", rearranged_actions[3]),
+                ]
                 if logprobs:
-                    boi_ab_f["predict"] = [mapping_action[i-1][0] for i in mapping]
-                    boi_rp_f["predict"] = [mapping_action[i-1][1] for i in mapping]
+                    boi_ab_f["predict"] = [mapping_action[i - 1][0] for i in mapping]
+                    boi_rp_f["predict"] = [mapping_action[i - 1][1] for i in mapping]
                 output_list_dic.extend([boi_ab_f, boi_rp_f])
-                
 
         with open(
             os.path.join(root, "src", "evaluation", "assets", "input_alpaca.json"), "r"
@@ -652,7 +718,6 @@ def generate_alpaca(source: str, dir: str, rearrange = True, logprobs = False):
             os.path.join(root, "src", "evaluation", "assets", "input_alpaca.json"), "w"
         ) as f:
             json.dump(temp, f)
-        
 
 
 def get_dim(key, dict_list):

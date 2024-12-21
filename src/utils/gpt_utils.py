@@ -12,7 +12,9 @@ import csv
 if not os.path.exists(f"{root}/logs/eval"):
     os.makedirs(f"{root}/logs/eval")
 
-with open(f"{root}/src/abstractions/configs/abstractions_config.json", "r") as config_file:
+with open(
+    f"{root}/src/abstractions/configs/abstractions_config.json", "r"
+) as config_file:
     abstractions_config = json.load(config_file)
     if "openai_mirror" in abstractions_config:
         mirror_url = abstractions_config["openai_mirror"]

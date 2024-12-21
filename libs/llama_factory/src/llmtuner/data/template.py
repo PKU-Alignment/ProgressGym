@@ -713,7 +713,10 @@ _register_template(
         ]
     ),
     format_system=StringFormatter(
-        slots=[{"bos_token"}, "<|start_header_id|>system<|end_header_id|>\n\n{{content}}<|eot_id|>"]
+        slots=[
+            {"bos_token"},
+            "<|start_header_id|>system<|end_header_id|>\n\n{{content}}<|eot_id|>",
+        ]
     ),
     format_observation=StringFormatter(
         slots=[

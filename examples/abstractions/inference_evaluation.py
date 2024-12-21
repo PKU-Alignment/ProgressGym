@@ -30,9 +30,9 @@ def dataset_inference_example(histllama: Model):
 
 def logprob_example(histllama: Model):
     custom_data = Data(
-        "custom_data", 
+        "custom_data",
         data_type="sft",
-        data_content = [
+        data_content=[
             {
                 "input": "What is the capital of France?",
                 "predict": ["Paris", "Washington D.C.", "London", "Berlin"],
@@ -42,9 +42,12 @@ def logprob_example(histllama: Model):
     custom_data.set_key_fields(query_field_name="input")
 
     logprob_output: Data = histllama.inference(
-        custom_data, "8B-C021-infer-custom-deepspeed", backend="sglang", purpose="logprobs"
+        custom_data,
+        "8B-C021-infer-custom-deepspeed",
+        backend="sglang",
+        purpose="logprobs",
     )
-    print(list(logprob_output.all_passages())) 
+    print(list(logprob_output.all_passages()))
     # [{'predict': ['Paris', 'Washington D.C.', 'London', 'Berlin'], 'input': 'What is the capital of France?', 'logprob': [-9.92294692993164, -17.21290510520339, -11.677074432373047, -12.903636932373047]}]
 
 
@@ -58,6 +61,6 @@ if __name__ == "__main__":
     #     model_path_or_repoid="mistralai/Mixtral-8x7B-Instruct-v0.1",
     #     template_type="mistral",
     # )
-    
+
     dataset_inference_example(histllama)
     logprob_example(histllama)
