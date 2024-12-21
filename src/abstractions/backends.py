@@ -2,16 +2,16 @@
 from src.path import root
 import os
 
-path = os.path.join(
-    os.environ["CONDA_PREFIX"], "lib/python3.8/site-packages/flashinfer/cascade.py"
-)
-with open(path, "r") as f:
-    content = f.read()
-content = content.replace("list[", "List[").replace(
-    "import Optional", "import List, Optional"
-)
-with open(path, "w") as f:
-    f.write(content)
+# path = os.path.join(
+#     os.environ["CONDA_PREFIX"], "lib/python3.8/site-packages/flashinfer/cascade.py"
+# )
+# with open(path, "r") as f:
+#     content = f.read()
+# content = content.replace("list[", "List[").replace(
+#     "import Optional", "import List, Optional"
+# )
+# with open(path, "w") as f:
+#     f.write(content)
 
 import torch
 import time
@@ -24,7 +24,6 @@ import multiprocessing
 import subprocess
 from nvitop import GpuProcess, Device
 import signal
-import importlib
 import ray
 import importlib
 import torch.distributed as dist

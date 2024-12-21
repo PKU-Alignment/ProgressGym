@@ -313,7 +313,7 @@ At every iteration:
 <p>We have implemented the four baseline examinees as described in <a class="reference internal" href="index.html"><span class="doc">ProgressGym: The Progress Alignment Framework</span></a> in <code class="docutils literal notranslate"><span class="pre">./algorithm</span></code>. You can turn to those implementations
 for reference for your own implementation.</p>
 <p>After implementation, use our pre-implemented <em>dummy</em> challenge to verify and debug your implementation.</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python<span class="w"> </span>run_benchmark.py
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nv">DEFAULT_TEMPLATE</span><span class="o">=</span>alpaca<span class="w"> </span>python<span class="w"> </span>run_benchmark.py
 <span class="go">  --algorithms=your_algorithm</span>
 <span class="go">  --challenges=Dummy</span>
 <span class="go">  --output_filename=dummy_debugging_run</span>
@@ -397,7 +397,7 @@ logic that you need.</p>
 </dd></dl>
 
 <p>Similarly, use the dummy examinee to verify your implementation.</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python<span class="w"> </span>run_benchmark.py
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nv">DEFAULT_TEMPLATE</span><span class="o">=</span>alpaca<span class="w"> </span>python<span class="w"> </span>run_benchmark.py
 <span class="go">  --algorithms=Dummy</span>
 <span class="go">  --challenges=your_task</span>
 <span class="go">  --output_filename=dummy_debugging_run</span>

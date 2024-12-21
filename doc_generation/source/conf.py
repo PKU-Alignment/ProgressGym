@@ -5,11 +5,10 @@
 
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
-from src.path import root
 import os
 import sys
 
-sys.path.insert(0, os.path.abspath(root))
+sys.path.insert(0, os.path.abspath("../.."))
 
 project = "ProgressGym"
 copyright = "2024 PKU Alignment, Tianyi Qiu, Yang Zhang, Xuchuan Huang, Xinze Li"

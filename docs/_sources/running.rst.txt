@@ -68,7 +68,7 @@ Running
 
 .. code-block:: console
 
-   $ python run_benchmark.py
+   $ DEFAULT_TEMPLATE=alpaca python run_benchmark.py
         --algorithms=ALGO1[,ALGO2[,ALGO3[,...]]]
         --challenges=SUBTASK1[,SUBTASK2[,SUBTASK3[,...]]]
         --output_filename=OUTPUT_FILENAME
@@ -88,7 +88,7 @@ See comments at the beginning of ``run_benchmark.py`` for a detailed usage of th
 
 .. code-block:: console
 
-   $ python run_benchmark.py
+   $ DEFAULT_TEMPLATE=alpaca python run_benchmark.py
         --algorithms=ALGO1[,ALGO2[,ALGO3[,...]]]
         --challenges=SUBTASK1[,SUBTASK2[,SUBTASK3[,...]]]
         --output_filename=OUTPUT_FILENAME
