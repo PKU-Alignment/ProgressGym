@@ -378,6 +378,7 @@ def start_inference_backend(
 
             try:
                 sgl.set_default_backend(sgl.RuntimeEndpoint(f"http://localhost:{port}"))
+                backend_key = None
                 connected = True
                 backend = None
                 print("Connected to backend.", flush=True)
@@ -671,7 +672,9 @@ def start_inference_backend(
             with open(f"{root}/output/backend_history.json", "r") as f:
                 backend_history = json.load(f)
 
-            backend_history.pop(backend_key)
+            if backend_key:
+                backend_history.pop(backend_key)
+            
             with open(f"{root}/output/backend_history.json", "w") as f:
                 json.dump(backend_history, f)
 
