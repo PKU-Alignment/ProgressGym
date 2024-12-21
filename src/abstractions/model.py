@@ -1098,11 +1098,6 @@ class Model:
             )
 
     def __evaluate_fast(self, logprobs=True) -> np.ndarray:
-        if self.template_type != "alpaca":
-            raise NotImplementedError(
-                "Fast evaluation is only supported for models using alpaca template."
-            )
-
         if not os.path.exists(f"{root}/output"):
             os.mkdir(f"{root}/output")
         if not os.path.exists(os.path.join(root, "output", "evaluation_results")):
