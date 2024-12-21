@@ -1,7 +1,7 @@
 from src.path import root
 from string import Template
 import json
-import os
+import os, sys
 from typing import Dict, Any, Literal, Optional, List, Union, Callable
 
 
@@ -34,8 +34,17 @@ class GlobalState:
         for k, v in self.prior_state.items():
             setattr(GlobalState, k, v)
 
-        for destroy in GlobalState.__active_backend_destroyers:
-            destroy()
+        # Keep silent when destroying backends if LOUD_BACKEND is not set
+        old_stdout, old_stderr = sys.stdout, sys.stderr
+        with open(os.devnull, "w") as devnull:
+            if not eval(os.environ.get("LOUD_BACKEND", "False")):
+                sys.stdout = devnull
+                sys.stderr = devnull
+        
+            for destroy in GlobalState.__active_backend_destroyers:
+                destroy()
+            
+            sys.stdout, sys.stderr = old_stdout, old_stderr
 
         GlobalState.__active_backend_destroyers = []
 
