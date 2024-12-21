@@ -1,6 +1,6 @@
 help_info = """
 Usage:
-   $ python run_benchmark.py \\
+   $ DEFAULT_TEMPLATE=alpaca python run_benchmark.py \\
         --algorithms=ALGO1[,ALGO2[,ALGO3[,...]]] \\
         --challenges=SUBTASK1[,SUBTASK2[,SUBTASK3[,...]]] \\
         --output_filename=OUTPUT_FILENAME \\
@@ -11,14 +11,14 @@ Usage:
         [...] (additional arguments will be supplied to the algorithms and the challenges when they are instantiated; only string values are supported)
    
 Examples:
-    $ python run_benchmark.py \\
+    $ DEFAULT_TEMPLATE=alpaca python run_benchmark.py \\
           --algorithms=LifelongRLHF,LifelongDPO,OPO \\
           --challenges=Follow,Predict,Coevolve \\
           --output_filename=3x3_benchmark \\
           --judge_model_size=8B \\
           --examinee_model_size=8B
           
-    $ python run_benchmark.py \\
+    $ DEFAULT_TEMPLATE=alpaca python run_benchmark.py \\
           --algorithms=Dummy \\
           --challenges=Dummy,Coevolve \\
           --output_filename=dummy_debugging_run \\

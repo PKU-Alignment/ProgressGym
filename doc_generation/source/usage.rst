@@ -25,7 +25,7 @@ After implementation, use our pre-implemented *dummy* challenge to verify and de
  
 .. code-block:: console
 
-    $ python run_benchmark.py
+    $ DEFAULT_TEMPLATE=alpaca python run_benchmark.py
       --algorithms=your_algorithm
       --challenges=Dummy
       --output_filename=dummy_debugging_run
@@ -44,7 +44,7 @@ Similarly, use the dummy examinee to verify your implementation.
 
 .. code-block:: console
 
-    $ python run_benchmark.py
+    $ DEFAULT_TEMPLATE=alpaca python run_benchmark.py
       --algorithms=Dummy
       --challenges=your_task
       --output_filename=dummy_debugging_run
