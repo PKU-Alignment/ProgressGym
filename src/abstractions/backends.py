@@ -584,7 +584,8 @@ def start_inference_backend(
             assert len(output) == len(sample_dicts)
 
             count = 0
-            for _ in range(20):
+            max_iter = int(os.environ.get("SG_ITER", 20))
+            for _ in range(max_iter):
                 bad_indices = [
                     k
                     for k in range(len(output))
