@@ -624,11 +624,11 @@ def start_inference_backend(
                     break
             else:
                 warnings.warn(
-                    f"{count} cases still not completed after 10 retries. Use NO_SGLANG=1 to disable sglang backend."
+                    f"{count} cases still not completed after {max_iter} retries. Use NO_SGLANG=1 to disable sglang backend."
                 )
 
-            if count > 100 or count / len(output) > 0.01:
-                raise Exception(f"Too many cases ({count}) still not completed.")
+            if os.environ.get("MAX_SG_FAIL", "").lower() != "inf" and count > eval(os.environ.get("MAX_SG_FAIL", "min(100, len(output)//100)")):
+                raise Exception(f"Too many cases ({count}) still not completed. Aborting. Use MAX_SG_FAIL=inf to disable this check.")
 
             failure_count = 0
             for dic, out in zip(sample_dicts, output):
